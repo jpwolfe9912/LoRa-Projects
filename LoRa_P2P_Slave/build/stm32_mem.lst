@@ -1,0 +1,258 @@
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"stm32_mem.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.UTIL_MEM_cpy_8,"ax",%progbits
+  16              		.align	1
+  17              		.global	UTIL_MEM_cpy_8
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	UTIL_MEM_cpy_8:
+  25              	.LVL0:
+  26              	.LFB104:
+  27              		.file 1 "Utilities/misc/stm32_mem.c"
+   1:Utilities/misc/stm32_mem.c **** /**
+   2:Utilities/misc/stm32_mem.c ****   ******************************************************************************
+   3:Utilities/misc/stm32_mem.c ****   * @file    stm32_mem.c
+   4:Utilities/misc/stm32_mem.c ****   * @author  MCD Application Team
+   5:Utilities/misc/stm32_mem.c ****   * @brief   standard memory operation
+   6:Utilities/misc/stm32_mem.c ****   ******************************************************************************
+   7:Utilities/misc/stm32_mem.c ****   * @attention
+   8:Utilities/misc/stm32_mem.c ****   *
+   9:Utilities/misc/stm32_mem.c ****   * Copyright (c) 2019 STMicroelectronics.
+  10:Utilities/misc/stm32_mem.c ****   * All rights reserved.
+  11:Utilities/misc/stm32_mem.c ****   *
+  12:Utilities/misc/stm32_mem.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Utilities/misc/stm32_mem.c ****   * in the root directory of this software component.
+  14:Utilities/misc/stm32_mem.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Utilities/misc/stm32_mem.c ****   *
+  16:Utilities/misc/stm32_mem.c ****   ******************************************************************************
+  17:Utilities/misc/stm32_mem.c ****   */
+  18:Utilities/misc/stm32_mem.c **** 
+  19:Utilities/misc/stm32_mem.c **** /* Includes ------------------------------------------------------------------*/
+  20:Utilities/misc/stm32_mem.c **** #include "stdint.h"
+  21:Utilities/misc/stm32_mem.c **** #include "stm32_mem.h"
+  22:Utilities/misc/stm32_mem.c **** 
+  23:Utilities/misc/stm32_mem.c **** /* Private typedef -----------------------------------------------------------*/
+  24:Utilities/misc/stm32_mem.c **** /* Private defines -----------------------------------------------------------*/
+  25:Utilities/misc/stm32_mem.c **** /* Private macros ------------------------------------------------------------*/
+  26:Utilities/misc/stm32_mem.c **** /* Private variables ---------------------------------------------------------*/
+  27:Utilities/misc/stm32_mem.c **** /* Global variables ----------------------------------------------------------*/
+  28:Utilities/misc/stm32_mem.c **** /* Private function prototypes -----------------------------------------------*/
+  29:Utilities/misc/stm32_mem.c **** /* Functions Definition ------------------------------------------------------*/
+  30:Utilities/misc/stm32_mem.c **** 
+  31:Utilities/misc/stm32_mem.c **** void UTIL_MEM_cpy_8( void *dst, const void *src, uint16_t size )
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s 			page 2
+
+
+  32:Utilities/misc/stm32_mem.c **** {
+  28              		.loc 1 32 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33:Utilities/misc/stm32_mem.c ****   uint8_t* dst8= (uint8_t *) dst;
+  33              		.loc 1 33 3 view .LVU1
+  34:Utilities/misc/stm32_mem.c ****   uint8_t* src8= (uint8_t *) src;
+  34              		.loc 1 34 3 view .LVU2
+  35:Utilities/misc/stm32_mem.c **** 
+  36:Utilities/misc/stm32_mem.c ****   while( size-- )
+  35              		.loc 1 36 3 view .LVU3
+  36              		.loc 1 36 8 is_stmt 0 view .LVU4
+  37 0000 04E0     		b	.L2
+  38              	.LVL1:
+  39              	.L3:
+  37:Utilities/misc/stm32_mem.c ****     {
+  38:Utilities/misc/stm32_mem.c ****         *dst8++ = *src8++;
+  40              		.loc 1 38 9 is_stmt 1 view .LVU5
+  41              		.loc 1 38 19 is_stmt 0 view .LVU6
+  42 0002 11F8012B 		ldrb	r2, [r1], #1	@ zero_extendqisi2
+  43              	.LVL2:
+  44              		.loc 1 38 17 view .LVU7
+  45 0006 00F8012B 		strb	r2, [r0], #1
+  46              	.LVL3:
+  36:Utilities/misc/stm32_mem.c ****     {
+  47              		.loc 1 36 14 view .LVU8
+  48 000a 1A46     		mov	r2, r3
+  49              	.LVL4:
+  50              	.L2:
+  36:Utilities/misc/stm32_mem.c ****     {
+  51              		.loc 1 36 8 is_stmt 1 view .LVU9
+  36:Utilities/misc/stm32_mem.c ****     {
+  52              		.loc 1 36 14 is_stmt 0 view .LVU10
+  53 000c 531E     		subs	r3, r2, #1
+  54 000e 9BB2     		uxth	r3, r3
+  55              	.LVL5:
+  36:Utilities/misc/stm32_mem.c ****     {
+  56              		.loc 1 36 8 view .LVU11
+  57 0010 002A     		cmp	r2, #0
+  58 0012 F6D1     		bne	.L3
+  39:Utilities/misc/stm32_mem.c ****     }
+  40:Utilities/misc/stm32_mem.c **** }
+  59              		.loc 1 40 1 view .LVU12
+  60 0014 7047     		bx	lr
+  61              		.cfi_endproc
+  62              	.LFE104:
+  64              		.section	.text.UTIL_MEM_cpyr_8,"ax",%progbits
+  65              		.align	1
+  66              		.global	UTIL_MEM_cpyr_8
+  67              		.syntax unified
+  68              		.thumb
+  69              		.thumb_func
+  70              		.fpu softvfp
+  72              	UTIL_MEM_cpyr_8:
+  73              	.LVL6:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s 			page 3
+
+
+  74              	.LFB105:
+  41:Utilities/misc/stm32_mem.c **** 
+  42:Utilities/misc/stm32_mem.c **** void UTIL_MEM_cpyr_8( void *dst, const void *src, uint16_t size )
+  43:Utilities/misc/stm32_mem.c **** {
+  75              		.loc 1 43 1 is_stmt 1 view -0
+  76              		.cfi_startproc
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 0, uses_anonymous_args = 0
+  79              		@ link register save eliminated.
+  44:Utilities/misc/stm32_mem.c ****     uint8_t* dst8= (uint8_t *) dst;
+  80              		.loc 1 44 5 view .LVU14
+  45:Utilities/misc/stm32_mem.c ****     uint8_t* src8= (uint8_t *) src;
+  81              		.loc 1 45 5 view .LVU15
+  46:Utilities/misc/stm32_mem.c **** 
+  47:Utilities/misc/stm32_mem.c ****     dst8 = dst8 + ( size - 1 );
+  82              		.loc 1 47 5 view .LVU16
+  83              		.loc 1 47 17 is_stmt 0 view .LVU17
+  84 0000 531E     		subs	r3, r2, #1
+  85              		.loc 1 47 10 view .LVU18
+  86 0002 1844     		add	r0, r0, r3
+  87              	.LVL7:
+  48:Utilities/misc/stm32_mem.c ****     while( size-- )
+  88              		.loc 1 48 5 is_stmt 1 view .LVU19
+  89              		.loc 1 48 10 is_stmt 0 view .LVU20
+  90 0004 04E0     		b	.L5
+  91              	.LVL8:
+  92              	.L6:
+  49:Utilities/misc/stm32_mem.c ****     {
+  50:Utilities/misc/stm32_mem.c ****         *dst8-- = *src8++;
+  93              		.loc 1 50 9 is_stmt 1 view .LVU21
+  94              		.loc 1 50 19 is_stmt 0 view .LVU22
+  95 0006 11F8012B 		ldrb	r2, [r1], #1	@ zero_extendqisi2
+  96              	.LVL9:
+  97              		.loc 1 50 17 view .LVU23
+  98 000a 00F80129 		strb	r2, [r0], #-1
+  99              	.LVL10:
+  48:Utilities/misc/stm32_mem.c ****     while( size-- )
+ 100              		.loc 1 48 16 view .LVU24
+ 101 000e 1A46     		mov	r2, r3
+ 102              	.LVL11:
+ 103              	.L5:
+  48:Utilities/misc/stm32_mem.c ****     while( size-- )
+ 104              		.loc 1 48 10 is_stmt 1 view .LVU25
+  48:Utilities/misc/stm32_mem.c ****     while( size-- )
+ 105              		.loc 1 48 16 is_stmt 0 view .LVU26
+ 106 0010 531E     		subs	r3, r2, #1
+ 107 0012 9BB2     		uxth	r3, r3
+ 108              	.LVL12:
+  48:Utilities/misc/stm32_mem.c ****     while( size-- )
+ 109              		.loc 1 48 10 view .LVU27
+ 110 0014 002A     		cmp	r2, #0
+ 111 0016 F6D1     		bne	.L6
+  51:Utilities/misc/stm32_mem.c ****     }
+  52:Utilities/misc/stm32_mem.c **** }
+ 112              		.loc 1 52 1 view .LVU28
+ 113 0018 7047     		bx	lr
+ 114              		.cfi_endproc
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s 			page 4
+
+
+ 115              	.LFE105:
+ 117              		.section	.text.UTIL_MEM_set_8,"ax",%progbits
+ 118              		.align	1
+ 119              		.global	UTIL_MEM_set_8
+ 120              		.syntax unified
+ 121              		.thumb
+ 122              		.thumb_func
+ 123              		.fpu softvfp
+ 125              	UTIL_MEM_set_8:
+ 126              	.LVL13:
+ 127              	.LFB106:
+  53:Utilities/misc/stm32_mem.c **** 
+  54:Utilities/misc/stm32_mem.c **** void UTIL_MEM_set_8( void *dst, uint8_t value, uint16_t size )
+  55:Utilities/misc/stm32_mem.c **** {
+ 128              		.loc 1 55 1 is_stmt 1 view -0
+ 129              		.cfi_startproc
+ 130              		@ args = 0, pretend = 0, frame = 0
+ 131              		@ frame_needed = 0, uses_anonymous_args = 0
+ 132              		@ link register save eliminated.
+  56:Utilities/misc/stm32_mem.c ****   uint8_t* dst8= (uint8_t *) dst;
+ 133              		.loc 1 56 3 view .LVU30
+  57:Utilities/misc/stm32_mem.c ****   while( size-- )
+ 134              		.loc 1 57 3 view .LVU31
+ 135              		.loc 1 57 8 is_stmt 0 view .LVU32
+ 136 0000 02E0     		b	.L8
+ 137              	.LVL14:
+ 138              	.L9:
+  58:Utilities/misc/stm32_mem.c ****   {
+  59:Utilities/misc/stm32_mem.c ****     *dst8++ = value;
+ 139              		.loc 1 59 5 is_stmt 1 view .LVU33
+ 140              		.loc 1 59 13 is_stmt 0 view .LVU34
+ 141 0002 00F8011B 		strb	r1, [r0], #1
+ 142              	.LVL15:
+  57:Utilities/misc/stm32_mem.c ****   while( size-- )
+ 143              		.loc 1 57 14 view .LVU35
+ 144 0006 1A46     		mov	r2, r3
+ 145              	.LVL16:
+ 146              	.L8:
+  57:Utilities/misc/stm32_mem.c ****   while( size-- )
+ 147              		.loc 1 57 8 is_stmt 1 view .LVU36
+  57:Utilities/misc/stm32_mem.c ****   while( size-- )
+ 148              		.loc 1 57 14 is_stmt 0 view .LVU37
+ 149 0008 531E     		subs	r3, r2, #1
+ 150 000a 9BB2     		uxth	r3, r3
+ 151              	.LVL17:
+  57:Utilities/misc/stm32_mem.c ****   while( size-- )
+ 152              		.loc 1 57 8 view .LVU38
+ 153 000c 002A     		cmp	r2, #0
+ 154 000e F8D1     		bne	.L9
+  60:Utilities/misc/stm32_mem.c ****   }
+  61:Utilities/misc/stm32_mem.c **** }
+ 155              		.loc 1 61 1 view .LVU39
+ 156 0010 7047     		bx	lr
+ 157              		.cfi_endproc
+ 158              	.LFE106:
+ 160              		.text
+ 161              	.Letext0:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s 			page 5
+
+
+ 162              		.file 2 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/machine/_de
+ 163              		.file 3 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/sys/_stdint
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32_mem.c
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s:16     .text.UTIL_MEM_cpy_8:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s:24     .text.UTIL_MEM_cpy_8:0000000000000000 UTIL_MEM_cpy_8
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s:65     .text.UTIL_MEM_cpyr_8:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s:72     .text.UTIL_MEM_cpyr_8:0000000000000000 UTIL_MEM_cpyr_8
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s:118    .text.UTIL_MEM_set_8:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccp2ZyiF.s:125    .text.UTIL_MEM_set_8:0000000000000000 UTIL_MEM_set_8
+
+NO UNDEFINED SYMBOLS

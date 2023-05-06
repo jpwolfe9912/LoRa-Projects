@@ -1,0 +1,17 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
+    "files.associations": {
+        "lcd.h": "c",
+        "i2c.h": "c",
+        "main.h": "c",
+        "dma.h": "c",
+        "system_stm32wlxx.h": "c",
+        "radio_driver.h": "c",
+        "stm32wlxx_ll_exti.h": "c",
+        "stm32wlxx_ll_pwr.h": "c",
+        "radio.h": "c"
+    },
+    "cortex-debug.armToolchainPath": "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/bin",
+    "cortex-debug.openocdPath": "/opt/homebrew/bin/openocd",
+    "cortex-debug.gdbPath": "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/bin/arm-none-eabi-gdb"
+}

@@ -1,0 +1,2178 @@
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"stm32_systime.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.CalendarDiv86400,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv7e-m
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	CalendarDiv86400:
+  24              	.LVL0:
+  25              	.LFB13:
+  26              		.file 1 "Utilities/misc/stm32_systime.c"
+   1:Utilities/misc/stm32_systime.c **** /*!
+   2:Utilities/misc/stm32_systime.c ****  * \file      stm32_systime.c
+   3:Utilities/misc/stm32_systime.c ****  *
+   4:Utilities/misc/stm32_systime.c ****  * \brief     System time functions implementation
+   5:Utilities/misc/stm32_systime.c ****  *
+   6:Utilities/misc/stm32_systime.c ****  * \copyright Revised BSD License, see section \ref LICENSE.
+   7:Utilities/misc/stm32_systime.c ****  *
+   8:Utilities/misc/stm32_systime.c ****  * \code
+   9:Utilities/misc/stm32_systime.c ****  *                ______                              _
+  10:Utilities/misc/stm32_systime.c ****  *               / _____)             _              | |
+  11:Utilities/misc/stm32_systime.c ****  *              ( (____  _____ ____ _| |_ _____  ____| |__
+  12:Utilities/misc/stm32_systime.c ****  *               \____ \| ___ |    (_   _) ___ |/ ___)  _ \
+  13:Utilities/misc/stm32_systime.c ****  *               _____) ) ____| | | || |_| ____( (___| | | |
+  14:Utilities/misc/stm32_systime.c ****  *              (______/|_____)_|_|_| \__)_____)\____)_| |_|
+  15:Utilities/misc/stm32_systime.c ****  *              (C)2013-2018 Semtech - STMicroelectronics
+  16:Utilities/misc/stm32_systime.c ****  *
+  17:Utilities/misc/stm32_systime.c ****  * \endcode
+  18:Utilities/misc/stm32_systime.c ****  *
+  19:Utilities/misc/stm32_systime.c ****  * \author    Miguel Luis ( Semtech )
+  20:Utilities/misc/stm32_systime.c ****  *
+  21:Utilities/misc/stm32_systime.c ****  * \author    Gregory Cristian ( Semtech )
+  22:Utilities/misc/stm32_systime.c ****  *
+  23:Utilities/misc/stm32_systime.c ****  * \author    MCD Application Team ( STMicroelectronics International )
+  24:Utilities/misc/stm32_systime.c ****  */
+  25:Utilities/misc/stm32_systime.c **** /**
+  26:Utilities/misc/stm32_systime.c ****   ******************************************************************************
+  27:Utilities/misc/stm32_systime.c ****   * @file    stm32_systime.c
+  28:Utilities/misc/stm32_systime.c ****   * @author  MCD Application Team
+  29:Utilities/misc/stm32_systime.c ****   * @brief   System time functions implementation
+  30:Utilities/misc/stm32_systime.c ****   ******************************************************************************
+  31:Utilities/misc/stm32_systime.c ****   * @attention
+  32:Utilities/misc/stm32_systime.c ****   *
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 2
+
+
+  33:Utilities/misc/stm32_systime.c ****   * Copyright (c) 2019 STMicroelectronics.
+  34:Utilities/misc/stm32_systime.c ****   * All rights reserved.
+  35:Utilities/misc/stm32_systime.c ****   *
+  36:Utilities/misc/stm32_systime.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  37:Utilities/misc/stm32_systime.c ****   * in the root directory of this software component.
+  38:Utilities/misc/stm32_systime.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  39:Utilities/misc/stm32_systime.c ****   *
+  40:Utilities/misc/stm32_systime.c ****   ******************************************************************************
+  41:Utilities/misc/stm32_systime.c ****   */
+  42:Utilities/misc/stm32_systime.c **** 
+  43:Utilities/misc/stm32_systime.c **** /* Includes ------------------------------------------------------------------*/
+  44:Utilities/misc/stm32_systime.c **** #include <stdio.h>
+  45:Utilities/misc/stm32_systime.c **** #include "stm32_systime.h"
+  46:Utilities/misc/stm32_systime.c **** 
+  47:Utilities/misc/stm32_systime.c **** /** @addtogroup SYS_TIME
+  48:Utilities/misc/stm32_systime.c ****   * @{
+  49:Utilities/misc/stm32_systime.c ****   */
+  50:Utilities/misc/stm32_systime.c **** 
+  51:Utilities/misc/stm32_systime.c **** /* Private defines -----------------------------------------------------------*/
+  52:Utilities/misc/stm32_systime.c **** /**
+  53:Utilities/misc/stm32_systime.c ****  * @defgroup SYS_TIME_private_defines SYS_TIME private defines
+  54:Utilities/misc/stm32_systime.c ****  *  @{
+  55:Utilities/misc/stm32_systime.c ****  */
+  56:Utilities/misc/stm32_systime.c **** 
+  57:Utilities/misc/stm32_systime.c **** /**
+  58:Utilities/misc/stm32_systime.c ****   * @brief number of day in leap year up to the end of February
+  59:Utilities/misc/stm32_systime.c ****   *
+  60:Utilities/misc/stm32_systime.c ****   */
+  61:Utilities/misc/stm32_systime.c **** #define END_OF_FEBRUARY_LEAP             60 //31+29
+  62:Utilities/misc/stm32_systime.c **** 
+  63:Utilities/misc/stm32_systime.c **** /**
+  64:Utilities/misc/stm32_systime.c ****   * @brief number of day in leap year up to the end of july
+  65:Utilities/misc/stm32_systime.c ****   *
+  66:Utilities/misc/stm32_systime.c ****   */
+  67:Utilities/misc/stm32_systime.c **** #define END_OF_JULY_LEAP              213 //31+29+...
+  68:Utilities/misc/stm32_systime.c **** 
+  69:Utilities/misc/stm32_systime.c **** /**
+  70:Utilities/misc/stm32_systime.c ****   * @brief number of day in normal year up to the end of February
+  71:Utilities/misc/stm32_systime.c ****   *
+  72:Utilities/misc/stm32_systime.c ****   */
+  73:Utilities/misc/stm32_systime.c **** #define END_OF_FEBRUARY_NORM             59 //31+28
+  74:Utilities/misc/stm32_systime.c **** 
+  75:Utilities/misc/stm32_systime.c **** /**
+  76:Utilities/misc/stm32_systime.c ****   * @brief number of day in normal year up to the end of july
+  77:Utilities/misc/stm32_systime.c ****   *
+  78:Utilities/misc/stm32_systime.c ****   */
+  79:Utilities/misc/stm32_systime.c **** #define END_OF_JULY_NORM              212 //31+28+...
+  80:Utilities/misc/stm32_systime.c **** 
+  81:Utilities/misc/stm32_systime.c **** /**
+  82:Utilities/misc/stm32_systime.c ****   * @brief delta is referenced to Unix time
+  83:Utilities/misc/stm32_systime.c ****   * @note UNIX time 0 = starts at 01:00:00, 01/01/1970
+  84:Utilities/misc/stm32_systime.c ****   * but calculation is easier from Monday 1st January 1968
+  85:Utilities/misc/stm32_systime.c ****   *
+  86:Utilities/misc/stm32_systime.c ****   */
+  87:Utilities/misc/stm32_systime.c **** #define CALC_REF_YEAR                  68
+  88:Utilities/misc/stm32_systime.c **** 
+  89:Utilities/misc/stm32_systime.c **** /**
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 3
+
+
+  90:Utilities/misc/stm32_systime.c ****   * @brief delta is referenced to Unix time
+  91:Utilities/misc/stm32_systime.c ****   * @note UNIX time 0 = starts at 01:00:00, 01/01/1970
+  92:Utilities/misc/stm32_systime.c ****   * but calculation is easier from Monday 1st January 1968
+  93:Utilities/misc/stm32_systime.c ****   *
+  94:Utilities/misc/stm32_systime.c ****   */
+  95:Utilities/misc/stm32_systime.c **** #define CALC_REF_YEAR_TO_UNIX_REF_YEAR_COMPENSATION_IN_SECONDS  ( ( TM_DAYS_IN_LEAP_YEAR + TM_DAYS_
+  96:Utilities/misc/stm32_systime.c **** 
+  97:Utilities/misc/stm32_systime.c **** /**
+  98:Utilities/misc/stm32_systime.c ****   * @brief month correction table of a normal year. To calculate the day number within a year
+  99:Utilities/misc/stm32_systime.c ****   * @note error compensation is between 0 and 2 days. 2 bits per month
+ 100:Utilities/misc/stm32_systime.c ****   *
+ 101:Utilities/misc/stm32_systime.c ****   */
+ 102:Utilities/misc/stm32_systime.c **** #define  DAYS_IN_MONTH_CORRECTION_NORM        ( (uint32_t )0x99AAA0 )
+ 103:Utilities/misc/stm32_systime.c **** 
+ 104:Utilities/misc/stm32_systime.c **** /**
+ 105:Utilities/misc/stm32_systime.c ****   * @brief month correction table of a leap year. To calculate the day number within a year
+ 106:Utilities/misc/stm32_systime.c ****   * @note error compensation is between 0 and 2 days. 2 bits per month
+ 107:Utilities/misc/stm32_systime.c ****   *
+ 108:Utilities/misc/stm32_systime.c ****   */
+ 109:Utilities/misc/stm32_systime.c **** #define  DAYS_IN_MONTH_CORRECTION_LEAP        ( (uint32_t )0x445550 )
+ 110:Utilities/misc/stm32_systime.c **** 
+ 111:Utilities/misc/stm32_systime.c **** /**
+ 112:Utilities/misc/stm32_systime.c ****   * @brief find  X/365.25
+ 113:Utilities/misc/stm32_systime.c ****   *
+ 114:Utilities/misc/stm32_systime.c ****   */
+ 115:Utilities/misc/stm32_systime.c **** /* 365.25 = (366 + 365 + 365 + 365)/4 */
+ 116:Utilities/misc/stm32_systime.c **** #define DIV_365_25( X )                 ( ( ( X ) * 91867 + 22750 ) >> 25 )
+ 117:Utilities/misc/stm32_systime.c **** 
+ 118:Utilities/misc/stm32_systime.c **** /**
+ 119:Utilities/misc/stm32_systime.c ****   * @brief find the nearest quotient of X/86400 (8640 number of seconds in one week)
+ 120:Utilities/misc/stm32_systime.c ****   *
+ 121:Utilities/misc/stm32_systime.c ****   */
+ 122:Utilities/misc/stm32_systime.c **** #define DIV_APPROX_86400( X )             ( ( ( X ) >> 18 ) + ( ( X ) >> 17 ) )
+ 123:Utilities/misc/stm32_systime.c **** 
+ 124:Utilities/misc/stm32_systime.c **** /**
+ 125:Utilities/misc/stm32_systime.c ****   * @brief find the nearest quotient of X/1000
+ 126:Utilities/misc/stm32_systime.c ****   *
+ 127:Utilities/misc/stm32_systime.c ****   */
+ 128:Utilities/misc/stm32_systime.c **** #define DIV_APPROX_1000( X )            ( ( ( X ) >> 10 ) +( ( X ) >> 16 ) + ( ( X ) >> 17 ) )
+ 129:Utilities/misc/stm32_systime.c **** 
+ 130:Utilities/misc/stm32_systime.c **** /**
+ 131:Utilities/misc/stm32_systime.c ****   * @brief find the nearest quotient of X/60
+ 132:Utilities/misc/stm32_systime.c ****   *
+ 133:Utilities/misc/stm32_systime.c ****   */
+ 134:Utilities/misc/stm32_systime.c **** #define DIV_APPROX_60( X )              ( ( ( X ) * 17476 ) >> 20 )
+ 135:Utilities/misc/stm32_systime.c **** 
+ 136:Utilities/misc/stm32_systime.c **** /**
+ 137:Utilities/misc/stm32_systime.c ****   * @brief find the nearest quotient of X/61
+ 138:Utilities/misc/stm32_systime.c ****   *
+ 139:Utilities/misc/stm32_systime.c ****   */
+ 140:Utilities/misc/stm32_systime.c **** #define DIV_APPROX_61( X )              ( ( ( X ) * 68759 ) >> 22 )
+ 141:Utilities/misc/stm32_systime.c **** 
+ 142:Utilities/misc/stm32_systime.c **** /**
+ 143:Utilities/misc/stm32_systime.c ****   * @brief Calculates mod(x,7)
+ 144:Utilities/misc/stm32_systime.c ****   *
+ 145:Utilities/misc/stm32_systime.c ****   */
+ 146:Utilities/misc/stm32_systime.c **** #define MODULO_7( X )                 ( ( X ) -( ( ( ( ( X ) + 1 ) * 299593 ) >> 21 ) * 7 ) )
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 4
+
+
+ 147:Utilities/misc/stm32_systime.c **** 
+ 148:Utilities/misc/stm32_systime.c **** /**
+ 149:Utilities/misc/stm32_systime.c ****   * @brief Calculates ceiling( X / N )
+ 150:Utilities/misc/stm32_systime.c ****   *
+ 151:Utilities/misc/stm32_systime.c ****   */
+ 152:Utilities/misc/stm32_systime.c **** #define DIVC( X, N )                ( ( ( X ) + ( N ) -1 ) / ( N ) )
+ 153:Utilities/misc/stm32_systime.c **** 
+ 154:Utilities/misc/stm32_systime.c **** /**
+ 155:Utilities/misc/stm32_systime.c ****   * @brief Calculates ceiling( X / 4 )
+ 156:Utilities/misc/stm32_systime.c ****   *
+ 157:Utilities/misc/stm32_systime.c ****   */
+ 158:Utilities/misc/stm32_systime.c **** #define DIVC_BY_4( X )                ( ( ( X ) + 3 ) >>2 )
+ 159:Utilities/misc/stm32_systime.c **** 
+ 160:Utilities/misc/stm32_systime.c **** /**
+ 161:Utilities/misc/stm32_systime.c ****   * @brief Calculates ceiling( X / 2 )
+ 162:Utilities/misc/stm32_systime.c ****   *
+ 163:Utilities/misc/stm32_systime.c ****   */
+ 164:Utilities/misc/stm32_systime.c **** #define DIVC_BY_2( X )                ( ( ( X ) + 1 ) >> 1 )
+ 165:Utilities/misc/stm32_systime.c **** /**
+ 166:Utilities/misc/stm32_systime.c ****   *  @}
+ 167:Utilities/misc/stm32_systime.c ****   */
+ 168:Utilities/misc/stm32_systime.c **** 
+ 169:Utilities/misc/stm32_systime.c **** /* Private constants -----------------------------------------------------------*/
+ 170:Utilities/misc/stm32_systime.c **** /**
+ 171:Utilities/misc/stm32_systime.c ****  * @defgroup SYSTIME_private_variable SYSTIME private constants
+ 172:Utilities/misc/stm32_systime.c ****  *  @{
+ 173:Utilities/misc/stm32_systime.c ****  */
+ 174:Utilities/misc/stm32_systime.c **** const char *WeekDayString[]={ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+ 175:Utilities/misc/stm32_systime.c **** /**
+ 176:Utilities/misc/stm32_systime.c ****   *  @}
+ 177:Utilities/misc/stm32_systime.c ****   */
+ 178:Utilities/misc/stm32_systime.c **** 
+ 179:Utilities/misc/stm32_systime.c **** /* Private function prototypes -----------------------------------------------*/
+ 180:Utilities/misc/stm32_systime.c **** 
+ 181:Utilities/misc/stm32_systime.c **** /**
+ 182:Utilities/misc/stm32_systime.c ****  * @defgroup SYSTIME_private_function_prototypes SYSTIME private function prototypes
+ 183:Utilities/misc/stm32_systime.c ****  *  @{
+ 184:Utilities/misc/stm32_systime.c ****  */
+ 185:Utilities/misc/stm32_systime.c **** static uint32_t CalendarGetMonth( uint32_t days, uint32_t year );
+ 186:Utilities/misc/stm32_systime.c **** static void CalendarDiv86400( uint32_t in, uint32_t* out, uint32_t* remainder );
+ 187:Utilities/misc/stm32_systime.c **** static uint32_t CalendarDiv61( uint32_t in );
+ 188:Utilities/misc/stm32_systime.c **** static void CalendarDiv60( uint32_t in, uint32_t* out, uint32_t* remainder );
+ 189:Utilities/misc/stm32_systime.c **** /**
+ 190:Utilities/misc/stm32_systime.c ****   *  @}
+ 191:Utilities/misc/stm32_systime.c ****   */
+ 192:Utilities/misc/stm32_systime.c **** 
+ 193:Utilities/misc/stm32_systime.c **** /* Functions Definition ------------------------------------------------------*/
+ 194:Utilities/misc/stm32_systime.c **** /**
+ 195:Utilities/misc/stm32_systime.c ****   * @addtogroup SYSTIME_exported_function
+ 196:Utilities/misc/stm32_systime.c ****   *  @{
+ 197:Utilities/misc/stm32_systime.c ****   */
+ 198:Utilities/misc/stm32_systime.c **** 
+ 199:Utilities/misc/stm32_systime.c **** SysTime_t SysTimeAdd( SysTime_t a, SysTime_t b )
+ 200:Utilities/misc/stm32_systime.c **** {
+ 201:Utilities/misc/stm32_systime.c ****   SysTime_t c =  { .Seconds = 0, .SubSeconds = 0 };
+ 202:Utilities/misc/stm32_systime.c **** 
+ 203:Utilities/misc/stm32_systime.c ****   c.Seconds = a.Seconds + b.Seconds;
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 5
+
+
+ 204:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds + b.SubSeconds;
+ 205:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds >= 1000 )
+ 206:Utilities/misc/stm32_systime.c ****   {
+ 207:Utilities/misc/stm32_systime.c ****     c.Seconds++;
+ 208:Utilities/misc/stm32_systime.c ****     c.SubSeconds -= 1000;
+ 209:Utilities/misc/stm32_systime.c ****   }
+ 210:Utilities/misc/stm32_systime.c ****   return c;
+ 211:Utilities/misc/stm32_systime.c **** }
+ 212:Utilities/misc/stm32_systime.c **** 
+ 213:Utilities/misc/stm32_systime.c **** SysTime_t SysTimeSub( SysTime_t a, SysTime_t b )
+ 214:Utilities/misc/stm32_systime.c **** {
+ 215:Utilities/misc/stm32_systime.c ****   SysTime_t c = { .Seconds = 0, .SubSeconds = 0 };
+ 216:Utilities/misc/stm32_systime.c **** 
+ 217:Utilities/misc/stm32_systime.c ****   c.Seconds = a.Seconds - b.Seconds;
+ 218:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds - b.SubSeconds;
+ 219:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds < 0 )
+ 220:Utilities/misc/stm32_systime.c ****   {
+ 221:Utilities/misc/stm32_systime.c ****     c.Seconds--;
+ 222:Utilities/misc/stm32_systime.c ****     c.SubSeconds += 1000;
+ 223:Utilities/misc/stm32_systime.c ****   }
+ 224:Utilities/misc/stm32_systime.c ****   return c;
+ 225:Utilities/misc/stm32_systime.c **** }
+ 226:Utilities/misc/stm32_systime.c **** 
+ 227:Utilities/misc/stm32_systime.c **** void SysTimeSet( SysTime_t sysTime )
+ 228:Utilities/misc/stm32_systime.c **** {
+ 229:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 230:Utilities/misc/stm32_systime.c **** 
+ 231:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 232:Utilities/misc/stm32_systime.c **** 
+ 233:Utilities/misc/stm32_systime.c ****   calendarTime.Seconds = UTIL_SYSTIMDriver.GetCalendarTime( ( uint16_t* )&calendarTime.SubSeconds )
+ 234:Utilities/misc/stm32_systime.c **** 
+ 235:Utilities/misc/stm32_systime.c ****   // sysTime is UNIX epoch
+ 236:Utilities/misc/stm32_systime.c ****   DeltaTime = SysTimeSub( sysTime, calendarTime );
+ 237:Utilities/misc/stm32_systime.c **** 
+ 238:Utilities/misc/stm32_systime.c ****   UTIL_SYSTIMDriver.BKUPWrite_Seconds( DeltaTime.Seconds );
+ 239:Utilities/misc/stm32_systime.c ****   UTIL_SYSTIMDriver.BKUPWrite_SubSeconds( ( uint32_t ) DeltaTime.SubSeconds );
+ 240:Utilities/misc/stm32_systime.c **** }
+ 241:Utilities/misc/stm32_systime.c **** 
+ 242:Utilities/misc/stm32_systime.c **** SysTime_t SysTimeGet( void )
+ 243:Utilities/misc/stm32_systime.c **** {
+ 244:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 245:Utilities/misc/stm32_systime.c ****   SysTime_t sysTime = { .Seconds = 0, .SubSeconds = 0 };
+ 246:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 247:Utilities/misc/stm32_systime.c **** 
+ 248:Utilities/misc/stm32_systime.c ****   calendarTime.Seconds = UTIL_SYSTIMDriver.GetCalendarTime( ( uint16_t* )&calendarTime.SubSeconds )
+ 249:Utilities/misc/stm32_systime.c **** 
+ 250:Utilities/misc/stm32_systime.c ****   DeltaTime.SubSeconds = (int16_t)UTIL_SYSTIMDriver.BKUPRead_SubSeconds();
+ 251:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 252:Utilities/misc/stm32_systime.c **** 
+ 253:Utilities/misc/stm32_systime.c ****   sysTime = SysTimeAdd( DeltaTime, calendarTime );
+ 254:Utilities/misc/stm32_systime.c **** 
+ 255:Utilities/misc/stm32_systime.c ****   return sysTime;
+ 256:Utilities/misc/stm32_systime.c **** }
+ 257:Utilities/misc/stm32_systime.c **** 
+ 258:Utilities/misc/stm32_systime.c **** 
+ 259:Utilities/misc/stm32_systime.c **** SysTime_t SysTimeGetMcuTime( void )
+ 260:Utilities/misc/stm32_systime.c **** {
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 6
+
+
+ 261:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 262:Utilities/misc/stm32_systime.c **** 
+ 263:Utilities/misc/stm32_systime.c ****   calendarTime.Seconds = UTIL_SYSTIMDriver.GetCalendarTime( ( uint16_t* )&calendarTime.SubSeconds )
+ 264:Utilities/misc/stm32_systime.c **** 
+ 265:Utilities/misc/stm32_systime.c ****   return calendarTime;
+ 266:Utilities/misc/stm32_systime.c **** }
+ 267:Utilities/misc/stm32_systime.c **** 
+ 268:Utilities/misc/stm32_systime.c **** uint32_t SysTimeToMs( SysTime_t sysTime )
+ 269:Utilities/misc/stm32_systime.c **** {
+ 270:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 271:Utilities/misc/stm32_systime.c ****   DeltaTime.SubSeconds = (int16_t)UTIL_SYSTIMDriver.BKUPRead_SubSeconds();
+ 272:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 273:Utilities/misc/stm32_systime.c **** 
+ 274:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = SysTimeSub( sysTime, DeltaTime );
+ 275:Utilities/misc/stm32_systime.c ****   return calendarTime.Seconds * 1000 + calendarTime.SubSeconds;
+ 276:Utilities/misc/stm32_systime.c **** }
+ 277:Utilities/misc/stm32_systime.c **** 
+ 278:Utilities/misc/stm32_systime.c **** SysTime_t SysTimeFromMs( uint32_t timeMs )
+ 279:Utilities/misc/stm32_systime.c **** {
+ 280:Utilities/misc/stm32_systime.c ****   uint32_t seconds = timeMs / 1000;
+ 281:Utilities/misc/stm32_systime.c ****   SysTime_t sysTime = { .Seconds = seconds, .SubSeconds =  timeMs - seconds * 1000 };
+ 282:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime = { 0 };
+ 283:Utilities/misc/stm32_systime.c **** 
+ 284:Utilities/misc/stm32_systime.c ****   DeltaTime.SubSeconds = (int16_t)UTIL_SYSTIMDriver.BKUPRead_SubSeconds();
+ 285:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 286:Utilities/misc/stm32_systime.c ****   return SysTimeAdd( sysTime, DeltaTime );
+ 287:Utilities/misc/stm32_systime.c **** }
+ 288:Utilities/misc/stm32_systime.c **** 
+ 289:Utilities/misc/stm32_systime.c **** uint32_t SysTimeMkTime( const struct tm* localtime )
+ 290:Utilities/misc/stm32_systime.c **** {
+ 291:Utilities/misc/stm32_systime.c ****   uint32_t nbdays;
+ 292:Utilities/misc/stm32_systime.c ****   uint32_t nbsecs;
+ 293:Utilities/misc/stm32_systime.c ****   uint32_t year = localtime->tm_year - CALC_REF_YEAR;
+ 294:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 295:Utilities/misc/stm32_systime.c ****   {
+ 296:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_LEAP,
+ 297:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_NORM,
+ 298:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_NORM,
+ 299:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_NORM
+ 300:Utilities/misc/stm32_systime.c ****   };
+ 301:Utilities/misc/stm32_systime.c **** 
+ 302:Utilities/misc/stm32_systime.c ****   nbdays = DIVC( ( TM_DAYS_IN_YEAR * 3 + TM_DAYS_IN_LEAP_YEAR ) * year, 4 );
+ 303:Utilities/misc/stm32_systime.c **** 
+ 304:Utilities/misc/stm32_systime.c ****   nbdays += ( DIVC_BY_2( ( localtime->tm_mon ) * ( 30 + 31 ) ) -
+ 305:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) ) );
+ 306:Utilities/misc/stm32_systime.c **** 
+ 307:Utilities/misc/stm32_systime.c ****   nbdays += ( localtime->tm_mday - 1 );
+ 308:Utilities/misc/stm32_systime.c **** 
+ 309:Utilities/misc/stm32_systime.c ****   // Convert from days to seconds
+ 310:Utilities/misc/stm32_systime.c ****   nbsecs = nbdays * TM_SECONDS_IN_1DAY;
+ 311:Utilities/misc/stm32_systime.c **** 
+ 312:Utilities/misc/stm32_systime.c ****   nbsecs += ( ( uint32_t )localtime->tm_sec +
+ 313:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_min * TM_SECONDS_IN_1MINUTE ) +
+ 314:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_hour * TM_SECONDS_IN_1HOUR ) );
+ 315:Utilities/misc/stm32_systime.c ****   return nbsecs - CALC_REF_YEAR_TO_UNIX_REF_YEAR_COMPENSATION_IN_SECONDS;
+ 316:Utilities/misc/stm32_systime.c **** }
+ 317:Utilities/misc/stm32_systime.c **** 
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 7
+
+
+ 318:Utilities/misc/stm32_systime.c **** void SysTimeLocalTime( const uint32_t timestamp, struct tm *localtime )
+ 319:Utilities/misc/stm32_systime.c **** {
+ 320:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 321:Utilities/misc/stm32_systime.c ****   {
+ 322:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_LEAP,
+ 323:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_NORM,
+ 324:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_NORM,
+ 325:Utilities/misc/stm32_systime.c ****     DAYS_IN_MONTH_CORRECTION_NORM
+ 326:Utilities/misc/stm32_systime.c ****   };
+ 327:Utilities/misc/stm32_systime.c ****   uint32_t weekDays = 1; // Monday 1st January 1968
+ 328:Utilities/misc/stm32_systime.c ****   uint32_t seconds;
+ 329:Utilities/misc/stm32_systime.c ****   uint32_t minutes;
+ 330:Utilities/misc/stm32_systime.c ****   uint32_t days;
+ 331:Utilities/misc/stm32_systime.c ****   uint32_t divOut;
+ 332:Utilities/misc/stm32_systime.c ****   uint32_t divReminder;
+ 333:Utilities/misc/stm32_systime.c **** 
+ 334:Utilities/misc/stm32_systime.c ****   CalendarDiv86400( timestamp + CALC_REF_YEAR_TO_UNIX_REF_YEAR_COMPENSATION_IN_SECONDS, &days, &sec
+ 335:Utilities/misc/stm32_systime.c **** 
+ 336:Utilities/misc/stm32_systime.c ****   // Calculates seconds
+ 337:Utilities/misc/stm32_systime.c ****   CalendarDiv60( seconds, &minutes, &divReminder );
+ 338:Utilities/misc/stm32_systime.c ****   localtime->tm_sec = ( uint8_t )divReminder;
+ 339:Utilities/misc/stm32_systime.c **** 
+ 340:Utilities/misc/stm32_systime.c ****   // Calculates minutes and hours
+ 341:Utilities/misc/stm32_systime.c ****   CalendarDiv60( minutes, &divOut, &divReminder);
+ 342:Utilities/misc/stm32_systime.c ****   localtime->tm_min = ( uint8_t )divReminder;
+ 343:Utilities/misc/stm32_systime.c ****   localtime->tm_hour = ( uint8_t )divOut;
+ 344:Utilities/misc/stm32_systime.c **** 
+ 345:Utilities/misc/stm32_systime.c ****   // Calculates year
+ 346:Utilities/misc/stm32_systime.c ****   localtime->tm_year = DIV_365_25( days );
+ 347:Utilities/misc/stm32_systime.c ****   days-= DIVC_BY_4( ( TM_DAYS_IN_YEAR * 3 + TM_DAYS_IN_LEAP_YEAR ) * localtime->tm_year );
+ 348:Utilities/misc/stm32_systime.c **** 
+ 349:Utilities/misc/stm32_systime.c ****   localtime->tm_yday = days;
+ 350:Utilities/misc/stm32_systime.c **** 
+ 351:Utilities/misc/stm32_systime.c ****   // Calculates month
+ 352:Utilities/misc/stm32_systime.c ****   localtime->tm_mon = CalendarGetMonth( days, localtime->tm_year );
+ 353:Utilities/misc/stm32_systime.c **** 
+ 354:Utilities/misc/stm32_systime.c ****   // calculates weekdays
+ 355:Utilities/misc/stm32_systime.c ****   weekDays += DIVC_BY_4( ( localtime->tm_year * 5 ) );
+ 356:Utilities/misc/stm32_systime.c ****   weekDays += days;
+ 357:Utilities/misc/stm32_systime.c ****   localtime->tm_wday = MODULO_7( weekDays );
+ 358:Utilities/misc/stm32_systime.c **** 
+ 359:Utilities/misc/stm32_systime.c ****   days -= ( DIVC_BY_2( ( localtime->tm_mon ) * ( 30 + 31 ) ) -
+ 360:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[localtime->tm_year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) )
+ 361:Utilities/misc/stm32_systime.c **** 
+ 362:Utilities/misc/stm32_systime.c ****   // Convert 0 to 1 indexed.
+ 363:Utilities/misc/stm32_systime.c ****   localtime->tm_mday = days + 1;
+ 364:Utilities/misc/stm32_systime.c **** 
+ 365:Utilities/misc/stm32_systime.c ****   localtime->tm_year += CALC_REF_YEAR;
+ 366:Utilities/misc/stm32_systime.c **** 
+ 367:Utilities/misc/stm32_systime.c ****   localtime->tm_isdst = -1;
+ 368:Utilities/misc/stm32_systime.c **** }
+ 369:Utilities/misc/stm32_systime.c **** 
+ 370:Utilities/misc/stm32_systime.c **** /**
+ 371:Utilities/misc/stm32_systime.c ****   *  @}
+ 372:Utilities/misc/stm32_systime.c ****   */
+ 373:Utilities/misc/stm32_systime.c **** 
+ 374:Utilities/misc/stm32_systime.c **** /**************************** Private functions *******************************/
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 8
+
+
+ 375:Utilities/misc/stm32_systime.c **** 
+ 376:Utilities/misc/stm32_systime.c **** /**
+ 377:Utilities/misc/stm32_systime.c ****   *  @addtogroup SYSTIME_private_function
+ 378:Utilities/misc/stm32_systime.c ****   *
+ 379:Utilities/misc/stm32_systime.c ****   *  @{
+ 380:Utilities/misc/stm32_systime.c ****   */
+ 381:Utilities/misc/stm32_systime.c **** static uint32_t CalendarGetMonth( uint32_t days, uint32_t year )
+ 382:Utilities/misc/stm32_systime.c **** {
+ 383:Utilities/misc/stm32_systime.c ****   uint32_t month;
+ 384:Utilities/misc/stm32_systime.c ****   if( ( year % 4 ) == 0 )
+ 385:Utilities/misc/stm32_systime.c ****   {   /*leap year*/
+ 386:Utilities/misc/stm32_systime.c ****     if( days < END_OF_FEBRUARY_LEAP )
+ 387:Utilities/misc/stm32_systime.c ****     {   // January or February
+ 388:Utilities/misc/stm32_systime.c ****       // month =  days * 2 / ( 30 + 31 );
+ 389:Utilities/misc/stm32_systime.c ****       month = CalendarDiv61( days * 2 );
+ 390:Utilities/misc/stm32_systime.c ****     }
+ 391:Utilities/misc/stm32_systime.c ****     else if( days < END_OF_JULY_LEAP )
+ 392:Utilities/misc/stm32_systime.c ****     {
+ 393:Utilities/misc/stm32_systime.c ****       month = CalendarDiv61( ( days - END_OF_FEBRUARY_LEAP ) * 2 ) + 2;
+ 394:Utilities/misc/stm32_systime.c ****     }
+ 395:Utilities/misc/stm32_systime.c ****     else
+ 396:Utilities/misc/stm32_systime.c ****     {
+ 397:Utilities/misc/stm32_systime.c ****       month = CalendarDiv61( ( days - END_OF_JULY_LEAP ) * 2 ) + 7;
+ 398:Utilities/misc/stm32_systime.c ****     }
+ 399:Utilities/misc/stm32_systime.c ****   }
+ 400:Utilities/misc/stm32_systime.c ****   else
+ 401:Utilities/misc/stm32_systime.c ****   {
+ 402:Utilities/misc/stm32_systime.c ****     if( days < END_OF_FEBRUARY_NORM )
+ 403:Utilities/misc/stm32_systime.c ****     {   // January or February
+ 404:Utilities/misc/stm32_systime.c ****       month = CalendarDiv61( days * 2 );
+ 405:Utilities/misc/stm32_systime.c ****     }
+ 406:Utilities/misc/stm32_systime.c ****     else if( days < END_OF_JULY_NORM )
+ 407:Utilities/misc/stm32_systime.c ****     {
+ 408:Utilities/misc/stm32_systime.c ****       month = CalendarDiv61( ( days - END_OF_FEBRUARY_NORM ) * 2 ) + 2;
+ 409:Utilities/misc/stm32_systime.c ****     }
+ 410:Utilities/misc/stm32_systime.c ****     else
+ 411:Utilities/misc/stm32_systime.c ****     {
+ 412:Utilities/misc/stm32_systime.c ****       month = CalendarDiv61( ( days - END_OF_JULY_NORM ) * 2 ) + 7;
+ 413:Utilities/misc/stm32_systime.c ****     }
+ 414:Utilities/misc/stm32_systime.c ****   }
+ 415:Utilities/misc/stm32_systime.c ****   return month;
+ 416:Utilities/misc/stm32_systime.c **** }
+ 417:Utilities/misc/stm32_systime.c **** 
+ 418:Utilities/misc/stm32_systime.c **** static void CalendarDiv86400( uint32_t in, uint32_t* out, uint32_t* remainder )
+ 419:Utilities/misc/stm32_systime.c **** {
+  27              		.loc 1 419 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              		.loc 1 419 1 is_stmt 0 view .LVU1
+  33 0000 30B4     		push	{r4, r5}
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 4, -8
+  36              		.cfi_offset 5, -4
+ 420:Utilities/misc/stm32_systime.c **** #if 0
+ 421:Utilities/misc/stm32_systime.c ****   *remainder = in % SECONDS_IN_1DAY;
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 9
+
+
+ 422:Utilities/misc/stm32_systime.c ****   *out     = in / SECONDS_IN_1DAY;
+ 423:Utilities/misc/stm32_systime.c **** #else
+ 424:Utilities/misc/stm32_systime.c ****   uint32_t outTemp = 0;
+  37              		.loc 1 424 3 is_stmt 1 view .LVU2
+  38              	.LVL1:
+ 425:Utilities/misc/stm32_systime.c ****   uint32_t divResult = DIV_APPROX_86400( in );
+  39              		.loc 1 425 3 view .LVU3
+  40              		.loc 1 425 24 is_stmt 0 view .LVU4
+  41 0002 430C     		lsrs	r3, r0, #17
+  42              		.loc 1 425 12 view .LVU5
+  43 0004 03EB9043 		add	r3, r3, r0, lsr #18
+  44              	.LVL2:
+ 426:Utilities/misc/stm32_systime.c **** 
+ 427:Utilities/misc/stm32_systime.c ****   while( divResult >=1 )
+  45              		.loc 1 427 3 is_stmt 1 view .LVU6
+ 424:Utilities/misc/stm32_systime.c ****   uint32_t divResult = DIV_APPROX_86400( in );
+  46              		.loc 1 424 12 is_stmt 0 view .LVU7
+  47 0008 0024     		movs	r4, #0
+  48              		.loc 1 427 8 view .LVU8
+  49 000a 06E0     		b	.L2
+  50              	.LVL3:
+  51              	.L3:
+ 428:Utilities/misc/stm32_systime.c ****   {
+ 429:Utilities/misc/stm32_systime.c ****     outTemp += divResult;
+  52              		.loc 1 429 5 is_stmt 1 view .LVU9
+  53              		.loc 1 429 13 is_stmt 0 view .LVU10
+  54 000c 1C44     		add	r4, r4, r3
+  55              	.LVL4:
+ 430:Utilities/misc/stm32_systime.c ****     in -= divResult * 86400;
+  56              		.loc 1 430 5 is_stmt 1 view .LVU11
+  57              		.loc 1 430 8 is_stmt 0 view .LVU12
+  58 000e 0A4D     		ldr	r5, .L6
+  59 0010 05FB1300 		mls	r0, r5, r3, r0
+  60              	.LVL5:
+ 431:Utilities/misc/stm32_systime.c ****     divResult= DIV_APPROX_86400( in );
+  61              		.loc 1 431 5 is_stmt 1 view .LVU13
+  62              		.loc 1 431 16 is_stmt 0 view .LVU14
+  63 0014 430C     		lsrs	r3, r0, #17
+  64              	.LVL6:
+  65              		.loc 1 431 14 view .LVU15
+  66 0016 03EB9043 		add	r3, r3, r0, lsr #18
+  67              	.LVL7:
+  68              	.L2:
+ 427:Utilities/misc/stm32_systime.c ****   {
+  69              		.loc 1 427 8 is_stmt 1 view .LVU16
+  70 001a 002B     		cmp	r3, #0
+  71 001c F6D1     		bne	.L3
+ 432:Utilities/misc/stm32_systime.c ****   }
+ 433:Utilities/misc/stm32_systime.c ****   if( in >= 86400 )
+  72              		.loc 1 433 3 view .LVU17
+  73              		.loc 1 433 5 is_stmt 0 view .LVU18
+  74 001e 074B     		ldr	r3, .L6+4
+  75              	.LVL8:
+  76              		.loc 1 433 5 view .LVU19
+  77 0020 9842     		cmp	r0, r3
+  78 0022 04D9     		bls	.L4
+ 434:Utilities/misc/stm32_systime.c ****   {
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 10
+
+
+ 435:Utilities/misc/stm32_systime.c ****     outTemp += 1;
+  79              		.loc 1 435 5 is_stmt 1 view .LVU20
+  80              		.loc 1 435 13 is_stmt 0 view .LVU21
+  81 0024 0134     		adds	r4, r4, #1
+  82              	.LVL9:
+ 436:Utilities/misc/stm32_systime.c ****     in -= 86400;
+  83              		.loc 1 436 5 is_stmt 1 view .LVU22
+  84              		.loc 1 436 8 is_stmt 0 view .LVU23
+  85 0026 A0F5A830 		sub	r0, r0, #86016
+  86              	.LVL10:
+  87              		.loc 1 436 8 view .LVU24
+  88 002a A0F5C070 		sub	r0, r0, #384
+  89              	.LVL11:
+  90              	.L4:
+ 437:Utilities/misc/stm32_systime.c ****   }
+ 438:Utilities/misc/stm32_systime.c **** 
+ 439:Utilities/misc/stm32_systime.c ****   *remainder = in;
+  91              		.loc 1 439 3 is_stmt 1 view .LVU25
+  92              		.loc 1 439 14 is_stmt 0 view .LVU26
+  93 002e 1060     		str	r0, [r2]
+ 440:Utilities/misc/stm32_systime.c ****   *out = outTemp;
+  94              		.loc 1 440 3 is_stmt 1 view .LVU27
+  95              		.loc 1 440 8 is_stmt 0 view .LVU28
+  96 0030 0C60     		str	r4, [r1]
+ 441:Utilities/misc/stm32_systime.c **** #endif
+ 442:Utilities/misc/stm32_systime.c **** }
+  97              		.loc 1 442 1 view .LVU29
+  98 0032 30BC     		pop	{r4, r5}
+  99              		.cfi_restore 5
+ 100              		.cfi_restore 4
+ 101              		.cfi_def_cfa_offset 0
+ 102              	.LVL12:
+ 103              		.loc 1 442 1 view .LVU30
+ 104 0034 7047     		bx	lr
+ 105              	.L7:
+ 106 0036 00BF     		.align	2
+ 107              	.L6:
+ 108 0038 80510100 		.word	86400
+ 109 003c 7F510100 		.word	86399
+ 110              		.cfi_endproc
+ 111              	.LFE13:
+ 113              		.section	.text.CalendarDiv61,"ax",%progbits
+ 114              		.align	1
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 118              		.fpu softvfp
+ 120              	CalendarDiv61:
+ 121              	.LVL13:
+ 122              	.LFB14:
+ 443:Utilities/misc/stm32_systime.c **** 
+ 444:Utilities/misc/stm32_systime.c **** static uint32_t CalendarDiv61( uint32_t in )
+ 445:Utilities/misc/stm32_systime.c **** {
+ 123              		.loc 1 445 1 is_stmt 1 view -0
+ 124              		.cfi_startproc
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 11
+
+
+ 127              		@ link register save eliminated.
+ 128              		.loc 1 445 1 is_stmt 0 view .LVU32
+ 129 0000 0246     		mov	r2, r0
+ 446:Utilities/misc/stm32_systime.c **** #if 0
+ 447:Utilities/misc/stm32_systime.c ****   return( in / 61 );
+ 448:Utilities/misc/stm32_systime.c **** #else
+ 449:Utilities/misc/stm32_systime.c ****   uint32_t outTemp = 0;
+ 130              		.loc 1 449 3 is_stmt 1 view .LVU33
+ 131              	.LVL14:
+ 450:Utilities/misc/stm32_systime.c ****   uint32_t divResult = DIV_APPROX_61( in );
+ 132              		.loc 1 450 3 view .LVU34
+ 133              		.loc 1 450 24 is_stmt 0 view .LVU35
+ 134 0002 0B4B     		ldr	r3, .L12
+ 135 0004 00FB03F3 		mul	r3, r0, r3
+ 136              		.loc 1 450 12 view .LVU36
+ 137 0008 9B0D     		lsrs	r3, r3, #22
+ 138              	.LVL15:
+ 451:Utilities/misc/stm32_systime.c ****   while( divResult >=1 )
+ 139              		.loc 1 451 3 is_stmt 1 view .LVU37
+ 449:Utilities/misc/stm32_systime.c ****   uint32_t divResult = DIV_APPROX_61( in );
+ 140              		.loc 1 449 12 is_stmt 0 view .LVU38
+ 141 000a 0020     		movs	r0, #0
+ 142              	.LVL16:
+ 143              		.loc 1 451 8 view .LVU39
+ 144 000c 09E0     		b	.L9
+ 145              	.LVL17:
+ 146              	.L10:
+ 452:Utilities/misc/stm32_systime.c ****   {
+ 453:Utilities/misc/stm32_systime.c ****     outTemp += divResult;
+ 147              		.loc 1 453 5 is_stmt 1 view .LVU40
+ 148              		.loc 1 453 13 is_stmt 0 view .LVU41
+ 149 000e 1844     		add	r0, r0, r3
+ 150              	.LVL18:
+ 454:Utilities/misc/stm32_systime.c ****     in -= divResult * 61;
+ 151              		.loc 1 454 5 is_stmt 1 view .LVU42
+ 152              		.loc 1 454 21 is_stmt 0 view .LVU43
+ 153 0010 C3EB0311 		rsb	r1, r3, r3, lsl #4
+ 154 0014 03EB8103 		add	r3, r3, r1, lsl #2
+ 155              	.LVL19:
+ 156              		.loc 1 454 8 view .LVU44
+ 157 0018 D21A     		subs	r2, r2, r3
+ 158              	.LVL20:
+ 455:Utilities/misc/stm32_systime.c ****     divResult = DIV_APPROX_61( in );
+ 159              		.loc 1 455 5 is_stmt 1 view .LVU45
+ 160              		.loc 1 455 17 is_stmt 0 view .LVU46
+ 161 001a 054B     		ldr	r3, .L12
+ 162 001c 02FB03F3 		mul	r3, r2, r3
+ 163              		.loc 1 455 15 view .LVU47
+ 164 0020 9B0D     		lsrs	r3, r3, #22
+ 165              	.LVL21:
+ 166              	.L9:
+ 451:Utilities/misc/stm32_systime.c ****   {
+ 167              		.loc 1 451 8 is_stmt 1 view .LVU48
+ 168 0022 002B     		cmp	r3, #0
+ 169 0024 F3D1     		bne	.L10
+ 456:Utilities/misc/stm32_systime.c ****   }
+ 457:Utilities/misc/stm32_systime.c ****   if( in >= 61 )
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 12
+
+
+ 170              		.loc 1 457 3 view .LVU49
+ 171              		.loc 1 457 5 is_stmt 0 view .LVU50
+ 172 0026 3C2A     		cmp	r2, #60
+ 173 0028 00D9     		bls	.L8
+ 458:Utilities/misc/stm32_systime.c ****   {
+ 459:Utilities/misc/stm32_systime.c ****     outTemp += 1;
+ 174              		.loc 1 459 5 is_stmt 1 view .LVU51
+ 175              		.loc 1 459 13 is_stmt 0 view .LVU52
+ 176 002a 0130     		adds	r0, r0, #1
+ 177              	.LVL22:
+ 460:Utilities/misc/stm32_systime.c ****     in -= 61;
+ 178              		.loc 1 460 5 is_stmt 1 view .LVU53
+ 461:Utilities/misc/stm32_systime.c ****   }
+ 462:Utilities/misc/stm32_systime.c ****   return outTemp;
+ 179              		.loc 1 462 3 view .LVU54
+ 180              	.L8:
+ 463:Utilities/misc/stm32_systime.c **** #endif
+ 464:Utilities/misc/stm32_systime.c **** }
+ 181              		.loc 1 464 1 is_stmt 0 view .LVU55
+ 182 002c 7047     		bx	lr
+ 183              	.L13:
+ 184 002e 00BF     		.align	2
+ 185              	.L12:
+ 186 0030 970C0100 		.word	68759
+ 187              		.cfi_endproc
+ 188              	.LFE14:
+ 190              		.section	.text.CalendarGetMonth,"ax",%progbits
+ 191              		.align	1
+ 192              		.syntax unified
+ 193              		.thumb
+ 194              		.thumb_func
+ 195              		.fpu softvfp
+ 197              	CalendarGetMonth:
+ 198              	.LVL23:
+ 199              	.LFB12:
+ 382:Utilities/misc/stm32_systime.c ****   uint32_t month;
+ 200              		.loc 1 382 1 is_stmt 1 view -0
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 0
+ 203              		@ frame_needed = 0, uses_anonymous_args = 0
+ 382:Utilities/misc/stm32_systime.c ****   uint32_t month;
+ 204              		.loc 1 382 1 is_stmt 0 view .LVU57
+ 205 0000 08B5     		push	{r3, lr}
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 3, -8
+ 208              		.cfi_offset 14, -4
+ 383:Utilities/misc/stm32_systime.c ****   if( ( year % 4 ) == 0 )
+ 209              		.loc 1 383 3 is_stmt 1 view .LVU58
+ 384:Utilities/misc/stm32_systime.c ****   {   /*leap year*/
+ 210              		.loc 1 384 3 view .LVU59
+ 384:Utilities/misc/stm32_systime.c ****   {   /*leap year*/
+ 211              		.loc 1 384 5 is_stmt 0 view .LVU60
+ 212 0002 11F0030F 		tst	r1, #3
+ 213 0006 13D1     		bne	.L15
+ 386:Utilities/misc/stm32_systime.c ****     {   // January or February
+ 214              		.loc 1 386 5 is_stmt 1 view .LVU61
+ 386:Utilities/misc/stm32_systime.c ****     {   // January or February
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 13
+
+
+ 215              		.loc 1 386 7 is_stmt 0 view .LVU62
+ 216 0008 3B28     		cmp	r0, #59
+ 217 000a 07D9     		bls	.L22
+ 391:Utilities/misc/stm32_systime.c ****     {
+ 218              		.loc 1 391 10 is_stmt 1 view .LVU63
+ 391:Utilities/misc/stm32_systime.c ****     {
+ 219              		.loc 1 391 12 is_stmt 0 view .LVU64
+ 220 000c D428     		cmp	r0, #212
+ 221 000e 09D8     		bhi	.L18
+ 393:Utilities/misc/stm32_systime.c ****     }
+ 222              		.loc 1 393 7 is_stmt 1 view .LVU65
+ 393:Utilities/misc/stm32_systime.c ****     }
+ 223              		.loc 1 393 37 is_stmt 0 view .LVU66
+ 224 0010 3C38     		subs	r0, r0, #60
+ 225              	.LVL24:
+ 393:Utilities/misc/stm32_systime.c ****     }
+ 226              		.loc 1 393 15 view .LVU67
+ 227 0012 4000     		lsls	r0, r0, #1
+ 228              	.LVL25:
+ 393:Utilities/misc/stm32_systime.c ****     }
+ 229              		.loc 1 393 15 view .LVU68
+ 230 0014 FFF7FEFF 		bl	CalendarDiv61
+ 231              	.LVL26:
+ 393:Utilities/misc/stm32_systime.c ****     }
+ 232              		.loc 1 393 13 view .LVU69
+ 233 0018 0230     		adds	r0, r0, #2
+ 234              	.LVL27:
+ 235              	.L14:
+ 416:Utilities/misc/stm32_systime.c **** 
+ 236              		.loc 1 416 1 view .LVU70
+ 237 001a 08BD     		pop	{r3, pc}
+ 238              	.LVL28:
+ 239              	.L22:
+ 389:Utilities/misc/stm32_systime.c ****     }
+ 240              		.loc 1 389 7 is_stmt 1 view .LVU71
+ 389:Utilities/misc/stm32_systime.c ****     }
+ 241              		.loc 1 389 15 is_stmt 0 view .LVU72
+ 242 001c 4000     		lsls	r0, r0, #1
+ 243              	.LVL29:
+ 389:Utilities/misc/stm32_systime.c ****     }
+ 244              		.loc 1 389 15 view .LVU73
+ 245 001e FFF7FEFF 		bl	CalendarDiv61
+ 246              	.LVL30:
+ 389:Utilities/misc/stm32_systime.c ****     }
+ 247              		.loc 1 389 15 view .LVU74
+ 248 0022 FAE7     		b	.L14
+ 249              	.LVL31:
+ 250              	.L18:
+ 397:Utilities/misc/stm32_systime.c ****     }
+ 251              		.loc 1 397 7 is_stmt 1 view .LVU75
+ 397:Utilities/misc/stm32_systime.c ****     }
+ 252              		.loc 1 397 37 is_stmt 0 view .LVU76
+ 253 0024 D538     		subs	r0, r0, #213
+ 254              	.LVL32:
+ 397:Utilities/misc/stm32_systime.c ****     }
+ 255              		.loc 1 397 15 view .LVU77
+ 256 0026 4000     		lsls	r0, r0, #1
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 14
+
+
+ 257              	.LVL33:
+ 397:Utilities/misc/stm32_systime.c ****     }
+ 258              		.loc 1 397 15 view .LVU78
+ 259 0028 FFF7FEFF 		bl	CalendarDiv61
+ 260              	.LVL34:
+ 397:Utilities/misc/stm32_systime.c ****     }
+ 261              		.loc 1 397 13 view .LVU79
+ 262 002c 0730     		adds	r0, r0, #7
+ 263              	.LVL35:
+ 397:Utilities/misc/stm32_systime.c ****     }
+ 264              		.loc 1 397 13 view .LVU80
+ 265 002e F4E7     		b	.L14
+ 266              	.LVL36:
+ 267              	.L15:
+ 402:Utilities/misc/stm32_systime.c ****     {   // January or February
+ 268              		.loc 1 402 5 is_stmt 1 view .LVU81
+ 402:Utilities/misc/stm32_systime.c ****     {   // January or February
+ 269              		.loc 1 402 7 is_stmt 0 view .LVU82
+ 270 0030 3A28     		cmp	r0, #58
+ 271 0032 07D9     		bls	.L23
+ 406:Utilities/misc/stm32_systime.c ****     {
+ 272              		.loc 1 406 10 is_stmt 1 view .LVU83
+ 406:Utilities/misc/stm32_systime.c ****     {
+ 273              		.loc 1 406 12 is_stmt 0 view .LVU84
+ 274 0034 D328     		cmp	r0, #211
+ 275 0036 09D8     		bhi	.L20
+ 408:Utilities/misc/stm32_systime.c ****     }
+ 276              		.loc 1 408 7 is_stmt 1 view .LVU85
+ 408:Utilities/misc/stm32_systime.c ****     }
+ 277              		.loc 1 408 37 is_stmt 0 view .LVU86
+ 278 0038 3B38     		subs	r0, r0, #59
+ 279              	.LVL37:
+ 408:Utilities/misc/stm32_systime.c ****     }
+ 280              		.loc 1 408 15 view .LVU87
+ 281 003a 4000     		lsls	r0, r0, #1
+ 282              	.LVL38:
+ 408:Utilities/misc/stm32_systime.c ****     }
+ 283              		.loc 1 408 15 view .LVU88
+ 284 003c FFF7FEFF 		bl	CalendarDiv61
+ 285              	.LVL39:
+ 408:Utilities/misc/stm32_systime.c ****     }
+ 286              		.loc 1 408 13 view .LVU89
+ 287 0040 0230     		adds	r0, r0, #2
+ 288              	.LVL40:
+ 408:Utilities/misc/stm32_systime.c ****     }
+ 289              		.loc 1 408 13 view .LVU90
+ 290 0042 EAE7     		b	.L14
+ 291              	.LVL41:
+ 292              	.L23:
+ 404:Utilities/misc/stm32_systime.c ****     }
+ 293              		.loc 1 404 7 is_stmt 1 view .LVU91
+ 404:Utilities/misc/stm32_systime.c ****     }
+ 294              		.loc 1 404 15 is_stmt 0 view .LVU92
+ 295 0044 4000     		lsls	r0, r0, #1
+ 296              	.LVL42:
+ 404:Utilities/misc/stm32_systime.c ****     }
+ 297              		.loc 1 404 15 view .LVU93
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 15
+
+
+ 298 0046 FFF7FEFF 		bl	CalendarDiv61
+ 299              	.LVL43:
+ 404:Utilities/misc/stm32_systime.c ****     }
+ 300              		.loc 1 404 15 view .LVU94
+ 301 004a E6E7     		b	.L14
+ 302              	.LVL44:
+ 303              	.L20:
+ 412:Utilities/misc/stm32_systime.c ****     }
+ 304              		.loc 1 412 7 is_stmt 1 view .LVU95
+ 412:Utilities/misc/stm32_systime.c ****     }
+ 305              		.loc 1 412 37 is_stmt 0 view .LVU96
+ 306 004c D438     		subs	r0, r0, #212
+ 307              	.LVL45:
+ 412:Utilities/misc/stm32_systime.c ****     }
+ 308              		.loc 1 412 15 view .LVU97
+ 309 004e 4000     		lsls	r0, r0, #1
+ 310              	.LVL46:
+ 412:Utilities/misc/stm32_systime.c ****     }
+ 311              		.loc 1 412 15 view .LVU98
+ 312 0050 FFF7FEFF 		bl	CalendarDiv61
+ 313              	.LVL47:
+ 412:Utilities/misc/stm32_systime.c ****     }
+ 314              		.loc 1 412 13 view .LVU99
+ 315 0054 0730     		adds	r0, r0, #7
+ 316              	.LVL48:
+ 415:Utilities/misc/stm32_systime.c **** }
+ 317              		.loc 1 415 3 is_stmt 1 view .LVU100
+ 415:Utilities/misc/stm32_systime.c **** }
+ 318              		.loc 1 415 10 is_stmt 0 view .LVU101
+ 319 0056 E0E7     		b	.L14
+ 320              		.cfi_endproc
+ 321              	.LFE12:
+ 323              		.section	.text.CalendarDiv60,"ax",%progbits
+ 324              		.align	1
+ 325              		.syntax unified
+ 326              		.thumb
+ 327              		.thumb_func
+ 328              		.fpu softvfp
+ 330              	CalendarDiv60:
+ 331              	.LVL49:
+ 332              	.LFB15:
+ 465:Utilities/misc/stm32_systime.c **** 
+ 466:Utilities/misc/stm32_systime.c **** static void CalendarDiv60( uint32_t in, uint32_t* out, uint32_t* remainder )
+ 467:Utilities/misc/stm32_systime.c **** {
+ 333              		.loc 1 467 1 is_stmt 1 view -0
+ 334              		.cfi_startproc
+ 335              		@ args = 0, pretend = 0, frame = 0
+ 336              		@ frame_needed = 0, uses_anonymous_args = 0
+ 337              		@ link register save eliminated.
+ 338              		.loc 1 467 1 is_stmt 0 view .LVU103
+ 339 0000 10B4     		push	{r4}
+ 340              		.cfi_def_cfa_offset 4
+ 341              		.cfi_offset 4, -4
+ 468:Utilities/misc/stm32_systime.c **** #if 0
+ 469:Utilities/misc/stm32_systime.c ****   *remainder = in % 60;
+ 470:Utilities/misc/stm32_systime.c ****   *out     = in / 60;
+ 471:Utilities/misc/stm32_systime.c **** #else
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 16
+
+
+ 472:Utilities/misc/stm32_systime.c ****   uint32_t outTemp = 0;
+ 342              		.loc 1 472 3 is_stmt 1 view .LVU104
+ 343              	.LVL50:
+ 473:Utilities/misc/stm32_systime.c ****   uint32_t divResult = DIV_APPROX_60( in );
+ 344              		.loc 1 473 3 view .LVU105
+ 345              		.loc 1 473 24 is_stmt 0 view .LVU106
+ 346 0002 44F24443 		movw	r3, #17476
+ 347 0006 00FB03F3 		mul	r3, r0, r3
+ 348              		.loc 1 473 12 view .LVU107
+ 349 000a 1B0D     		lsrs	r3, r3, #20
+ 350              	.LVL51:
+ 474:Utilities/misc/stm32_systime.c **** 
+ 475:Utilities/misc/stm32_systime.c ****   while( divResult >=1 )
+ 351              		.loc 1 475 3 is_stmt 1 view .LVU108
+ 472:Utilities/misc/stm32_systime.c ****   uint32_t divResult = DIV_APPROX_60( in );
+ 352              		.loc 1 472 12 is_stmt 0 view .LVU109
+ 353 000c 0024     		movs	r4, #0
+ 354              		.loc 1 475 8 view .LVU110
+ 355 000e 09E0     		b	.L25
+ 356              	.LVL52:
+ 357              	.L26:
+ 476:Utilities/misc/stm32_systime.c ****   {
+ 477:Utilities/misc/stm32_systime.c ****     outTemp += divResult;
+ 358              		.loc 1 477 5 is_stmt 1 view .LVU111
+ 359              		.loc 1 477 13 is_stmt 0 view .LVU112
+ 360 0010 1C44     		add	r4, r4, r3
+ 361              	.LVL53:
+ 478:Utilities/misc/stm32_systime.c ****     in -= divResult * 60;
+ 362              		.loc 1 478 5 is_stmt 1 view .LVU113
+ 363              		.loc 1 478 21 is_stmt 0 view .LVU114
+ 364 0012 C3EB0313 		rsb	r3, r3, r3, lsl #4
+ 365              	.LVL54:
+ 366              		.loc 1 478 8 view .LVU115
+ 367 0016 A0EB8300 		sub	r0, r0, r3, lsl #2
+ 368              	.LVL55:
+ 479:Utilities/misc/stm32_systime.c ****     divResult = DIV_APPROX_60( in );
+ 369              		.loc 1 479 5 is_stmt 1 view .LVU116
+ 370              		.loc 1 479 17 is_stmt 0 view .LVU117
+ 371 001a 44F24443 		movw	r3, #17476
+ 372 001e 00FB03F3 		mul	r3, r0, r3
+ 373              		.loc 1 479 15 view .LVU118
+ 374 0022 1B0D     		lsrs	r3, r3, #20
+ 375              	.LVL56:
+ 376              	.L25:
+ 475:Utilities/misc/stm32_systime.c ****   {
+ 377              		.loc 1 475 8 is_stmt 1 view .LVU119
+ 378 0024 002B     		cmp	r3, #0
+ 379 0026 F3D1     		bne	.L26
+ 480:Utilities/misc/stm32_systime.c ****   }
+ 481:Utilities/misc/stm32_systime.c ****   if( in >= 60 )
+ 380              		.loc 1 481 3 view .LVU120
+ 381              		.loc 1 481 5 is_stmt 0 view .LVU121
+ 382 0028 3B28     		cmp	r0, #59
+ 383 002a 01D9     		bls	.L27
+ 482:Utilities/misc/stm32_systime.c ****   {
+ 483:Utilities/misc/stm32_systime.c ****     outTemp += 1;
+ 384              		.loc 1 483 5 is_stmt 1 view .LVU122
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 17
+
+
+ 385              		.loc 1 483 13 is_stmt 0 view .LVU123
+ 386 002c 0134     		adds	r4, r4, #1
+ 387              	.LVL57:
+ 484:Utilities/misc/stm32_systime.c ****     in -= 60;
+ 388              		.loc 1 484 5 is_stmt 1 view .LVU124
+ 389              		.loc 1 484 8 is_stmt 0 view .LVU125
+ 390 002e 3C38     		subs	r0, r0, #60
+ 391              	.LVL58:
+ 392              	.L27:
+ 485:Utilities/misc/stm32_systime.c ****   }
+ 486:Utilities/misc/stm32_systime.c ****   *remainder = in;
+ 393              		.loc 1 486 3 is_stmt 1 view .LVU126
+ 394              		.loc 1 486 14 is_stmt 0 view .LVU127
+ 395 0030 1060     		str	r0, [r2]
+ 487:Utilities/misc/stm32_systime.c ****   *out = outTemp;
+ 396              		.loc 1 487 3 is_stmt 1 view .LVU128
+ 397              		.loc 1 487 8 is_stmt 0 view .LVU129
+ 398 0032 0C60     		str	r4, [r1]
+ 488:Utilities/misc/stm32_systime.c **** #endif
+ 489:Utilities/misc/stm32_systime.c **** }
+ 399              		.loc 1 489 1 view .LVU130
+ 400 0034 10BC     		pop	{r4}
+ 401              		.cfi_restore 4
+ 402              		.cfi_def_cfa_offset 0
+ 403              	.LVL59:
+ 404              		.loc 1 489 1 view .LVU131
+ 405 0036 7047     		bx	lr
+ 406              		.cfi_endproc
+ 407              	.LFE15:
+ 409              		.section	.text.SysTimeAdd,"ax",%progbits
+ 410              		.align	1
+ 411              		.global	SysTimeAdd
+ 412              		.syntax unified
+ 413              		.thumb
+ 414              		.thumb_func
+ 415              		.fpu softvfp
+ 417              	SysTimeAdd:
+ 418              	.LVL60:
+ 419              	.LFB3:
+ 200:Utilities/misc/stm32_systime.c ****   SysTime_t c =  { .Seconds = 0, .SubSeconds = 0 };
+ 420              		.loc 1 200 1 is_stmt 1 view -0
+ 421              		.cfi_startproc
+ 422              		@ args = 12, pretend = 8, frame = 8
+ 423              		@ frame_needed = 0, uses_anonymous_args = 0
+ 424              		@ link register save eliminated.
+ 200:Utilities/misc/stm32_systime.c ****   SysTime_t c =  { .Seconds = 0, .SubSeconds = 0 };
+ 425              		.loc 1 200 1 is_stmt 0 view .LVU133
+ 426 0000 82B0     		sub	sp, sp, #8
+ 427              		.cfi_def_cfa_offset 8
+ 428 0002 82B0     		sub	sp, sp, #8
+ 429              		.cfi_def_cfa_offset 16
+ 430 0004 0DF1080C 		add	ip, sp, #8
+ 431 0008 0CE90600 		stmdb	ip, {r1, r2}
+ 432 000c 0393     		str	r3, [sp, #12]
+ 201:Utilities/misc/stm32_systime.c **** 
+ 433              		.loc 1 201 3 is_stmt 1 view .LVU134
+ 201:Utilities/misc/stm32_systime.c **** 
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 18
+
+
+ 434              		.loc 1 201 13 is_stmt 0 view .LVU135
+ 435 000e 0022     		movs	r2, #0
+ 436 0010 0260     		str	r2, [r0]
+ 437 0012 8280     		strh	r2, [r0, #4]	@ movhi
+ 203:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds + b.SubSeconds;
+ 438              		.loc 1 203 3 is_stmt 1 view .LVU136
+ 203:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds + b.SubSeconds;
+ 439              		.loc 1 203 25 is_stmt 0 view .LVU137
+ 440 0014 0B44     		add	r3, r3, r1
+ 203:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds + b.SubSeconds;
+ 441              		.loc 1 203 13 view .LVU138
+ 442 0016 0360     		str	r3, [r0]
+ 204:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds >= 1000 )
+ 443              		.loc 1 204 3 is_stmt 1 view .LVU139
+ 204:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds >= 1000 )
+ 444              		.loc 1 204 19 is_stmt 0 view .LVU140
+ 445 0018 BDF80420 		ldrh	r2, [sp, #4]
+ 204:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds >= 1000 )
+ 446              		.loc 1 204 34 view .LVU141
+ 447 001c BDF81010 		ldrh	r1, [sp, #16]
+ 204:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds >= 1000 )
+ 448              		.loc 1 204 31 view .LVU142
+ 449 0020 0A44     		add	r2, r2, r1
+ 450 0022 91B2     		uxth	r1, r2
+ 451 0024 12B2     		sxth	r2, r2
+ 204:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds >= 1000 )
+ 452              		.loc 1 204 16 view .LVU143
+ 453 0026 8280     		strh	r2, [r0, #4]	@ movhi
+ 205:Utilities/misc/stm32_systime.c ****   {
+ 454              		.loc 1 205 3 is_stmt 1 view .LVU144
+ 205:Utilities/misc/stm32_systime.c ****   {
+ 455              		.loc 1 205 5 is_stmt 0 view .LVU145
+ 456 0028 B2F57A7F 		cmp	r2, #1000
+ 457 002c 04DB     		blt	.L29
+ 207:Utilities/misc/stm32_systime.c ****     c.SubSeconds -= 1000;
+ 458              		.loc 1 207 5 is_stmt 1 view .LVU146
+ 207:Utilities/misc/stm32_systime.c ****     c.SubSeconds -= 1000;
+ 459              		.loc 1 207 14 is_stmt 0 view .LVU147
+ 460 002e 0133     		adds	r3, r3, #1
+ 461 0030 0360     		str	r3, [r0]
+ 208:Utilities/misc/stm32_systime.c ****   }
+ 462              		.loc 1 208 5 is_stmt 1 view .LVU148
+ 208:Utilities/misc/stm32_systime.c ****   }
+ 463              		.loc 1 208 18 is_stmt 0 view .LVU149
+ 464 0032 A1F57A71 		sub	r1, r1, #1000
+ 465 0036 8180     		strh	r1, [r0, #4]	@ movhi
+ 210:Utilities/misc/stm32_systime.c **** }
+ 466              		.loc 1 210 3 is_stmt 1 view .LVU150
+ 467              	.L29:
+ 211:Utilities/misc/stm32_systime.c **** 
+ 468              		.loc 1 211 1 is_stmt 0 view .LVU151
+ 469 0038 02B0     		add	sp, sp, #8
+ 470              		.cfi_def_cfa_offset 8
+ 471              		@ sp needed
+ 472 003a 02B0     		add	sp, sp, #8
+ 473              		.cfi_def_cfa_offset 0
+ 474 003c 7047     		bx	lr
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 19
+
+
+ 475              		.cfi_endproc
+ 476              	.LFE3:
+ 478              		.section	.text.SysTimeSub,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	SysTimeSub
+ 481              		.syntax unified
+ 482              		.thumb
+ 483              		.thumb_func
+ 484              		.fpu softvfp
+ 486              	SysTimeSub:
+ 487              	.LVL61:
+ 488              	.LFB4:
+ 214:Utilities/misc/stm32_systime.c ****   SysTime_t c = { .Seconds = 0, .SubSeconds = 0 };
+ 489              		.loc 1 214 1 is_stmt 1 view -0
+ 490              		.cfi_startproc
+ 491              		@ args = 12, pretend = 8, frame = 8
+ 492              		@ frame_needed = 0, uses_anonymous_args = 0
+ 493              		@ link register save eliminated.
+ 214:Utilities/misc/stm32_systime.c ****   SysTime_t c = { .Seconds = 0, .SubSeconds = 0 };
+ 494              		.loc 1 214 1 is_stmt 0 view .LVU153
+ 495 0000 82B0     		sub	sp, sp, #8
+ 496              		.cfi_def_cfa_offset 8
+ 497 0002 82B0     		sub	sp, sp, #8
+ 498              		.cfi_def_cfa_offset 16
+ 499 0004 0DF1080C 		add	ip, sp, #8
+ 500 0008 0CE90600 		stmdb	ip, {r1, r2}
+ 501 000c 0393     		str	r3, [sp, #12]
+ 215:Utilities/misc/stm32_systime.c **** 
+ 502              		.loc 1 215 3 is_stmt 1 view .LVU154
+ 215:Utilities/misc/stm32_systime.c **** 
+ 503              		.loc 1 215 13 is_stmt 0 view .LVU155
+ 504 000e 0022     		movs	r2, #0
+ 505 0010 0260     		str	r2, [r0]
+ 506 0012 8280     		strh	r2, [r0, #4]	@ movhi
+ 217:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds - b.SubSeconds;
+ 507              		.loc 1 217 3 is_stmt 1 view .LVU156
+ 217:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds - b.SubSeconds;
+ 508              		.loc 1 217 25 is_stmt 0 view .LVU157
+ 509 0014 CB1A     		subs	r3, r1, r3
+ 217:Utilities/misc/stm32_systime.c ****   c.SubSeconds = a.SubSeconds - b.SubSeconds;
+ 510              		.loc 1 217 13 view .LVU158
+ 511 0016 0360     		str	r3, [r0]
+ 218:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds < 0 )
+ 512              		.loc 1 218 3 is_stmt 1 view .LVU159
+ 218:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds < 0 )
+ 513              		.loc 1 218 19 is_stmt 0 view .LVU160
+ 514 0018 BDF80420 		ldrh	r2, [sp, #4]
+ 218:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds < 0 )
+ 515              		.loc 1 218 34 view .LVU161
+ 516 001c BDF81010 		ldrh	r1, [sp, #16]
+ 218:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds < 0 )
+ 517              		.loc 1 218 31 view .LVU162
+ 518 0020 521A     		subs	r2, r2, r1
+ 519 0022 91B2     		uxth	r1, r2
+ 520 0024 12B2     		sxth	r2, r2
+ 218:Utilities/misc/stm32_systime.c ****   if( c.SubSeconds < 0 )
+ 521              		.loc 1 218 16 view .LVU163
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 20
+
+
+ 522 0026 8280     		strh	r2, [r0, #4]	@ movhi
+ 219:Utilities/misc/stm32_systime.c ****   {
+ 523              		.loc 1 219 3 is_stmt 1 view .LVU164
+ 219:Utilities/misc/stm32_systime.c ****   {
+ 524              		.loc 1 219 5 is_stmt 0 view .LVU165
+ 525 0028 002A     		cmp	r2, #0
+ 526 002a 02DB     		blt	.L35
+ 527              	.L32:
+ 225:Utilities/misc/stm32_systime.c **** 
+ 528              		.loc 1 225 1 view .LVU166
+ 529 002c 02B0     		add	sp, sp, #8
+ 530              		.cfi_remember_state
+ 531              		.cfi_def_cfa_offset 8
+ 532              		@ sp needed
+ 533 002e 02B0     		add	sp, sp, #8
+ 534              		.cfi_def_cfa_offset 0
+ 535 0030 7047     		bx	lr
+ 536              	.L35:
+ 537              		.cfi_restore_state
+ 221:Utilities/misc/stm32_systime.c ****     c.SubSeconds += 1000;
+ 538              		.loc 1 221 5 is_stmt 1 view .LVU167
+ 221:Utilities/misc/stm32_systime.c ****     c.SubSeconds += 1000;
+ 539              		.loc 1 221 14 is_stmt 0 view .LVU168
+ 540 0032 013B     		subs	r3, r3, #1
+ 541 0034 0360     		str	r3, [r0]
+ 222:Utilities/misc/stm32_systime.c ****   }
+ 542              		.loc 1 222 5 is_stmt 1 view .LVU169
+ 222:Utilities/misc/stm32_systime.c ****   }
+ 543              		.loc 1 222 18 is_stmt 0 view .LVU170
+ 544 0036 01F57A71 		add	r1, r1, #1000
+ 545 003a 8180     		strh	r1, [r0, #4]	@ movhi
+ 224:Utilities/misc/stm32_systime.c **** }
+ 546              		.loc 1 224 3 is_stmt 1 view .LVU171
+ 224:Utilities/misc/stm32_systime.c **** }
+ 547              		.loc 1 224 10 is_stmt 0 view .LVU172
+ 548 003c F6E7     		b	.L32
+ 549              		.cfi_endproc
+ 550              	.LFE4:
+ 552              		.section	.text.SysTimeSet,"ax",%progbits
+ 553              		.align	1
+ 554              		.global	SysTimeSet
+ 555              		.syntax unified
+ 556              		.thumb
+ 557              		.thumb_func
+ 558              		.fpu softvfp
+ 560              	SysTimeSet:
+ 561              	.LFB5:
+ 228:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 562              		.loc 1 228 1 is_stmt 1 view -0
+ 563              		.cfi_startproc
+ 564              		@ args = 0, pretend = 0, frame = 24
+ 565              		@ frame_needed = 0, uses_anonymous_args = 0
+ 566 0000 30B5     		push	{r4, r5, lr}
+ 567              		.cfi_def_cfa_offset 12
+ 568              		.cfi_offset 4, -12
+ 569              		.cfi_offset 5, -8
+ 570              		.cfi_offset 14, -4
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 21
+
+
+ 571 0002 89B0     		sub	sp, sp, #36
+ 572              		.cfi_def_cfa_offset 48
+ 573 0004 02AC     		add	r4, sp, #8
+ 574 0006 84E80300 		stm	r4, {r0, r1}
+ 229:Utilities/misc/stm32_systime.c **** 
+ 575              		.loc 1 229 3 view .LVU174
+ 231:Utilities/misc/stm32_systime.c **** 
+ 576              		.loc 1 231 3 view .LVU175
+ 231:Utilities/misc/stm32_systime.c **** 
+ 577              		.loc 1 231 13 is_stmt 0 view .LVU176
+ 578 000a 0023     		movs	r3, #0
+ 579 000c 0493     		str	r3, [sp, #16]
+ 580 000e ADF81430 		strh	r3, [sp, #20]	@ movhi
+ 233:Utilities/misc/stm32_systime.c **** 
+ 581              		.loc 1 233 3 is_stmt 1 view .LVU177
+ 233:Utilities/misc/stm32_systime.c **** 
+ 582              		.loc 1 233 43 is_stmt 0 view .LVU178
+ 583 0012 0B4D     		ldr	r5, .L38
+ 584 0014 2B69     		ldr	r3, [r5, #16]
+ 233:Utilities/misc/stm32_systime.c **** 
+ 585              		.loc 1 233 26 view .LVU179
+ 586 0016 05A8     		add	r0, sp, #20
+ 587 0018 9847     		blx	r3
+ 588              	.LVL62:
+ 589 001a 0346     		mov	r3, r0
+ 233:Utilities/misc/stm32_systime.c **** 
+ 590              		.loc 1 233 24 view .LVU180
+ 591 001c 0490     		str	r0, [sp, #16]
+ 236:Utilities/misc/stm32_systime.c **** 
+ 592              		.loc 1 236 3 is_stmt 1 view .LVU181
+ 236:Utilities/misc/stm32_systime.c **** 
+ 593              		.loc 1 236 15 is_stmt 0 view .LVU182
+ 594 001e 059A     		ldr	r2, [sp, #20]
+ 595 0020 0092     		str	r2, [sp]
+ 596 0022 94E80600 		ldm	r4, {r1, r2}
+ 597 0026 06A8     		add	r0, sp, #24
+ 598 0028 FFF7FEFF 		bl	SysTimeSub
+ 599              	.LVL63:
+ 238:Utilities/misc/stm32_systime.c ****   UTIL_SYSTIMDriver.BKUPWrite_SubSeconds( ( uint32_t ) DeltaTime.SubSeconds );
+ 600              		.loc 1 238 3 is_stmt 1 view .LVU183
+ 238:Utilities/misc/stm32_systime.c ****   UTIL_SYSTIMDriver.BKUPWrite_SubSeconds( ( uint32_t ) DeltaTime.SubSeconds );
+ 601              		.loc 1 238 20 is_stmt 0 view .LVU184
+ 602 002c 2B68     		ldr	r3, [r5]
+ 238:Utilities/misc/stm32_systime.c ****   UTIL_SYSTIMDriver.BKUPWrite_SubSeconds( ( uint32_t ) DeltaTime.SubSeconds );
+ 603              		.loc 1 238 3 view .LVU185
+ 604 002e 0698     		ldr	r0, [sp, #24]
+ 605 0030 9847     		blx	r3
+ 606              	.LVL64:
+ 239:Utilities/misc/stm32_systime.c **** }
+ 607              		.loc 1 239 3 is_stmt 1 view .LVU186
+ 239:Utilities/misc/stm32_systime.c **** }
+ 608              		.loc 1 239 20 is_stmt 0 view .LVU187
+ 609 0032 AB68     		ldr	r3, [r5, #8]
+ 239:Utilities/misc/stm32_systime.c **** }
+ 610              		.loc 1 239 3 view .LVU188
+ 611 0034 BDF91C00 		ldrsh	r0, [sp, #28]
+ 612 0038 9847     		blx	r3
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 22
+
+
+ 613              	.LVL65:
+ 240:Utilities/misc/stm32_systime.c **** 
+ 614              		.loc 1 240 1 view .LVU189
+ 615 003a 09B0     		add	sp, sp, #36
+ 616              		.cfi_def_cfa_offset 12
+ 617              		@ sp needed
+ 618 003c 30BD     		pop	{r4, r5, pc}
+ 619              	.L39:
+ 620 003e 00BF     		.align	2
+ 621              	.L38:
+ 622 0040 00000000 		.word	UTIL_SYSTIMDriver
+ 623              		.cfi_endproc
+ 624              	.LFE5:
+ 626              		.section	.text.SysTimeGet,"ax",%progbits
+ 627              		.align	1
+ 628              		.global	SysTimeGet
+ 629              		.syntax unified
+ 630              		.thumb
+ 631              		.thumb_func
+ 632              		.fpu softvfp
+ 634              	SysTimeGet:
+ 635              	.LVL66:
+ 636              	.LFB6:
+ 243:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 637              		.loc 1 243 1 is_stmt 1 view -0
+ 638              		.cfi_startproc
+ 639              		@ args = 0, pretend = 0, frame = 16
+ 640              		@ frame_needed = 0, uses_anonymous_args = 0
+ 243:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 641              		.loc 1 243 1 is_stmt 0 view .LVU191
+ 642 0000 30B5     		push	{r4, r5, lr}
+ 643              		.cfi_def_cfa_offset 12
+ 644              		.cfi_offset 4, -12
+ 645              		.cfi_offset 5, -8
+ 646              		.cfi_offset 14, -4
+ 647 0002 87B0     		sub	sp, sp, #28
+ 648              		.cfi_def_cfa_offset 40
+ 649 0004 0446     		mov	r4, r0
+ 244:Utilities/misc/stm32_systime.c ****   SysTime_t sysTime = { .Seconds = 0, .SubSeconds = 0 };
+ 650              		.loc 1 244 3 is_stmt 1 view .LVU192
+ 244:Utilities/misc/stm32_systime.c ****   SysTime_t sysTime = { .Seconds = 0, .SubSeconds = 0 };
+ 651              		.loc 1 244 13 is_stmt 0 view .LVU193
+ 652 0006 0023     		movs	r3, #0
+ 653 0008 0493     		str	r3, [sp, #16]
+ 654 000a ADF81430 		strh	r3, [sp, #20]	@ movhi
+ 245:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 655              		.loc 1 245 3 is_stmt 1 view .LVU194
+ 245:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 656              		.loc 1 245 13 is_stmt 0 view .LVU195
+ 657 000e 0360     		str	r3, [r0]
+ 658 0010 8380     		strh	r3, [r0, #4]	@ movhi
+ 246:Utilities/misc/stm32_systime.c **** 
+ 659              		.loc 1 246 3 is_stmt 1 view .LVU196
+ 248:Utilities/misc/stm32_systime.c **** 
+ 660              		.loc 1 248 3 view .LVU197
+ 248:Utilities/misc/stm32_systime.c **** 
+ 661              		.loc 1 248 43 is_stmt 0 view .LVU198
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 23
+
+
+ 662 0012 0B4D     		ldr	r5, .L42
+ 663 0014 2B69     		ldr	r3, [r5, #16]
+ 248:Utilities/misc/stm32_systime.c **** 
+ 664              		.loc 1 248 26 view .LVU199
+ 665 0016 05A8     		add	r0, sp, #20
+ 666              	.LVL67:
+ 248:Utilities/misc/stm32_systime.c **** 
+ 667              		.loc 1 248 26 view .LVU200
+ 668 0018 9847     		blx	r3
+ 669              	.LVL68:
+ 248:Utilities/misc/stm32_systime.c **** 
+ 670              		.loc 1 248 24 view .LVU201
+ 671 001a 0490     		str	r0, [sp, #16]
+ 250:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 672              		.loc 1 250 3 is_stmt 1 view .LVU202
+ 250:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 673              		.loc 1 250 52 is_stmt 0 view .LVU203
+ 674 001c EB68     		ldr	r3, [r5, #12]
+ 250:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 675              		.loc 1 250 35 view .LVU204
+ 676 001e 9847     		blx	r3
+ 677              	.LVL69:
+ 250:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 678              		.loc 1 250 24 view .LVU205
+ 679 0020 ADF80C00 		strh	r0, [sp, #12]	@ movhi
+ 251:Utilities/misc/stm32_systime.c **** 
+ 680              		.loc 1 251 3 is_stmt 1 view .LVU206
+ 251:Utilities/misc/stm32_systime.c **** 
+ 681              		.loc 1 251 40 is_stmt 0 view .LVU207
+ 682 0024 6B68     		ldr	r3, [r5, #4]
+ 251:Utilities/misc/stm32_systime.c **** 
+ 683              		.loc 1 251 23 view .LVU208
+ 684 0026 9847     		blx	r3
+ 685              	.LVL70:
+ 251:Utilities/misc/stm32_systime.c **** 
+ 686              		.loc 1 251 21 view .LVU209
+ 687 0028 0290     		str	r0, [sp, #8]
+ 253:Utilities/misc/stm32_systime.c **** 
+ 688              		.loc 1 253 3 is_stmt 1 view .LVU210
+ 253:Utilities/misc/stm32_systime.c **** 
+ 689              		.loc 1 253 13 is_stmt 0 view .LVU211
+ 690 002a 059B     		ldr	r3, [sp, #20]
+ 691 002c 0093     		str	r3, [sp]
+ 692 002e 049B     		ldr	r3, [sp, #16]
+ 693 0030 02AA     		add	r2, sp, #8
+ 694 0032 06CA     		ldm	r2, {r1, r2}
+ 695 0034 2046     		mov	r0, r4
+ 696 0036 FFF7FEFF 		bl	SysTimeAdd
+ 697              	.LVL71:
+ 255:Utilities/misc/stm32_systime.c **** }
+ 698              		.loc 1 255 3 is_stmt 1 view .LVU212
+ 256:Utilities/misc/stm32_systime.c **** 
+ 699              		.loc 1 256 1 is_stmt 0 view .LVU213
+ 700 003a 2046     		mov	r0, r4
+ 701 003c 07B0     		add	sp, sp, #28
+ 702              		.cfi_def_cfa_offset 12
+ 703              		@ sp needed
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 24
+
+
+ 704 003e 30BD     		pop	{r4, r5, pc}
+ 705              	.LVL72:
+ 706              	.L43:
+ 256:Utilities/misc/stm32_systime.c **** 
+ 707              		.loc 1 256 1 view .LVU214
+ 708              		.align	2
+ 709              	.L42:
+ 710 0040 00000000 		.word	UTIL_SYSTIMDriver
+ 711              		.cfi_endproc
+ 712              	.LFE6:
+ 714              		.section	.text.SysTimeGetMcuTime,"ax",%progbits
+ 715              		.align	1
+ 716              		.global	SysTimeGetMcuTime
+ 717              		.syntax unified
+ 718              		.thumb
+ 719              		.thumb_func
+ 720              		.fpu softvfp
+ 722              	SysTimeGetMcuTime:
+ 723              	.LVL73:
+ 724              	.LFB7:
+ 260:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 725              		.loc 1 260 1 is_stmt 1 view -0
+ 726              		.cfi_startproc
+ 727              		@ args = 0, pretend = 0, frame = 8
+ 728              		@ frame_needed = 0, uses_anonymous_args = 0
+ 260:Utilities/misc/stm32_systime.c ****   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
+ 729              		.loc 1 260 1 is_stmt 0 view .LVU216
+ 730 0000 30B5     		push	{r4, r5, lr}
+ 731              		.cfi_def_cfa_offset 12
+ 732              		.cfi_offset 4, -12
+ 733              		.cfi_offset 5, -8
+ 734              		.cfi_offset 14, -4
+ 735 0002 83B0     		sub	sp, sp, #12
+ 736              		.cfi_def_cfa_offset 24
+ 737 0004 0446     		mov	r4, r0
+ 261:Utilities/misc/stm32_systime.c **** 
+ 738              		.loc 1 261 3 is_stmt 1 view .LVU217
+ 261:Utilities/misc/stm32_systime.c **** 
+ 739              		.loc 1 261 13 is_stmt 0 view .LVU218
+ 740 0006 0023     		movs	r3, #0
+ 741 0008 0093     		str	r3, [sp]
+ 742 000a ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 263:Utilities/misc/stm32_systime.c **** 
+ 743              		.loc 1 263 3 is_stmt 1 view .LVU219
+ 263:Utilities/misc/stm32_systime.c **** 
+ 744              		.loc 1 263 43 is_stmt 0 view .LVU220
+ 745 000e 064B     		ldr	r3, .L46
+ 746 0010 1B69     		ldr	r3, [r3, #16]
+ 263:Utilities/misc/stm32_systime.c **** 
+ 747              		.loc 1 263 26 view .LVU221
+ 748 0012 6D46     		mov	r5, sp
+ 749 0014 01A8     		add	r0, sp, #4
+ 750              	.LVL74:
+ 263:Utilities/misc/stm32_systime.c **** 
+ 751              		.loc 1 263 26 view .LVU222
+ 752 0016 9847     		blx	r3
+ 753              	.LVL75:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 25
+
+
+ 263:Utilities/misc/stm32_systime.c **** 
+ 754              		.loc 1 263 24 view .LVU223
+ 755 0018 0090     		str	r0, [sp]
+ 265:Utilities/misc/stm32_systime.c **** }
+ 756              		.loc 1 265 3 is_stmt 1 view .LVU224
+ 265:Utilities/misc/stm32_systime.c **** }
+ 757              		.loc 1 265 10 is_stmt 0 view .LVU225
+ 758 001a 95E80300 		ldm	r5, {r0, r1}
+ 759 001e 84E80300 		stm	r4, {r0, r1}
+ 266:Utilities/misc/stm32_systime.c **** 
+ 760              		.loc 1 266 1 view .LVU226
+ 761 0022 2046     		mov	r0, r4
+ 762 0024 03B0     		add	sp, sp, #12
+ 763              		.cfi_def_cfa_offset 12
+ 764              		@ sp needed
+ 765 0026 30BD     		pop	{r4, r5, pc}
+ 766              	.LVL76:
+ 767              	.L47:
+ 266:Utilities/misc/stm32_systime.c **** 
+ 768              		.loc 1 266 1 view .LVU227
+ 769              		.align	2
+ 770              	.L46:
+ 771 0028 00000000 		.word	UTIL_SYSTIMDriver
+ 772              		.cfi_endproc
+ 773              	.LFE7:
+ 775              		.section	.text.SysTimeToMs,"ax",%progbits
+ 776              		.align	1
+ 777              		.global	SysTimeToMs
+ 778              		.syntax unified
+ 779              		.thumb
+ 780              		.thumb_func
+ 781              		.fpu softvfp
+ 783              	SysTimeToMs:
+ 784              	.LFB8:
+ 269:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime;
+ 785              		.loc 1 269 1 is_stmt 1 view -0
+ 786              		.cfi_startproc
+ 787              		@ args = 0, pretend = 0, frame = 24
+ 788              		@ frame_needed = 0, uses_anonymous_args = 0
+ 789 0000 30B5     		push	{r4, r5, lr}
+ 790              		.cfi_def_cfa_offset 12
+ 791              		.cfi_offset 4, -12
+ 792              		.cfi_offset 5, -8
+ 793              		.cfi_offset 14, -4
+ 794 0002 89B0     		sub	sp, sp, #36
+ 795              		.cfi_def_cfa_offset 48
+ 796 0004 02AC     		add	r4, sp, #8
+ 797 0006 84E80300 		stm	r4, {r0, r1}
+ 270:Utilities/misc/stm32_systime.c ****   DeltaTime.SubSeconds = (int16_t)UTIL_SYSTIMDriver.BKUPRead_SubSeconds();
+ 798              		.loc 1 270 3 view .LVU229
+ 271:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 799              		.loc 1 271 3 view .LVU230
+ 271:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 800              		.loc 1 271 52 is_stmt 0 view .LVU231
+ 801 000a 0C4D     		ldr	r5, .L50
+ 802 000c EB68     		ldr	r3, [r5, #12]
+ 271:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 26
+
+
+ 803              		.loc 1 271 35 view .LVU232
+ 804 000e 9847     		blx	r3
+ 805              	.LVL77:
+ 271:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 806              		.loc 1 271 24 view .LVU233
+ 807 0010 ADF81C00 		strh	r0, [sp, #28]	@ movhi
+ 272:Utilities/misc/stm32_systime.c **** 
+ 808              		.loc 1 272 3 is_stmt 1 view .LVU234
+ 272:Utilities/misc/stm32_systime.c **** 
+ 809              		.loc 1 272 40 is_stmt 0 view .LVU235
+ 810 0014 6B68     		ldr	r3, [r5, #4]
+ 272:Utilities/misc/stm32_systime.c **** 
+ 811              		.loc 1 272 23 view .LVU236
+ 812 0016 9847     		blx	r3
+ 813              	.LVL78:
+ 814 0018 0346     		mov	r3, r0
+ 272:Utilities/misc/stm32_systime.c **** 
+ 815              		.loc 1 272 21 view .LVU237
+ 816 001a 0690     		str	r0, [sp, #24]
+ 274:Utilities/misc/stm32_systime.c ****   return calendarTime.Seconds * 1000 + calendarTime.SubSeconds;
+ 817              		.loc 1 274 3 is_stmt 1 view .LVU238
+ 274:Utilities/misc/stm32_systime.c ****   return calendarTime.Seconds * 1000 + calendarTime.SubSeconds;
+ 818              		.loc 1 274 28 is_stmt 0 view .LVU239
+ 819 001c 079A     		ldr	r2, [sp, #28]
+ 820 001e 0092     		str	r2, [sp]
+ 821 0020 94E80600 		ldm	r4, {r1, r2}
+ 822 0024 04A8     		add	r0, sp, #16
+ 823 0026 FFF7FEFF 		bl	SysTimeSub
+ 824              	.LVL79:
+ 275:Utilities/misc/stm32_systime.c **** }
+ 825              		.loc 1 275 3 is_stmt 1 view .LVU240
+ 275:Utilities/misc/stm32_systime.c **** }
+ 826              		.loc 1 275 52 is_stmt 0 view .LVU241
+ 827 002a BDF91430 		ldrsh	r3, [sp, #20]
+ 276:Utilities/misc/stm32_systime.c **** 
+ 828              		.loc 1 276 1 view .LVU242
+ 829 002e 049A     		ldr	r2, [sp, #16]
+ 830 0030 4FF47A70 		mov	r0, #1000
+ 831 0034 00FB0230 		mla	r0, r0, r2, r3
+ 832 0038 09B0     		add	sp, sp, #36
+ 833              		.cfi_def_cfa_offset 12
+ 834              		@ sp needed
+ 835 003a 30BD     		pop	{r4, r5, pc}
+ 836              	.L51:
+ 837              		.align	2
+ 838              	.L50:
+ 839 003c 00000000 		.word	UTIL_SYSTIMDriver
+ 840              		.cfi_endproc
+ 841              	.LFE8:
+ 843              		.section	.text.SysTimeFromMs,"ax",%progbits
+ 844              		.align	1
+ 845              		.global	SysTimeFromMs
+ 846              		.syntax unified
+ 847              		.thumb
+ 848              		.thumb_func
+ 849              		.fpu softvfp
+ 851              	SysTimeFromMs:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 27
+
+
+ 852              	.LVL80:
+ 853              	.LFB9:
+ 279:Utilities/misc/stm32_systime.c ****   uint32_t seconds = timeMs / 1000;
+ 854              		.loc 1 279 1 is_stmt 1 view -0
+ 855              		.cfi_startproc
+ 856              		@ args = 0, pretend = 0, frame = 16
+ 857              		@ frame_needed = 0, uses_anonymous_args = 0
+ 279:Utilities/misc/stm32_systime.c ****   uint32_t seconds = timeMs / 1000;
+ 858              		.loc 1 279 1 is_stmt 0 view .LVU244
+ 859 0000 30B5     		push	{r4, r5, lr}
+ 860              		.cfi_def_cfa_offset 12
+ 861              		.cfi_offset 4, -12
+ 862              		.cfi_offset 5, -8
+ 863              		.cfi_offset 14, -4
+ 864 0002 87B0     		sub	sp, sp, #28
+ 865              		.cfi_def_cfa_offset 40
+ 866 0004 0446     		mov	r4, r0
+ 280:Utilities/misc/stm32_systime.c ****   SysTime_t sysTime = { .Seconds = seconds, .SubSeconds =  timeMs - seconds * 1000 };
+ 867              		.loc 1 280 3 is_stmt 1 view .LVU245
+ 280:Utilities/misc/stm32_systime.c ****   SysTime_t sysTime = { .Seconds = seconds, .SubSeconds =  timeMs - seconds * 1000 };
+ 868              		.loc 1 280 12 is_stmt 0 view .LVU246
+ 869 0006 124B     		ldr	r3, .L54
+ 870 0008 A3FB0123 		umull	r2, r3, r3, r1
+ 871 000c 9B09     		lsrs	r3, r3, #6
+ 872              	.LVL81:
+ 281:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime = { 0 };
+ 873              		.loc 1 281 3 is_stmt 1 view .LVU247
+ 281:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime = { 0 };
+ 874              		.loc 1 281 13 is_stmt 0 view .LVU248
+ 875 000e 0493     		str	r3, [sp, #16]
+ 281:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime = { 0 };
+ 876              		.loc 1 281 67 view .LVU249
+ 877 0010 C3EB4312 		rsb	r2, r3, r3, lsl #5
+ 878 0014 03EB8203 		add	r3, r3, r2, lsl #2
+ 879              	.LVL82:
+ 281:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime = { 0 };
+ 880              		.loc 1 281 67 view .LVU250
+ 881 0018 A1EBC303 		sub	r3, r1, r3, lsl #3
+ 281:Utilities/misc/stm32_systime.c ****   SysTime_t DeltaTime = { 0 };
+ 882              		.loc 1 281 13 view .LVU251
+ 883 001c ADF81430 		strh	r3, [sp, #20]	@ movhi
+ 282:Utilities/misc/stm32_systime.c **** 
+ 884              		.loc 1 282 3 is_stmt 1 view .LVU252
+ 282:Utilities/misc/stm32_systime.c **** 
+ 885              		.loc 1 282 13 is_stmt 0 view .LVU253
+ 886 0020 0023     		movs	r3, #0
+ 887 0022 0293     		str	r3, [sp, #8]
+ 888 0024 0393     		str	r3, [sp, #12]
+ 284:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 889              		.loc 1 284 3 is_stmt 1 view .LVU254
+ 284:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 890              		.loc 1 284 52 is_stmt 0 view .LVU255
+ 891 0026 0B4D     		ldr	r5, .L54+4
+ 892 0028 EB68     		ldr	r3, [r5, #12]
+ 284:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 893              		.loc 1 284 35 view .LVU256
+ 894 002a 9847     		blx	r3
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 28
+
+
+ 895              	.LVL83:
+ 284:Utilities/misc/stm32_systime.c ****   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
+ 896              		.loc 1 284 24 view .LVU257
+ 897 002c ADF80C00 		strh	r0, [sp, #12]	@ movhi
+ 285:Utilities/misc/stm32_systime.c ****   return SysTimeAdd( sysTime, DeltaTime );
+ 898              		.loc 1 285 3 is_stmt 1 view .LVU258
+ 285:Utilities/misc/stm32_systime.c ****   return SysTimeAdd( sysTime, DeltaTime );
+ 899              		.loc 1 285 40 is_stmt 0 view .LVU259
+ 900 0030 6B68     		ldr	r3, [r5, #4]
+ 285:Utilities/misc/stm32_systime.c ****   return SysTimeAdd( sysTime, DeltaTime );
+ 901              		.loc 1 285 23 view .LVU260
+ 902 0032 9847     		blx	r3
+ 903              	.LVL84:
+ 904 0034 0346     		mov	r3, r0
+ 285:Utilities/misc/stm32_systime.c ****   return SysTimeAdd( sysTime, DeltaTime );
+ 905              		.loc 1 285 21 view .LVU261
+ 906 0036 0290     		str	r0, [sp, #8]
+ 286:Utilities/misc/stm32_systime.c **** }
+ 907              		.loc 1 286 3 is_stmt 1 view .LVU262
+ 286:Utilities/misc/stm32_systime.c **** }
+ 908              		.loc 1 286 10 is_stmt 0 view .LVU263
+ 909 0038 039A     		ldr	r2, [sp, #12]
+ 910 003a 0092     		str	r2, [sp]
+ 911 003c 06AA     		add	r2, sp, #24
+ 912 003e 12E90600 		ldmdb	r2, {r1, r2}
+ 913 0042 2046     		mov	r0, r4
+ 914 0044 FFF7FEFF 		bl	SysTimeAdd
+ 915              	.LVL85:
+ 287:Utilities/misc/stm32_systime.c **** 
+ 916              		.loc 1 287 1 view .LVU264
+ 917 0048 2046     		mov	r0, r4
+ 918 004a 07B0     		add	sp, sp, #28
+ 919              		.cfi_def_cfa_offset 12
+ 920              		@ sp needed
+ 921 004c 30BD     		pop	{r4, r5, pc}
+ 922              	.LVL86:
+ 923              	.L55:
+ 287:Utilities/misc/stm32_systime.c **** 
+ 924              		.loc 1 287 1 view .LVU265
+ 925 004e 00BF     		.align	2
+ 926              	.L54:
+ 927 0050 D34D6210 		.word	274877907
+ 928 0054 00000000 		.word	UTIL_SYSTIMDriver
+ 929              		.cfi_endproc
+ 930              	.LFE9:
+ 932              		.section	.text.SysTimeMkTime,"ax",%progbits
+ 933              		.align	1
+ 934              		.global	SysTimeMkTime
+ 935              		.syntax unified
+ 936              		.thumb
+ 937              		.thumb_func
+ 938              		.fpu softvfp
+ 940              	SysTimeMkTime:
+ 941              	.LVL87:
+ 942              	.LFB10:
+ 290:Utilities/misc/stm32_systime.c ****   uint32_t nbdays;
+ 943              		.loc 1 290 1 is_stmt 1 view -0
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 29
+
+
+ 944              		.cfi_startproc
+ 945              		@ args = 0, pretend = 0, frame = 16
+ 946              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290:Utilities/misc/stm32_systime.c ****   uint32_t nbdays;
+ 947              		.loc 1 290 1 is_stmt 0 view .LVU267
+ 948 0000 10B5     		push	{r4, lr}
+ 949              		.cfi_def_cfa_offset 8
+ 950              		.cfi_offset 4, -8
+ 951              		.cfi_offset 14, -4
+ 952 0002 84B0     		sub	sp, sp, #16
+ 953              		.cfi_def_cfa_offset 24
+ 954 0004 8446     		mov	ip, r0
+ 291:Utilities/misc/stm32_systime.c ****   uint32_t nbsecs;
+ 955              		.loc 1 291 3 is_stmt 1 view .LVU268
+ 292:Utilities/misc/stm32_systime.c ****   uint32_t year = localtime->tm_year - CALC_REF_YEAR;
+ 956              		.loc 1 292 3 view .LVU269
+ 293:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 957              		.loc 1 293 3 view .LVU270
+ 293:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 958              		.loc 1 293 28 is_stmt 0 view .LVU271
+ 959 0006 4369     		ldr	r3, [r0, #20]
+ 293:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 960              		.loc 1 293 38 view .LVU272
+ 961 0008 A3F1440E 		sub	lr, r3, #68
+ 962              	.LVL88:
+ 294:Utilities/misc/stm32_systime.c ****   {
+ 963              		.loc 1 294 3 is_stmt 1 view .LVU273
+ 294:Utilities/misc/stm32_systime.c ****   {
+ 964              		.loc 1 294 12 is_stmt 0 view .LVU274
+ 965 000c 1B4B     		ldr	r3, .L58
+ 966 000e 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 967              	.LVL89:
+ 294:Utilities/misc/stm32_systime.c ****   {
+ 968              		.loc 1 294 12 view .LVU275
+ 969 0010 04AC     		add	r4, sp, #16
+ 970 0012 04E90F00 		stmdb	r4, {r0, r1, r2, r3}
+ 302:Utilities/misc/stm32_systime.c **** 
+ 971              		.loc 1 302 3 is_stmt 1 view .LVU276
+ 302:Utilities/misc/stm32_systime.c **** 
+ 972              		.loc 1 302 12 is_stmt 0 view .LVU277
+ 973 0016 40F2B553 		movw	r3, #1461
+ 974 001a 03FB0EF3 		mul	r3, r3, lr
+ 975 001e D91C     		adds	r1, r3, #3
+ 976              	.LVL90:
+ 304:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) ) );
+ 977              		.loc 1 304 3 is_stmt 1 view .LVU278
+ 304:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) ) );
+ 978              		.loc 1 304 15 is_stmt 0 view .LVU279
+ 979 0020 DCF81020 		ldr	r2, [ip, #16]
+ 980 0024 C2EB0213 		rsb	r3, r2, r2, lsl #4
+ 981 0028 02EB8303 		add	r3, r2, r3, lsl #2
+ 982 002c 581C     		adds	r0, r3, #1
+ 305:Utilities/misc/stm32_systime.c **** 
+ 983              		.loc 1 305 36 view .LVU280
+ 984 002e 0EF0030E 		and	lr, lr, #3
+ 985              	.LVL91:
+ 305:Utilities/misc/stm32_systime.c **** 
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 30
+
+
+ 986              		.loc 1 305 30 view .LVU281
+ 987 0032 04EB8E0E 		add	lr, r4, lr, lsl #2
+ 988 0036 5EF8103C 		ldr	r3, [lr, #-16]
+ 305:Utilities/misc/stm32_systime.c **** 
+ 989              		.loc 1 305 68 view .LVU282
+ 990 003a 5200     		lsls	r2, r2, #1
+ 305:Utilities/misc/stm32_systime.c **** 
+ 991              		.loc 1 305 41 view .LVU283
+ 992 003c D340     		lsrs	r3, r3, r2
+ 305:Utilities/misc/stm32_systime.c **** 
+ 993              		.loc 1 305 76 view .LVU284
+ 994 003e 03F00303 		and	r3, r3, #3
+ 304:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) ) );
+ 995              		.loc 1 304 64 view .LVU285
+ 996 0042 C3EB6003 		rsb	r3, r3, r0, asr #1
+ 304:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) ) );
+ 997              		.loc 1 304 10 view .LVU286
+ 998 0046 03EB9103 		add	r3, r3, r1, lsr #2
+ 999              	.LVL92:
+ 307:Utilities/misc/stm32_systime.c **** 
+ 1000              		.loc 1 307 3 is_stmt 1 view .LVU287
+ 307:Utilities/misc/stm32_systime.c **** 
+ 1001              		.loc 1 307 24 is_stmt 0 view .LVU288
+ 1002 004a DCF80C20 		ldr	r2, [ip, #12]
+ 307:Utilities/misc/stm32_systime.c **** 
+ 1003              		.loc 1 307 10 view .LVU289
+ 1004 004e 1344     		add	r3, r3, r2
+ 1005              	.LVL93:
+ 307:Utilities/misc/stm32_systime.c **** 
+ 1006              		.loc 1 307 10 view .LVU290
+ 1007 0050 5A1E     		subs	r2, r3, #1
+ 1008              	.LVL94:
+ 310:Utilities/misc/stm32_systime.c **** 
+ 1009              		.loc 1 310 3 is_stmt 1 view .LVU291
+ 312:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_min * TM_SECONDS_IN_1MINUTE ) +
+ 1010              		.loc 1 312 3 view .LVU292
+ 312:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_min * TM_SECONDS_IN_1MINUTE ) +
+ 1011              		.loc 1 312 36 is_stmt 0 view .LVU293
+ 1012 0052 DCF80010 		ldr	r1, [ip]
+ 314:Utilities/misc/stm32_systime.c ****   return nbsecs - CALC_REF_YEAR_TO_UNIX_REF_YEAR_COMPENSATION_IN_SECONDS;
+ 1013              		.loc 1 314 32 view .LVU294
+ 1014 0056 DCF80800 		ldr	r0, [ip, #8]
+ 313:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_hour * TM_SECONDS_IN_1HOUR ) );
+ 1015              		.loc 1 313 32 view .LVU295
+ 1016 005a DCF80430 		ldr	r3, [ip, #4]
+ 313:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_hour * TM_SECONDS_IN_1HOUR ) );
+ 1017              		.loc 1 313 41 view .LVU296
+ 1018 005e C3EB0313 		rsb	r3, r3, r3, lsl #4
+ 1019 0062 9B00     		lsls	r3, r3, #2
+ 313:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_hour * TM_SECONDS_IN_1HOUR ) );
+ 1020              		.loc 1 313 67 view .LVU297
+ 1021 0064 4FF4616C 		mov	ip, #3600
+ 1022              	.LVL95:
+ 313:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_hour * TM_SECONDS_IN_1HOUR ) );
+ 1023              		.loc 1 313 67 view .LVU298
+ 1024 0068 0CFB0033 		mla	r3, ip, r0, r3
+ 1025 006c 0B44     		add	r3, r3, r1
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 31
+
+
+ 312:Utilities/misc/stm32_systime.c ****         ( ( uint32_t )localtime->tm_min * TM_SECONDS_IN_1MINUTE ) +
+ 1026              		.loc 1 312 10 view .LVU299
+ 1027 006e 0449     		ldr	r1, .L58+4
+ 1028 0070 01FB0233 		mla	r3, r1, r2, r3
+ 1029              	.LVL96:
+ 315:Utilities/misc/stm32_systime.c **** }
+ 1030              		.loc 1 315 3 is_stmt 1 view .LVU300
+ 316:Utilities/misc/stm32_systime.c **** 
+ 1031              		.loc 1 316 1 is_stmt 0 view .LVU301
+ 1032 0074 0348     		ldr	r0, .L58+8
+ 1033 0076 1844     		add	r0, r0, r3
+ 1034 0078 04B0     		add	sp, sp, #16
+ 1035              		.cfi_def_cfa_offset 8
+ 1036              		@ sp needed
+ 1037 007a 10BD     		pop	{r4, pc}
+ 1038              	.L59:
+ 1039              		.align	2
+ 1040              	.L58:
+ 1041 007c 00000000 		.word	.LANCHOR0
+ 1042 0080 80510100 		.word	86400
+ 1043 0084 80473CFC 		.word	-63158400
+ 1044              		.cfi_endproc
+ 1045              	.LFE10:
+ 1047              		.section	.text.SysTimeLocalTime,"ax",%progbits
+ 1048              		.align	1
+ 1049              		.global	SysTimeLocalTime
+ 1050              		.syntax unified
+ 1051              		.thumb
+ 1052              		.thumb_func
+ 1053              		.fpu softvfp
+ 1055              	SysTimeLocalTime:
+ 1056              	.LVL97:
+ 1057              	.LFB11:
+ 319:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 1058              		.loc 1 319 1 is_stmt 1 view -0
+ 1059              		.cfi_startproc
+ 1060              		@ args = 0, pretend = 0, frame = 40
+ 1061              		@ frame_needed = 0, uses_anonymous_args = 0
+ 319:Utilities/misc/stm32_systime.c ****   uint32_t correctionMonth[4] =
+ 1062              		.loc 1 319 1 is_stmt 0 view .LVU303
+ 1063 0000 70B5     		push	{r4, r5, r6, lr}
+ 1064              		.cfi_def_cfa_offset 16
+ 1065              		.cfi_offset 4, -16
+ 1066              		.cfi_offset 5, -12
+ 1067              		.cfi_offset 6, -8
+ 1068              		.cfi_offset 14, -4
+ 1069 0002 8AB0     		sub	sp, sp, #40
+ 1070              		.cfi_def_cfa_offset 56
+ 1071 0004 0446     		mov	r4, r0
+ 1072 0006 0D46     		mov	r5, r1
+ 320:Utilities/misc/stm32_systime.c ****   {
+ 1073              		.loc 1 320 3 is_stmt 1 view .LVU304
+ 320:Utilities/misc/stm32_systime.c ****   {
+ 1074              		.loc 1 320 12 is_stmt 0 view .LVU305
+ 1075 0008 314B     		ldr	r3, .L62
+ 1076 000a 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 1077              	.LVL98:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 32
+
+
+ 320:Utilities/misc/stm32_systime.c ****   {
+ 1078              		.loc 1 320 12 view .LVU306
+ 1079 000c 0AAE     		add	r6, sp, #40
+ 1080 000e 06E90F00 		stmdb	r6, {r0, r1, r2, r3}
+ 327:Utilities/misc/stm32_systime.c ****   uint32_t seconds;
+ 1081              		.loc 1 327 3 is_stmt 1 view .LVU307
+ 1082              	.LVL99:
+ 328:Utilities/misc/stm32_systime.c ****   uint32_t minutes;
+ 1083              		.loc 1 328 3 view .LVU308
+ 329:Utilities/misc/stm32_systime.c ****   uint32_t days;
+ 1084              		.loc 1 329 3 view .LVU309
+ 330:Utilities/misc/stm32_systime.c ****   uint32_t divOut;
+ 1085              		.loc 1 330 3 view .LVU310
+ 331:Utilities/misc/stm32_systime.c ****   uint32_t divReminder;
+ 1086              		.loc 1 331 3 view .LVU311
+ 332:Utilities/misc/stm32_systime.c **** 
+ 1087              		.loc 1 332 3 view .LVU312
+ 334:Utilities/misc/stm32_systime.c **** 
+ 1088              		.loc 1 334 3 view .LVU313
+ 1089 0012 05AA     		add	r2, sp, #20
+ 1090 0014 03A9     		add	r1, sp, #12
+ 1091 0016 2F48     		ldr	r0, .L62+4
+ 1092 0018 2044     		add	r0, r0, r4
+ 1093 001a FFF7FEFF 		bl	CalendarDiv86400
+ 1094              	.LVL100:
+ 337:Utilities/misc/stm32_systime.c ****   localtime->tm_sec = ( uint8_t )divReminder;
+ 1095              		.loc 1 337 3 view .LVU314
+ 1096 001e 01AA     		add	r2, sp, #4
+ 1097 0020 04A9     		add	r1, sp, #16
+ 1098 0022 0598     		ldr	r0, [sp, #20]
+ 1099 0024 FFF7FEFF 		bl	CalendarDiv60
+ 1100              	.LVL101:
+ 338:Utilities/misc/stm32_systime.c **** 
+ 1101              		.loc 1 338 3 view .LVU315
+ 338:Utilities/misc/stm32_systime.c **** 
+ 1102              		.loc 1 338 23 is_stmt 0 view .LVU316
+ 1103 0028 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 338:Utilities/misc/stm32_systime.c **** 
+ 1104              		.loc 1 338 21 view .LVU317
+ 1105 002c 2B60     		str	r3, [r5]
+ 341:Utilities/misc/stm32_systime.c ****   localtime->tm_min = ( uint8_t )divReminder;
+ 1106              		.loc 1 341 3 is_stmt 1 view .LVU318
+ 1107 002e 01AA     		add	r2, sp, #4
+ 1108 0030 02A9     		add	r1, sp, #8
+ 1109 0032 0498     		ldr	r0, [sp, #16]
+ 1110 0034 FFF7FEFF 		bl	CalendarDiv60
+ 1111              	.LVL102:
+ 342:Utilities/misc/stm32_systime.c ****   localtime->tm_hour = ( uint8_t )divOut;
+ 1112              		.loc 1 342 3 view .LVU319
+ 342:Utilities/misc/stm32_systime.c ****   localtime->tm_hour = ( uint8_t )divOut;
+ 1113              		.loc 1 342 23 is_stmt 0 view .LVU320
+ 1114 0038 9DF80430 		ldrb	r3, [sp, #4]	@ zero_extendqisi2
+ 342:Utilities/misc/stm32_systime.c ****   localtime->tm_hour = ( uint8_t )divOut;
+ 1115              		.loc 1 342 21 view .LVU321
+ 1116 003c 6B60     		str	r3, [r5, #4]
+ 343:Utilities/misc/stm32_systime.c **** 
+ 1117              		.loc 1 343 3 is_stmt 1 view .LVU322
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 33
+
+
+ 343:Utilities/misc/stm32_systime.c **** 
+ 1118              		.loc 1 343 24 is_stmt 0 view .LVU323
+ 1119 003e 9DF80830 		ldrb	r3, [sp, #8]	@ zero_extendqisi2
+ 343:Utilities/misc/stm32_systime.c **** 
+ 1120              		.loc 1 343 22 view .LVU324
+ 1121 0042 AB60     		str	r3, [r5, #8]
+ 346:Utilities/misc/stm32_systime.c ****   days-= DIVC_BY_4( ( TM_DAYS_IN_YEAR * 3 + TM_DAYS_IN_LEAP_YEAR ) * localtime->tm_year );
+ 1122              		.loc 1 346 3 is_stmt 1 view .LVU325
+ 346:Utilities/misc/stm32_systime.c ****   days-= DIVC_BY_4( ( TM_DAYS_IN_YEAR * 3 + TM_DAYS_IN_LEAP_YEAR ) * localtime->tm_year );
+ 1123              		.loc 1 346 24 is_stmt 0 view .LVU326
+ 1124 0044 039E     		ldr	r6, [sp, #12]
+ 1125 0046 244B     		ldr	r3, .L62+8
+ 1126 0048 45F6DE04 		movw	r4, #22750
+ 1127              	.LVL103:
+ 346:Utilities/misc/stm32_systime.c ****   days-= DIVC_BY_4( ( TM_DAYS_IN_YEAR * 3 + TM_DAYS_IN_LEAP_YEAR ) * localtime->tm_year );
+ 1128              		.loc 1 346 24 view .LVU327
+ 1129 004c 03FB0644 		mla	r4, r3, r6, r4
+ 1130 0050 640E     		lsrs	r4, r4, #25
+ 346:Utilities/misc/stm32_systime.c ****   days-= DIVC_BY_4( ( TM_DAYS_IN_YEAR * 3 + TM_DAYS_IN_LEAP_YEAR ) * localtime->tm_year );
+ 1131              		.loc 1 346 22 view .LVU328
+ 1132 0052 6C61     		str	r4, [r5, #20]
+ 347:Utilities/misc/stm32_systime.c **** 
+ 1133              		.loc 1 347 3 is_stmt 1 view .LVU329
+ 347:Utilities/misc/stm32_systime.c **** 
+ 1134              		.loc 1 347 10 is_stmt 0 view .LVU330
+ 1135 0054 40F2B550 		movw	r0, #1461
+ 1136 0058 04FB00F0 		mul	r0, r4, r0
+ 1137 005c 0330     		adds	r0, r0, #3
+ 347:Utilities/misc/stm32_systime.c **** 
+ 1138              		.loc 1 347 7 view .LVU331
+ 1139 005e A6EB9006 		sub	r6, r6, r0, lsr #2
+ 1140 0062 0396     		str	r6, [sp, #12]
+ 349:Utilities/misc/stm32_systime.c **** 
+ 1141              		.loc 1 349 3 is_stmt 1 view .LVU332
+ 349:Utilities/misc/stm32_systime.c **** 
+ 1142              		.loc 1 349 22 is_stmt 0 view .LVU333
+ 1143 0064 EE61     		str	r6, [r5, #28]
+ 352:Utilities/misc/stm32_systime.c **** 
+ 1144              		.loc 1 352 3 is_stmt 1 view .LVU334
+ 352:Utilities/misc/stm32_systime.c **** 
+ 1145              		.loc 1 352 23 is_stmt 0 view .LVU335
+ 1146 0066 2146     		mov	r1, r4
+ 1147 0068 3046     		mov	r0, r6
+ 1148 006a FFF7FEFF 		bl	CalendarGetMonth
+ 1149              	.LVL104:
+ 352:Utilities/misc/stm32_systime.c **** 
+ 1150              		.loc 1 352 21 view .LVU336
+ 1151 006e 2861     		str	r0, [r5, #16]
+ 355:Utilities/misc/stm32_systime.c ****   weekDays += days;
+ 1152              		.loc 1 355 3 is_stmt 1 view .LVU337
+ 355:Utilities/misc/stm32_systime.c ****   weekDays += days;
+ 1153              		.loc 1 355 15 is_stmt 0 view .LVU338
+ 1154 0070 04EB8403 		add	r3, r4, r4, lsl #2
+ 1155 0074 0333     		adds	r3, r3, #3
+ 1156 0076 9B10     		asrs	r3, r3, #2
+ 355:Utilities/misc/stm32_systime.c ****   weekDays += days;
+ 1157              		.loc 1 355 12 view .LVU339
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 34
+
+
+ 1158 0078 0133     		adds	r3, r3, #1
+ 1159              	.LVL105:
+ 356:Utilities/misc/stm32_systime.c ****   localtime->tm_wday = MODULO_7( weekDays );
+ 1160              		.loc 1 356 3 is_stmt 1 view .LVU340
+ 356:Utilities/misc/stm32_systime.c ****   localtime->tm_wday = MODULO_7( weekDays );
+ 1161              		.loc 1 356 12 is_stmt 0 view .LVU341
+ 1162 007a 3344     		add	r3, r3, r6
+ 1163              	.LVL106:
+ 357:Utilities/misc/stm32_systime.c **** 
+ 1164              		.loc 1 357 3 is_stmt 1 view .LVU342
+ 357:Utilities/misc/stm32_systime.c **** 
+ 1165              		.loc 1 357 24 is_stmt 0 view .LVU343
+ 1166 007c 174A     		ldr	r2, .L62+12
+ 1167 007e 03FB0222 		mla	r2, r3, r2, r2
+ 1168 0082 520D     		lsrs	r2, r2, #21
+ 1169 0084 C2EBC202 		rsb	r2, r2, r2, lsl #3
+ 1170 0088 9B1A     		subs	r3, r3, r2
+ 1171              	.LVL107:
+ 357:Utilities/misc/stm32_systime.c **** 
+ 1172              		.loc 1 357 22 view .LVU344
+ 1173 008a AB61     		str	r3, [r5, #24]
+ 359:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[localtime->tm_year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) )
+ 1174              		.loc 1 359 3 is_stmt 1 view .LVU345
+ 360:Utilities/misc/stm32_systime.c **** 
+ 1175              		.loc 1 360 50 is_stmt 0 view .LVU346
+ 1176 008c 6242     		rsbs	r2, r4, #0
+ 1177 008e 04F00303 		and	r3, r4, #3
+ 1178 0092 02F00302 		and	r2, r2, #3
+ 1179 0096 58BF     		it	pl
+ 1180 0098 5342     		rsbpl	r3, r2, #0
+ 360:Utilities/misc/stm32_systime.c **** 
+ 1181              		.loc 1 360 30 view .LVU347
+ 1182 009a 0AAA     		add	r2, sp, #40
+ 1183 009c 02EB8303 		add	r3, r2, r3, lsl #2
+ 1184 00a0 53F8103C 		ldr	r3, [r3, #-16]
+ 360:Utilities/misc/stm32_systime.c **** 
+ 1185              		.loc 1 360 82 view .LVU348
+ 1186 00a4 4200     		lsls	r2, r0, #1
+ 360:Utilities/misc/stm32_systime.c **** 
+ 1187              		.loc 1 360 55 view .LVU349
+ 1188 00a6 D340     		lsrs	r3, r3, r2
+ 360:Utilities/misc/stm32_systime.c **** 
+ 1189              		.loc 1 360 90 view .LVU350
+ 1190 00a8 03F00303 		and	r3, r3, #3
+ 359:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[localtime->tm_year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) )
+ 1191              		.loc 1 359 13 view .LVU351
+ 1192 00ac C0EB0012 		rsb	r2, r0, r0, lsl #4
+ 1193 00b0 00EB8200 		add	r0, r0, r2, lsl #2
+ 1194 00b4 0130     		adds	r0, r0, #1
+ 359:Utilities/misc/stm32_systime.c ****         ( ( ( correctionMonth[localtime->tm_year % 4] >> ( ( localtime->tm_mon ) * 2 ) ) & 0x03 ) )
+ 1195              		.loc 1 359 8 view .LVU352
+ 1196 00b6 A3EB6000 		sub	r0, r3, r0, asr #1
+ 1197 00ba 3044     		add	r0, r0, r6
+ 1198 00bc 0390     		str	r0, [sp, #12]
+ 363:Utilities/misc/stm32_systime.c **** 
+ 1199              		.loc 1 363 3 is_stmt 1 view .LVU353
+ 363:Utilities/misc/stm32_systime.c **** 
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 35
+
+
+ 1200              		.loc 1 363 29 is_stmt 0 view .LVU354
+ 1201 00be 0130     		adds	r0, r0, #1
+ 363:Utilities/misc/stm32_systime.c **** 
+ 1202              		.loc 1 363 22 view .LVU355
+ 1203 00c0 E860     		str	r0, [r5, #12]
+ 365:Utilities/misc/stm32_systime.c **** 
+ 1204              		.loc 1 365 3 is_stmt 1 view .LVU356
+ 365:Utilities/misc/stm32_systime.c **** 
+ 1205              		.loc 1 365 22 is_stmt 0 view .LVU357
+ 1206 00c2 4434     		adds	r4, r4, #68
+ 1207              	.LVL108:
+ 365:Utilities/misc/stm32_systime.c **** 
+ 1208              		.loc 1 365 22 view .LVU358
+ 1209 00c4 6C61     		str	r4, [r5, #20]
+ 367:Utilities/misc/stm32_systime.c **** }
+ 1210              		.loc 1 367 3 is_stmt 1 view .LVU359
+ 367:Utilities/misc/stm32_systime.c **** }
+ 1211              		.loc 1 367 23 is_stmt 0 view .LVU360
+ 1212 00c6 4FF0FF33 		mov	r3, #-1
+ 1213 00ca 2B62     		str	r3, [r5, #32]
+ 368:Utilities/misc/stm32_systime.c **** 
+ 1214              		.loc 1 368 1 view .LVU361
+ 1215 00cc 0AB0     		add	sp, sp, #40
+ 1216              		.cfi_def_cfa_offset 16
+ 1217              		@ sp needed
+ 1218 00ce 70BD     		pop	{r4, r5, r6, pc}
+ 1219              	.LVL109:
+ 1220              	.L63:
+ 368:Utilities/misc/stm32_systime.c **** 
+ 1221              		.loc 1 368 1 view .LVU362
+ 1222              		.align	2
+ 1223              	.L62:
+ 1224 00d0 00000000 		.word	.LANCHOR0
+ 1225 00d4 80B8C303 		.word	63158400
+ 1226 00d8 DB660100 		.word	91867
+ 1227 00dc 49920400 		.word	299593
+ 1228              		.cfi_endproc
+ 1229              	.LFE11:
+ 1231              		.global	WeekDayString
+ 1232              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 1233              		.align	2
+ 1234              	.LC1:
+ 1235 0000 53756E00 		.ascii	"Sun\000"
+ 1236              		.align	2
+ 1237              	.LC2:
+ 1238 0004 4D6F6E00 		.ascii	"Mon\000"
+ 1239              		.align	2
+ 1240              	.LC3:
+ 1241 0008 54756500 		.ascii	"Tue\000"
+ 1242              		.align	2
+ 1243              	.LC4:
+ 1244 000c 57656400 		.ascii	"Wed\000"
+ 1245              		.align	2
+ 1246              	.LC5:
+ 1247 0010 54687500 		.ascii	"Thu\000"
+ 1248              		.align	2
+ 1249              	.LC6:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 36
+
+
+ 1250 0014 46726900 		.ascii	"Fri\000"
+ 1251              		.align	2
+ 1252              	.LC7:
+ 1253 0018 53617400 		.ascii	"Sat\000"
+ 1254              		.section	.rodata
+ 1255              		.align	2
+ 1256              		.set	.LANCHOR0,. + 0
+ 1257              	.LC0:
+ 1258 0000 50554400 		.word	4478288
+ 1259 0004 A0AA9900 		.word	10070688
+ 1260 0008 A0AA9900 		.word	10070688
+ 1261 000c A0AA9900 		.word	10070688
+ 1262              		.section	.data.WeekDayString,"aw"
+ 1263              		.align	2
+ 1266              	WeekDayString:
+ 1267 0000 00000000 		.word	.LC1
+ 1268 0004 04000000 		.word	.LC2
+ 1269 0008 08000000 		.word	.LC3
+ 1270 000c 0C000000 		.word	.LC4
+ 1271 0010 10000000 		.word	.LC5
+ 1272 0014 14000000 		.word	.LC6
+ 1273 0018 18000000 		.word	.LC7
+ 1274              		.text
+ 1275              	.Letext0:
+ 1276              		.file 2 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/machine/_de
+ 1277              		.file 3 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/sys/_stdint
+ 1278              		.file 4 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/time.h"
+ 1279              		.file 5 "Utilities/misc/stm32_systime.h"
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s 			page 37
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32_systime.c
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:16     .text.CalendarDiv86400:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:23     .text.CalendarDiv86400:0000000000000000 CalendarDiv86400
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:108    .text.CalendarDiv86400:0000000000000038 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:114    .text.CalendarDiv61:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:120    .text.CalendarDiv61:0000000000000000 CalendarDiv61
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:186    .text.CalendarDiv61:0000000000000030 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:191    .text.CalendarGetMonth:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:197    .text.CalendarGetMonth:0000000000000000 CalendarGetMonth
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:324    .text.CalendarDiv60:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:330    .text.CalendarDiv60:0000000000000000 CalendarDiv60
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:410    .text.SysTimeAdd:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:417    .text.SysTimeAdd:0000000000000000 SysTimeAdd
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:479    .text.SysTimeSub:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:486    .text.SysTimeSub:0000000000000000 SysTimeSub
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:553    .text.SysTimeSet:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:560    .text.SysTimeSet:0000000000000000 SysTimeSet
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:622    .text.SysTimeSet:0000000000000040 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:627    .text.SysTimeGet:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:634    .text.SysTimeGet:0000000000000000 SysTimeGet
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:710    .text.SysTimeGet:0000000000000040 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:715    .text.SysTimeGetMcuTime:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:722    .text.SysTimeGetMcuTime:0000000000000000 SysTimeGetMcuTime
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:771    .text.SysTimeGetMcuTime:0000000000000028 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:776    .text.SysTimeToMs:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:783    .text.SysTimeToMs:0000000000000000 SysTimeToMs
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:839    .text.SysTimeToMs:000000000000003c $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:844    .text.SysTimeFromMs:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:851    .text.SysTimeFromMs:0000000000000000 SysTimeFromMs
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:927    .text.SysTimeFromMs:0000000000000050 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:933    .text.SysTimeMkTime:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:940    .text.SysTimeMkTime:0000000000000000 SysTimeMkTime
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1041   .text.SysTimeMkTime:000000000000007c $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1048   .text.SysTimeLocalTime:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1055   .text.SysTimeLocalTime:0000000000000000 SysTimeLocalTime
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1224   .text.SysTimeLocalTime:00000000000000d0 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1266   .data.WeekDayString:0000000000000000 WeekDayString
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1233   .rodata.str1.4:0000000000000000 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1255   .rodata:0000000000000000 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//cca3ifwk.s:1263   .data.WeekDayString:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+UTIL_SYSTIMDriver

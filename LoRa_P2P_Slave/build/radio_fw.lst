@@ -1,0 +1,1084 @@
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"radio_fw.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.RFW_TransmitLongPacket,"ax",%progbits
+  16              		.align	1
+  17              		.global	RFW_TransmitLongPacket
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	RFW_TransmitLongPacket:
+  25              	.LVL0:
+  26              	.LFB1163:
+  27              		.file 1 "Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c"
+   1:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+   2:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   ******************************************************************************
+   3:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @file    radio_fw.c
+   4:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @author  MCD Application Team
+   5:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @brief   extended radio functionality SubGHz_Phy Middleware
+   6:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   ******************************************************************************
+   7:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @attention
+   8:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+   9:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * Copyright (c) 2020(-2021) STMicroelectronics.
+  10:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * All rights reserved.
+  11:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+  12:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * in the root directory of this software component.
+  14:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+  16:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   ******************************************************************************
+  17:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   */
+  18:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  19:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Includes ------------------------------------------------------------------*/
+  20:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include <math.h>
+  21:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include "timer.h"
+  22:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include "radio.h"
+  23:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include "radio_fw.h"
+  24:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include "radio_driver.h"
+  25:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include "radio_conf.h"
+  26:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #include "mw_log_conf.h"
+  27:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  28:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* External variables --------------------------------------------------------*/
+  29:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Private typedef -----------------------------------------------------------*/
+  30:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  31:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 2
+
+
+  32:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * Radio RFWPacket and global parameters
+  33:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * In RFWPacket mode, the packet is 'Fixed length' without Hw Crc check and without Hw (de-)whiteni
+  34:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+  35:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** typedef struct
+  36:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+  37:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t Enable;                    /* RFWPacket mode On: 1 or Off: 0*/
+  38:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t PayloadLengthFieldSize;    /* Size of the packet length Field*/
+  39:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t CrcEnable;                 /* enable crc calculation and check*/
+  40:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t CrcFieldSize;              /* size of the packet length Field*/
+  41:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t CrcPolynomial;            /* Init Crc polynomial, to set before running RFW_CrcRun*/
+  42:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t CrcSeed;                  /* Init Crc seed to set before running RFW_CrcRun*/
+  43:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RADIO_FSK_CrcTypes_t CrcType;      /* Init Crc types to set before running RFW_CrcRun*/
+  44:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t WhiteSeed;                /* Init whitening seed, to set before running Radio_FwWhiteR
+  45:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t LongPacketMaxRxLength;    /* Maximum expected amount of bytes in payload*/
+  46:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RadioModems_t Modem;
+  47:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RadioEvents_t* RadioEvents;
+  48:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** } RFwInit_t;
+  49:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  50:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** typedef struct
+  51:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+  52:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFwInit_t Init;                    /*Init structure, set at Rx or Tx config*/
+  53:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t CrcLfsrState;             /*State of LFSR crc, set from CrcSeed at beginning of each p
+  54:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t WhiteLfsrState;           /*State of LFSR whitening, set from WhiteSeed at beginning o
+  55:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                                          use to save LFSR state after rx payload length de-withenin
+  56:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t PayloadLength;            /*In Rx, Payload length is first byte(s) of the payload excl
+  57:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t LongPacketModeEnable;      /* set to one when RFW_TransmitLongPacket or RFW_ReceiveLong
+  58:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     TimerEvent_t Timer;                /*Timer to get/Set Rx(Tx)Bytes*/
+  59:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t LongPacketRemainingBytes; /* Count remaining bytes to send receive (including crc)*/
+  60:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t RadioBufferOffset;         /* Radio buffer offset*/
+  61:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint16_t RxPayloadOffset;          /* RxPayloadOffset buffer offset*/
+  62:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     void (*RxLongPacketStoreChunkCb) (uint8_t* buffer, uint8_t buffer_size);
+  63:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     void (*TxLongPacketGetNextChunkCb) (uint8_t** buffer, uint8_t buffer_size);
+  64:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t AntSwitchPaSelect;
+  65:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint32_t BitRate;
+  66:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     TimerEvent_t* RxTimeoutTimer;
+  67:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     TimerEvent_t* TxTimeoutTimer;
+  68:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** } RadioFw_t;
+  69:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  70:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Private define ------------------------------------------------------------*/
+  71:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  72:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RADIO_BUF_SIZE 255 //bytes SubG IP  internal Buffer
+  73:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  74:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define LONGPACKET_CHUNK_LENGTH_BYTES ((int32_t) 128) //bytes (half Radio fifo)
+  75:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  76:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Private macro -------------------------------------------------------------*/
+  77:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+  78:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @brief Calculates ceiling division of ( X / N )
+  79:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+  80:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @param [in] X numerator
+  81:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @param [in] N denominator
+  82:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+  83:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   */
+  84:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef DIVC
+  85:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define DIVC( X, N )                ( ( ( X ) + ( N ) - 1 ) / ( N ) )
+  86:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+  87:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  88:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 3
+
+
+  89:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @brief Calculates rounding division of ( X / N )
+  90:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+  91:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @param [in] X numerator
+  92:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   * @param [in] N denominator
+  93:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   *
+  94:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   */
+  95:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef DIVR
+  96:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define DIVR( X, N )                ( ( ( X ) + ( ((X)>0?(N):(N))>>1 ) ) / ( N ) )
+  97:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+  98:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+  99:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /*can be overridden in radio_conf.h*/
+ 100:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RFW_IT_INIT
+ 101:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_IT_INIT()
+ 102:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 103:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 104:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RFW_GET_PAYLOAD_PROCESS
+ 105:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_GET_PAYLOAD_PROCESS() RFW_GetPayloadProcess()
+ 106:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 107:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /*can be overridden in radio_conf.h*/
+ 108:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RFW_TRANSMIT_LONGPACKET_TX_CHUNK_PROCESS
+ 109:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_TRANSMIT_LONGPACKET_TX_CHUNK_PROCESS() RFW_TransmitLongPacket_TxChunkProcess()
+ 110:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 111:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 112:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RFW_MW_LOG_ENABLE
+ 113:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_MW_LOG(...)
+ 114:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 115:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_MW_LOG   MW_LOG
+ 116:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 117:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 118:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RFW_ENABLE
+ 119:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_ENABLE 0
+ 120:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 121:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 122:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RFW_LONGPACKET_ENABLE
+ 123:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RFW_LONGPACKET_ENABLE 0
+ 124:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 125:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 126:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RADIO_MEMCPY8
+ 127:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RADIO_MEMCPY8 memcpy
+ 128:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 129:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 130:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #ifndef RADIO_MEMSET8
+ 131:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #define RADIO_MEMSET8 memset
+ 132:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 133:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 134:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if ((RFW_LONGPACKET_ENABLE==1)&&(RFW_ENABLE==0))
+ 135:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #error RFW_ENABLE must be defined to 1 if RFW_LONGPACKET_ENABLE is defined to 1
+ 136:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 137:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 138:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Private variables ---------------------------------------------------------*/
+ 139:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 140:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static RadioFw_t RFWPacket={0};
+ 141:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /*Radio buffer chunk*/
+ 142:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static uint8_t ChunkBuffer[RADIO_BUF_SIZE];
+ 143:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /*Radio buffer chunk for packet <=RADIO_BUF_SIZE and */
+ 144:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static uint8_t RxBuffer[RADIO_BUF_SIZE];
+ 145:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 4
+
+
+ 146:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Private function prototypes -----------------------------------------------*/
+ 147:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 148:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 149:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Record the seed of the (de-)Whitening algorithm
+ 150:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 151:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] RFwInit_t      the whitening Init structure
+ 152:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] WhiteSeed        the Initial seed of the Whitening algorithm
+ 153:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 154:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_WhiteInitState(RFwInit_t* Init, uint16_t WhiteSeed);
+ 155:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 156:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 157:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Set the state of the Whitening algorithm from the seed
+ 158:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 159:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] RFWPacket      the whitening structure
+ 160:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] whiteSeed             the Initial seed of the Whitening algorithm
+ 161:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 162:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_WhiteSetState(RadioFw_t* RFWPacket);
+ 163:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 164:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 165:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Initialize seed of the Crc algorithm
+ 166:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 167:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] RFWPacket      the whitening Init structure
+ 168:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] CrcPolynomial         the Initial seed of the Crc algorithm
+ 169:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] CrcSeed               the Initial seed of the Crc seed
+ 170:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] CrcSeed               the Initial seed of the Crc types (Ibm/CCITT)
+ 171:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 172:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_CrcInitState(RFwInit_t* Init, const uint16_t CrcPolynomial, const uint16_t CrcSeed,
+ 173:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 174:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 175:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Run the Crc algorithm
+ 176:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] RFWPacket      the whitening structure
+ 177:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 178:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_CrcSetState(RadioFw_t* RFWPacket);
+ 179:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 180:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Run the Whitening algorithm
+ 181:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 182:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] RFWPacket      the whitening structure
+ 183:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in,out] Payload    the Payload to (de-)Whiten and the payload result
+ 184:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] Size           the Payload size
+ 185:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 186:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_WhiteRun(RadioFw_t* RFWPacket, uint8_t* Payload, uint32_t Size);
+ 187:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 188:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 189:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Run the Crc algorithm
+ 190:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 191:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] RFWPacket      the whitening structure
+ 192:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] Payload        the Payload to calculate the Crc
+ 193:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] Size           the Payload size
+ 194:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [out] CrcResult     the result of the Crc calculation
+ 195:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 196:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static int32_t RFW_CrcRun(RadioFw_t* const RFWPacket, const uint8_t* Payload, const uint32_t Size, 
+ 197:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 198:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 199:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Compute Crc Byte
+ 200:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 201:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] crc        Crc bytes
+ 202:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] dataByte        the data byte
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 5
+
+
+ 203:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [out] polynomial     the polynomial to use
+ 204:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @return crc bytes out
+ 205:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 206:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** uint16_t RFW_CrcRun1Byte( uint16_t Crc, uint8_t DataByte, uint16_t Polynomial );
+ 207:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 208:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 209:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief Get the payload length after sync
+ 210:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 211:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [out] PayloadLength        the length of PayloadOnly excluding CrcLengthField
+ 212:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @return 0 when no parameters error, -1 otherwise
+ 213:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 214:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static int32_t RFW_GetPacketLength(uint16_t* PayloadLength);
+ 215:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 216:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 217:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief RFW_GetPayloadTimerEvent TimerEvent to get the payload data, de-whitening, and crc verifi
+ 218:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 219:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @Note calls RFW_GetPayloadProcess directly inside IRQ (default) or in background with sequencer 
+ 220:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] context        context of the timer
+ 221:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 222:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_GetPayloadTimerEvent( void * context);
+ 223:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 224:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 225:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief RFW_GetPayloadProcess process to get the payload data, de-whitening, and crc verification
+ 226:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 227:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_GetPayloadProcess( void );
+ 228:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 229:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_LONGPACKET_ENABLE ==1 )
+ 230:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 231:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief RFW_TransmitLongPacket_NewTxChunkTimer: long packet Tx timer callback to process intermed
+ 232:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @Note calls RFW_TransmitLongPacket_TxChunkProcess directly inside IRQ (default) or in background
+ 233:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 234:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] param        unused
+ 235:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 236:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_TransmitLongPacket_NewTxChunkTimerEvent( void * param );
+ 237:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 238:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 239:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief RFW_TransmitLongPacket_TxChunkProcess: tx long packet process intermediate chunk of TxDat
+ 240:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 241:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_TransmitLongPacket_TxChunkProcess( void );
+ 242:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 243:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 244:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /**
+ 245:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @brief RFW_GetPayload get the payload of
+ 246:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  *
+ 247:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] Offset        Offset of the
+ 248:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  * @param [in] Length        carrier frequency offset in Hertz
+ 249:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****  */
+ 250:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** static void RFW_GetPayload( uint8_t Offset, uint8_t Length );
+ 251:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 252:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 253:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Exported functions --------------------------------------------------------*/
+ 254:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*TxLongPacketGetNext
+ 255:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+  28              		.loc 1 255 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 6
+
+
+  32              		@ link register save eliminated.
+ 256:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   int32_t status=0;
+  33              		.loc 1 256 3 view .LVU1
+ 257:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_LONGPACKET_ENABLE ==1 )
+ 258:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint32_t total_size= payload_size+ RFWPacket.Init.PayloadLengthFieldSize+ RFWPacket.Init.CrcField
+ 259:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 260:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFW_MW_LOG( TS_ON, VLEVEL_M,  "RevID=%04X\r\n", LL_DBGMCU_GetRevisionID() );
+ 261:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 262:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if ((TxLongPacketGetNextChunkCb==NULL)||
+ 263:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       (payload_size> (1<<(8*RFWPacket.Init.PayloadLengthFieldSize))-1) ||/*check that size fits ins
+ 264:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       (RFWPacket.Init.Enable==0) ||/* Can only be used when after RadioSetTxGenericConfig*/
+ 265:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       (LL_DBGMCU_GetRevisionID() < 0x1003 ) )   /* Only available from stm32wl revision Y*/
+ 266:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 267:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     status= -1;
+ 268:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 269:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 270:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 271:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*chunk buffer pointer fed by the application*/
+ 272:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t* app_chunk_buffer_ptr=NULL;
+ 273:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*size of the chunk to be sent*/
+ 274:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t chunk_size;
+ 275:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint8_t crc_size;
+ 276:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*timeout for next chunk*/
+ 277:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint32_t chunk_timeout;
+ 278:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*Records call back*/
+ 279:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.TxLongPacketGetNextChunkCb=TxLongPacketGetNextChunkCb;
+ 280:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 281:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Radio IRQ is set to DIO1 by default */
+ 282:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_SetDioIrqParams( IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
+ 283:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                             IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
+ 284:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                             IRQ_RADIO_NONE,
+ 285:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                             IRQ_RADIO_NONE );
+ 286:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 287:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* ST_WORKAROUND_BEGIN : Set the debug pin and update the radio switch */
+ 288:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Set DBG pin */
+ 289:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     DBG_GPIO_RADIO_TX(SET);
+ 290:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Set RF switch */
+ 291:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_SetSwitch(RFWPacket.AntSwitchPaSelect, RFSWITCH_TX);
+ 292:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* ST_WORKAROUND_END */
+ 293:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 294:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     switch(RFWPacket.Init.Modem)
+ 295:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 296:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         case MODEM_FSK:
+ 297:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         case MODEM_MSK:
+ 298:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         {
+ 299:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             if (RFWPacket.Init.Enable==1)
+ 300:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             {
+ 301:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /*crc will be calculated on the fly along with packet chunk transmission*/
+ 302:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               uint8_t crc_result[2];
+ 303:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /*init radio buffer offset*/
+ 304:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RFWPacket.RadioBufferOffset=0;
+ 305:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /*long packet mode enable*/
+ 306:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RFWPacket.LongPacketModeEnable=1;
+ 307:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /*Remaining bytes to transmit*/
+ 308:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RFWPacket.LongPacketRemainingBytes=total_size;
+ 309:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /*Records total payload bytes to transmit*/
+ 310:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RFWPacket.PayloadLength=total_size;
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 7
+
+
+ 311:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               if (total_size> RADIO_BUF_SIZE)
+ 312:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               {
+ 313:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /*cut in chunk*/
+ 314:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 if (total_size<RADIO_BUF_SIZE+RFWPacket.Init.CrcFieldSize)
+ 315:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 {
+ 316:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                   /*reduce chunk so that crc is treated in the next chunk*/
+ 317:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                   chunk_size= RADIO_BUF_SIZE-RFWPacket.Init.PayloadLengthFieldSize-RFWPacket.Init.C
+ 318:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 }
+ 319:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 else
+ 320:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 {
+ 321:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                   chunk_size= RADIO_BUF_SIZE-RFWPacket.Init.PayloadLengthFieldSize;
+ 322:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 }
+ 323:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /*Set crc size for the crc calculation: no crc here because it is not the end of th
+ 324:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 crc_size= 0;
+ 325:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               }
+ 326:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               else
+ 327:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               {
+ 328:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 chunk_size= payload_size;
+ 329:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /*Set crc size for the crc calculation*/
+ 330:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 crc_size= RFWPacket.Init.CrcFieldSize;
+ 331:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               }
+ 332:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Prepend payload size before Payload*/
+ 333:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               if (RFWPacket.Init.PayloadLengthFieldSize==1)
+ 334:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               {
+ 335:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 ChunkBuffer[0]=payload_size;
+ 336:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               }
+ 337:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               else
+ 338:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               {
+ 339:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 ChunkBuffer[0]=(uint8_t) ((payload_size)>>8);
+ 340:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 ChunkBuffer[1]=(uint8_t) ((payload_size)&0xFF);
+ 341:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               }
+ 342:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Get Tx chunk from app*/
+ 343:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               TxLongPacketGetNextChunkCb(&app_chunk_buffer_ptr, chunk_size);
+ 344:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 345:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Copy first chunk in ChunkBuffer Buffer*/
+ 346:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RADIO_MEMCPY8(&ChunkBuffer[RFWPacket.Init.PayloadLengthFieldSize], app_chunk_buffer_p
+ 347:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 348:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               if (RFWPacket.Init.CrcEnable== 1)
+ 349:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               {
+ 350:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /* Set the state of the Crc to crc_seed*/
+ 351:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 RFW_CrcSetState(&RFWPacket);
+ 352:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /* Run the crc calculation on payload length and payload*/
+ 353:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 RFW_CrcRun(&RFWPacket, ChunkBuffer, RFWPacket.Init.PayloadLengthFieldSize+ chunk_si
+ 354:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /* Append the crc result after the payload if total_size<= RADIO_BUF_SIZE*/
+ 355:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 RADIO_MEMCPY8(&ChunkBuffer[RFWPacket.Init.PayloadLengthFieldSize+ chunk_size], crc_
+ 356:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               }
+ 357:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Init whitening at beginning of the packet*/
+ 358:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RFW_WhiteSetState(&RFWPacket);
+ 359:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Run the whitening calculation on payload length, payload and crc if crc fits insid
+ 360:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               RFW_WhiteRun(&RFWPacket, &ChunkBuffer[0],RFWPacket.Init.PayloadLengthFieldSize+ chunk
+ 361:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Configure the Transmitter to send all*/
+ 362:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Init radio buffer */
+ 363:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN,RFWPacket.Init.PayloadLengthFieldSize+ chunk_s
+ 364:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               SUBGRF_WriteRegister(SUBGHZ_TXADRPTR,0);
+ 365:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* Send*/
+ 366:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               SUBGRF_SendPayload( ChunkBuffer, RFWPacket.Init.PayloadLengthFieldSize+ chunk_size+ c
+ 367:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               if (total_size> RADIO_BUF_SIZE)
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 8
+
+
+ 368:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               {
+ 369:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /*in case total size is greater than RADIO_BUF_SIZE, need to program a timer to get
+ 370:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 //RFWPacket.LongPacketRemainingBytes-= RFWPacket.Init.PayloadLengthFieldSize+ chunk
+ 371:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /*Initialize Timer to get new chunk and update radio ptr*/
+ 372:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 chunk_timeout = ( LONGPACKET_CHUNK_LENGTH_BYTES* 8 * 1000)/RFWPacket.BitRate;
+ 373:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 RFW_MW_LOG( TS_ON, VLEVEL_M,  "Timeout=%d,\r\n", chunk_timeout);
+ 374:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 TimerInit( &RFWPacket.Timer, RFW_TransmitLongPacket_NewTxChunkTimerEvent );
+ 375:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 TimerSetValue( &RFWPacket.Timer, chunk_timeout );
+ 376:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 TimerStart( &RFWPacket.Timer);
+ 377:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 /*Write bit infinite_sequence = 1, required for long packet*/
+ 378:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 uint8_t reg = SUBGRF_ReadRegister(SUBGHZ_GPKTCTL1AR);
+ 379:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 SUBGRF_WriteRegister(SUBGHZ_GPKTCTL1AR, reg | 0x02);
+ 380:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 381:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 TimerSetValue( RFWPacket.RxTimeoutTimer, timeout );
+ 382:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                 TimerStart( RFWPacket.RxTimeoutTimer);
+ 383:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               }
+ 384:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             }
+ 385:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             else
+ 386:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             {
+ 387:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               /* error*/
+ 388:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****               status= -1;
+ 389:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             }
+ 390:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             break;
+ 391:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         }
+ 392:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         case MODEM_LORA:
+ 393:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         {
+ 394:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             /* not supported by the radio Ip*/
+ 395:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             status= -2;
+ 396:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             break;
+ 397:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         }
+ 398:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         case MODEM_BPSK:
+ 399:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         {
+ 400:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****            /* not supported by the FW*/
+ 401:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             status= -2;
+ 402:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             break;
+ 403:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         }
+ 404:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         case MODEM_SIGFOX_TX:
+ 405:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         {
+ 406:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             /* not supported by the FW*/
+ 407:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             status= -2;
+ 408:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             break;
+ 409:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         }
+ 410:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         default:
+ 411:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****             break;
+ 412:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 413:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 414:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 415:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   status= -1;
+  34              		.loc 1 415 3 view .LVU2
+ 416:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 417:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return status;
+  35              		.loc 1 417 3 view .LVU3
+ 418:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+  36              		.loc 1 418 1 is_stmt 0 view .LVU4
+  37 0000 4FF0FF30 		mov	r0, #-1
+  38              	.LVL1:
+  39              		.loc 1 418 1 view .LVU5
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 9
+
+
+  40 0004 7047     		bx	lr
+  41              		.cfi_endproc
+  42              	.LFE1163:
+  44              		.section	.text.RFW_ReceiveLongPacket,"ax",%progbits
+  45              		.align	1
+  46              		.global	RFW_ReceiveLongPacket
+  47              		.syntax unified
+  48              		.thumb
+  49              		.thumb_func
+  50              		.fpu softvfp
+  52              	RFW_ReceiveLongPacket:
+  53              	.LVL2:
+  54              	.LFB1164:
+ 419:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 420:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** int32_t RFW_ReceiveLongPacket( uint8_t boosted_mode, uint32_t timeout, void (*RxLongPacketStoreChun
+ 421:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+  55              		.loc 1 421 1 is_stmt 1 view -0
+  56              		.cfi_startproc
+  57              		@ args = 0, pretend = 0, frame = 0
+  58              		@ frame_needed = 0, uses_anonymous_args = 0
+  59              		@ link register save eliminated.
+ 422:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   int32_t status=0;
+  60              		.loc 1 422 3 view .LVU7
+ 423:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_LONGPACKET_ENABLE ==1 )
+ 424:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if ((RxLongPacketStoreChunkCb==NULL) ||
+ 425:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       (RFWPacket.Init.Enable==0)) /* Can only be used when after RadioSetRxGenericConfig*/
+ 426:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 427:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     status= -1;
+ 428:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 429:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 430:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 431:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*Records call back*/
+ 432:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.RxLongPacketStoreChunkCb=RxLongPacketStoreChunkCb;
+ 433:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_SetDioIrqParams( IRQ_SYNCWORD_VALID | IRQ_RX_TX_TIMEOUT,
+ 434:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                             IRQ_SYNCWORD_VALID | IRQ_RX_TX_TIMEOUT,
+ 435:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                             IRQ_RADIO_NONE,
+ 436:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                             IRQ_RADIO_NONE );
+ 437:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_SetSwitch(RFWPacket.AntSwitchPaSelect, RFSWITCH_RX);
+ 438:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*init radio buffer offset*/
+ 439:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.RadioBufferOffset=0;
+ 440:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Init whitening at beginning of the packet*/
+ 441:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFW_WhiteSetState(&RFWPacket);
+ 442:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Set the state of the Crc to crc_seed*/
+ 443:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFW_CrcSetState(&RFWPacket);
+ 444:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Init radio buffer */
+ 445:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN,255);
+ 446:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_WriteRegister(SUBGHZ_RXADRPTR,0);
+ 447:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*enable long packet*/
+ 448:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.LongPacketModeEnable=1;
+ 449:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 450:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     if( timeout != 0 )
+ 451:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 452:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         TimerSetValue( RFWPacket.RxTimeoutTimer, timeout );
+ 453:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****         TimerStart( RFWPacket.RxTimeoutTimer );
+ 454:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 455:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     DBG_GPIO_RADIO_RX(SET);
+ 456:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     if (boosted_mode ==1)
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 10
+
+
+ 457:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 458:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       SUBGRF_SetRxBoosted( 0xFFFFFF ); // Rx Continuous
+ 459:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 460:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     else
+ 461:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 462:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       SUBGRF_SetRx( 0xFFFFFF ); // Rx Continuous
+ 463:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 464:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 465:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 466:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   status= -1;
+  61              		.loc 1 466 3 view .LVU8
+ 467:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 468:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return status;
+  62              		.loc 1 468 3 view .LVU9
+ 469:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+  63              		.loc 1 469 1 is_stmt 0 view .LVU10
+  64 0000 4FF0FF30 		mov	r0, #-1
+  65              	.LVL3:
+  66              		.loc 1 469 1 view .LVU11
+  67 0004 7047     		bx	lr
+  68              		.cfi_endproc
+  69              	.LFE1164:
+  71              		.section	.text.RFW_Init,"ax",%progbits
+  72              		.align	1
+  73              		.global	RFW_Init
+  74              		.syntax unified
+  75              		.thumb
+  76              		.thumb_func
+  77              		.fpu softvfp
+  79              	RFW_Init:
+  80              	.LVL4:
+  81              	.LFB1165:
+ 470:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 471:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** int32_t RFW_Init( ConfigGeneric_t* config, RadioEvents_t* RadioEvents, TimerEvent_t* TimeoutTimerEv
+ 472:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+  82              		.loc 1 472 1 is_stmt 1 view -0
+  83              		.cfi_startproc
+  84              		@ args = 0, pretend = 0, frame = 0
+  85              		@ frame_needed = 0, uses_anonymous_args = 0
+  86              		@ link register save eliminated.
+ 473:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 474:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RADIO_FSK_PacketLengthModes_t HeaderType;
+ 475:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint32_t RxMaxPayloadLength= 0;
+ 476:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RADIO_FSK_CrcTypes_t CrcLength;
+ 477:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint16_t whiteSeed;
+ 478:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint16_t CrcPolynomial;
+ 479:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint16_t CrcSeed;
+ 480:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if (config->rtx ==CONFIG_TX)
+ 481:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 482:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     HeaderType=    config->TxConfig->fsk.HeaderType;
+ 483:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     CrcLength=     config->TxConfig->fsk.CrcLength;
+ 484:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     whiteSeed=     config->TxConfig->fsk.whiteSeed;
+ 485:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     CrcPolynomial= config->TxConfig->fsk.CrcPolynomial;
+ 486:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     CrcSeed=       config->TxConfig->fsk.CrcSeed;
+ 487:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.BitRate= config->TxConfig->fsk.BitRate;
+ 488:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.TxTimeoutTimer= TimeoutTimerEvent;
+ 489:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 11
+
+
+ 490:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 491:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 492:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     HeaderType=          config->RxConfig->fsk.LengthMode;
+ 493:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     CrcLength=           config->RxConfig->fsk.CrcLength;
+ 494:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RxMaxPayloadLength = config->RxConfig->fsk.MaxPayloadLength;
+ 495:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     whiteSeed=           config->RxConfig->fsk.whiteSeed;
+ 496:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     CrcPolynomial=       config->RxConfig->fsk.CrcPolynomial;
+ 497:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     CrcSeed=             config->RxConfig->fsk.CrcSeed;
+ 498:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.BitRate=   config->RxConfig->fsk.BitRate;
+ 499:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.RxTimeoutTimer= TimeoutTimerEvent;
+ 500:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 501:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if( ( RadioEvents != NULL ) && ( RadioEvents->RxError ) )
+ 502:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 503:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.RadioEvents=RadioEvents;
+ 504:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 505:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 506:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 507:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     return -1;
+ 508:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 509:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if (HeaderType==RADIO_FSK_PACKET_2BYTES_LENGTH)
+ 510:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 511:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_LONGPACKET_ENABLE ==1 )
+ 512:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.PayloadLengthFieldSize= 2;
+ 513:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 514:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     return -1;
+ 515:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 516:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 517:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 518:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 519:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.PayloadLengthFieldSize= 1;
+ 520:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 521:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*record, used to reject packet in length decoded at sync time out greater than LongPacketMaxRx
+ 522:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.Init.LongPacketMaxRxLength= RxMaxPayloadLength;
+ 523:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if (CrcLength== RADIO_FSK_CRC_OFF)
+ 524:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 525:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.CrcEnable =0;
+ 526:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.CrcFieldSize= 0;
+ 527:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 528:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 529:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 530:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.CrcEnable =1;
+ 531:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.CrcFieldSize= 2;
+ 532:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 533:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /*Macro can be used to init interrupt behaviour*/
+ 534:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFW_IT_INIT();
+ 535:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /*Initialise whitening Seed*/
+ 536:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFW_WhiteInitState(&RFWPacket.Init, whiteSeed);
+ 537:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /*Initialise Crc Seed*/
+ 538:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFW_CrcInitState(&RFWPacket.Init, CrcPolynomial, CrcSeed, CrcLength);
+ 539:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /*Enable the RFWPacket decoding*/
+ 540:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.Init.Enable=1;
+ 541:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /* Initialize Timer for end of fixed packet, started at sync*/
+ 542:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   TimerInit( &RFWPacket.Timer, RFW_GetPayloadTimerEvent );
+ 543:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return 0;
+ 544:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 545:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return -1;
+  87              		.loc 1 545 3 view .LVU13
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 12
+
+
+ 546:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 547:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+  88              		.loc 1 547 1 is_stmt 0 view .LVU14
+  89 0000 4FF0FF30 		mov	r0, #-1
+  90              	.LVL5:
+  91              		.loc 1 547 1 view .LVU15
+  92 0004 7047     		bx	lr
+  93              		.cfi_endproc
+  94              	.LFE1165:
+  96              		.section	.text.RFW_DeInit,"ax",%progbits
+  97              		.align	1
+  98              		.global	RFW_DeInit
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 102              		.fpu softvfp
+ 104              	RFW_DeInit:
+ 105              	.LFB1166:
+ 548:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 549:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** void RFW_DeInit( void)
+ 550:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 106              		.loc 1 550 1 is_stmt 1 view -0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110              		@ link register save eliminated.
+ 551:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 552:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.Init.Enable=0; /*Disable the RFWPacket decoding*/
+ 553:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 554:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 111              		.loc 1 554 1 view .LVU17
+ 112 0000 7047     		bx	lr
+ 113              		.cfi_endproc
+ 114              	.LFE1166:
+ 116              		.section	.text.RFW_Is_Init,"ax",%progbits
+ 117              		.align	1
+ 118              		.global	RFW_Is_Init
+ 119              		.syntax unified
+ 120              		.thumb
+ 121              		.thumb_func
+ 122              		.fpu softvfp
+ 124              	RFW_Is_Init:
+ 125              	.LFB1167:
+ 555:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 556:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** uint8_t RFW_Is_Init( void)
+ 557:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 126              		.loc 1 557 1 view -0
+ 127              		.cfi_startproc
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130              		@ link register save eliminated.
+ 558:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 559:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return RFWPacket.Init.Enable;
+ 560:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 561:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return 0;
+ 131              		.loc 1 561 3 view .LVU19
+ 562:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 13
+
+
+ 563:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 132              		.loc 1 563 1 is_stmt 0 view .LVU20
+ 133 0000 0020     		movs	r0, #0
+ 134 0002 7047     		bx	lr
+ 135              		.cfi_endproc
+ 136              	.LFE1167:
+ 138              		.section	.text.RFW_Is_LongPacketModeEnabled,"ax",%progbits
+ 139              		.align	1
+ 140              		.global	RFW_Is_LongPacketModeEnabled
+ 141              		.syntax unified
+ 142              		.thumb
+ 143              		.thumb_func
+ 144              		.fpu softvfp
+ 146              	RFW_Is_LongPacketModeEnabled:
+ 147              	.LFB1168:
+ 564:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 565:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** uint8_t RFW_Is_LongPacketModeEnabled( void)
+ 566:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 148              		.loc 1 566 1 is_stmt 1 view -0
+ 149              		.cfi_startproc
+ 150              		@ args = 0, pretend = 0, frame = 0
+ 151              		@ frame_needed = 0, uses_anonymous_args = 0
+ 152              		@ link register save eliminated.
+ 567:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 568:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return RFWPacket.LongPacketModeEnable;
+ 569:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 570:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return 0;
+ 153              		.loc 1 570 3 view .LVU22
+ 571:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 572:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 154              		.loc 1 572 1 is_stmt 0 view .LVU23
+ 155 0000 0020     		movs	r0, #0
+ 156 0002 7047     		bx	lr
+ 157              		.cfi_endproc
+ 158              	.LFE1168:
+ 160              		.section	.text.RFW_SetAntSwitch,"ax",%progbits
+ 161              		.align	1
+ 162              		.global	RFW_SetAntSwitch
+ 163              		.syntax unified
+ 164              		.thumb
+ 165              		.thumb_func
+ 166              		.fpu softvfp
+ 168              	RFW_SetAntSwitch:
+ 169              	.LVL6:
+ 170              	.LFB1169:
+ 573:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 574:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** void RFW_SetAntSwitch( uint8_t AntSwitch)
+ 575:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 171              		.loc 1 575 1 is_stmt 1 view -0
+ 172              		.cfi_startproc
+ 173              		@ args = 0, pretend = 0, frame = 0
+ 174              		@ frame_needed = 0, uses_anonymous_args = 0
+ 175              		@ link register save eliminated.
+ 576:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 577:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.AntSwitchPaSelect=AntSwitch;
+ 578:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 579:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 14
+
+
+ 176              		.loc 1 579 1 view .LVU25
+ 177 0000 7047     		bx	lr
+ 178              		.cfi_endproc
+ 179              	.LFE1169:
+ 181              		.section	.text.RFW_TransmitInit,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	RFW_TransmitInit
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 187              		.fpu softvfp
+ 189              	RFW_TransmitInit:
+ 190              	.LVL7:
+ 191              	.LFB1170:
+ 580:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 581:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** int32_t RFW_TransmitInit(uint8_t* inOutBuffer, uint8_t size, uint8_t* outSize)
+ 582:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 192              		.loc 1 582 1 view -0
+ 193              		.cfi_startproc
+ 194              		@ args = 0, pretend = 0, frame = 0
+ 195              		@ frame_needed = 0, uses_anonymous_args = 0
+ 196              		@ link register save eliminated.
+ 583:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   int32_t status=-1;
+ 197              		.loc 1 583 3 view .LVU27
+ 584:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 585:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint8_t crc_result[2];
+ 586:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if (size+RFWPacket.Init.PayloadLengthFieldSize+ RFWPacket.Init.CrcFieldSize> RADIO_BUF_SIZE)
+ 587:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 588:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFW_MW_LOG( TS_ON, VLEVEL_M, "RadioSend Oversize\r\n");
+ 589:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     status= -1;
+ 590:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 591:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 592:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 593:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Copy tx buffer in payload*/
+ 594:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RADIO_MEMCPY8(&ChunkBuffer[RFWPacket.Init.PayloadLengthFieldSize], inOutBuffer, size);
+ 595:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Calculate the crc on */
+ 596:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Payload Size without the packet length field nor the CRC */
+ 597:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /* Prepend payload size before Payload*/
+ 598:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     if (RFWPacket.Init.PayloadLengthFieldSize==1)
+ 599:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 600:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       ChunkBuffer[0]=size;
+ 601:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 602:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     else
+ 603:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 604:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       ChunkBuffer[0]=0;
+ 605:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       ChunkBuffer[1]=size;
+ 606:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 607:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     if (RFWPacket.Init.CrcEnable== 1)
+ 608:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 609:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* Set the state of the Crc to crc_seed*/
+ 610:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       RFW_CrcSetState(&RFWPacket);
+ 611:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /*Run the crc calculation on payload length and payload*/
+ 612:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       RFW_CrcRun(&RFWPacket, &ChunkBuffer[0],size+ RFWPacket.Init.PayloadLengthFieldSize, crc_resul
+ 613:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*append the crc result afater the payload*/
+ 614:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       RADIO_MEMCPY8(&ChunkBuffer[size+ RFWPacket.Init.PayloadLengthFieldSize], crc_result, RFWPacke
+ 615:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 616:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*init whitening at beginning of the packet*/
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 15
+
+
+ 617:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFW_WhiteSetState(&RFWPacket);
+ 618:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*Run the whitening calculation on payload length, payload and crc*/
+ 619:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFW_WhiteRun(&RFWPacket, &ChunkBuffer[0],size+ RFWPacket.Init.PayloadLengthFieldSize+ RFWPacket
+ 620:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*Configure the Transmitter to send all*/
+ 621:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     *outSize=(uint8_t) size+ RFWPacket.Init.PayloadLengthFieldSize+ RFWPacket.Init.CrcFieldSize;
+ 622:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*copy result*/
+ 623:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RADIO_MEMCPY8(inOutBuffer, ChunkBuffer, *outSize);
+ 624:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 625:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.LongPacketModeEnable=0;
+ 626:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 627:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     status= 0;
+ 628:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 629:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 630:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return status;
+ 198              		.loc 1 630 3 view .LVU28
+ 631:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 199              		.loc 1 631 1 is_stmt 0 view .LVU29
+ 200 0000 4FF0FF30 		mov	r0, #-1
+ 201              	.LVL8:
+ 202              		.loc 1 631 1 view .LVU30
+ 203 0004 7047     		bx	lr
+ 204              		.cfi_endproc
+ 205              	.LFE1170:
+ 207              		.section	.text.RFW_ReceiveInit,"ax",%progbits
+ 208              		.align	1
+ 209              		.global	RFW_ReceiveInit
+ 210              		.syntax unified
+ 211              		.thumb
+ 212              		.thumb_func
+ 213              		.fpu softvfp
+ 215              	RFW_ReceiveInit:
+ 216              	.LFB1171:
+ 632:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 633:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** int32_t RFW_ReceiveInit( void )
+ 634:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 217              		.loc 1 634 1 is_stmt 1 view -0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 0
+ 220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 221              		@ link register save eliminated.
+ 635:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 636:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /* Radio IRQ is set to DIO1 by default */
+ 637:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   SUBGRF_SetDioIrqParams( IRQ_RADIO_ALL&(~IRQ_RX_DONE), //IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
+ 638:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                           IRQ_RADIO_ALL&(~IRQ_RX_DONE), //IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
+ 639:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                           IRQ_RADIO_NONE,
+ 640:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****                           IRQ_RADIO_NONE );
+ 641:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /*init whitening at beginning of the packet*/
+ 642:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFW_WhiteSetState(&RFWPacket);
+ 643:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** /* Set the state of the Crc to crc_seed*/
+ 644:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFW_CrcSetState(&RFWPacket);
+ 645:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 646:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.RxPayloadOffset=0;
+ 647:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 648:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.LongPacketModeEnable=0;
+ 649:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return 0;
+ 650:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #else
+ 651:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   return -1;
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 16
+
+
+ 222              		.loc 1 651 3 view .LVU32
+ 652:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 653:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 223              		.loc 1 653 1 is_stmt 0 view .LVU33
+ 224 0000 4FF0FF30 		mov	r0, #-1
+ 225 0004 7047     		bx	lr
+ 226              		.cfi_endproc
+ 227              	.LFE1171:
+ 229              		.section	.text.RFW_DeInit_TxLongPacket,"ax",%progbits
+ 230              		.align	1
+ 231              		.global	RFW_DeInit_TxLongPacket
+ 232              		.syntax unified
+ 233              		.thumb
+ 234              		.thumb_func
+ 235              		.fpu softvfp
+ 237              	RFW_DeInit_TxLongPacket:
+ 238              	.LFB1172:
+ 654:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 655:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** void RFW_DeInit_TxLongPacket(void)
+ 656:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 239              		.loc 1 656 1 is_stmt 1 view -0
+ 240              		.cfi_startproc
+ 241              		@ args = 0, pretend = 0, frame = 0
+ 242              		@ frame_needed = 0, uses_anonymous_args = 0
+ 243              		@ link register save eliminated.
+ 657:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_LONGPACKET_ENABLE ==1 )
+ 658:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   /*long packet WA*/
+ 659:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint8_t reg = SUBGRF_ReadRegister(SUBGHZ_GPKTCTL1AR);
+ 660:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   SUBGRF_WriteRegister(SUBGHZ_GPKTCTL1AR, reg & ~0x02);//clear infinite_sequence bit
+ 661:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN, 0xFF); //RxTxPldLen: reset to 0xFF
+ 662:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 663:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 244              		.loc 1 663 1 view .LVU35
+ 245 0000 7047     		bx	lr
+ 246              		.cfi_endproc
+ 247              	.LFE1172:
+ 249              		.section	.text.RFW_ReceivePayload,"ax",%progbits
+ 250              		.align	1
+ 251              		.global	RFW_ReceivePayload
+ 252              		.syntax unified
+ 253              		.thumb
+ 254              		.thumb_func
+ 255              		.fpu softvfp
+ 257              	RFW_ReceivePayload:
+ 258              	.LFB1173:
+ 664:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 665:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** void RFW_ReceivePayload( void )
+ 666:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 259              		.loc 1 666 1 view -0
+ 260              		.cfi_startproc
+ 261              		@ args = 0, pretend = 0, frame = 0
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263              		@ link register save eliminated.
+ 667:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 668:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   uint16_t PayloadLength= 0;
+ 669:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   if (RFW_GetPacketLength(&PayloadLength)==0)
+ 670:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 17
+
+
+ 671:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint32_t timeout;
+ 672:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     uint32_t packet_length= PayloadLength+RFWPacket.Init.CrcFieldSize;
+ 673:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*record payload length*/
+ 674:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.PayloadLength= PayloadLength;
+ 675:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*record remaining payload length*/
+ 676:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.LongPacketRemainingBytes = (uint16_t) packet_length;
+ 677:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*record rx buffer offset*/
+ 678:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.RadioBufferOffset = RFWPacket.Init.PayloadLengthFieldSize;
+ 679:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*if decoded PayloadLength is longer than LongPacketMaxRxLength, reject packet*/
+ 680:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     if (PayloadLength>RFWPacket.Init.LongPacketMaxRxLength)
+ 681:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 682:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****        SUBGRF_SetStandby( STDBY_RC );
+ 683:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****        RFWPacket.Init.RadioEvents->RxError( );
+ 684:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****        return;
+ 685:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 686:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     if (packet_length<LONGPACKET_CHUNK_LENGTH_BYTES)
+ 687:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 688:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* all in one chunks*/
+ 689:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* calcucate time to end of packet*/
+ 690:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       timeout = DIVC( (packet_length) * 8 * 1000 , RFWPacket.BitRate)+2;
+ 691:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /**/
+ 692:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* start timer at the end of the packet*/
+ 693:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       RFW_MW_LOG( TS_ON, VLEVEL_M,  "end packet in %dms\r\n", timeout);
+ 694:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 695:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 696:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     else if (packet_length<(3*LONGPACKET_CHUNK_LENGTH_BYTES/2))
+ 697:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 698:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* packet contained in 2 chunks*/
+ 699:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* make sure that crc not cut in chunk*/
+ 700:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       timeout = DIVR( (packet_length * 8 * 1000)/2 , RFWPacket.BitRate);
+ 701:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 702:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     else
+ 703:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     {
+ 704:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* packet contained in multiple chunk*/
+ 705:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       /* program radio timer for first chunk*/
+ 706:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****       timeout = DIVR( LONGPACKET_CHUNK_LENGTH_BYTES * 8 * 1000 , RFWPacket.BitRate);
+ 707:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     }
+ 708:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     TimerSetValue( &RFWPacket.Timer, timeout );
+ 709:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     TimerStart( &RFWPacket.Timer);
+ 710:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 711:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   else
+ 712:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   {
+ 713:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     /*timeout*/
+ 714:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     SUBGRF_SetStandby( STDBY_RC );
+ 715:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****     RFWPacket.Init.RadioEvents->RxTimeout( );
+ 716:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   }
+ 717:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 718:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 264              		.loc 1 718 1 view .LVU37
+ 265 0000 7047     		bx	lr
+ 266              		.cfi_endproc
+ 267              	.LFE1173:
+ 269              		.section	.text.RFW_SetRadioModem,"ax",%progbits
+ 270              		.align	1
+ 271              		.global	RFW_SetRadioModem
+ 272              		.syntax unified
+ 273              		.thumb
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 18
+
+
+ 274              		.thumb_func
+ 275              		.fpu softvfp
+ 277              	RFW_SetRadioModem:
+ 278              	.LVL9:
+ 279              	.LFB1174:
+ 719:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** 
+ 720:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** void RFW_SetRadioModem(RadioModems_t Modem)
+ 721:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** {
+ 280              		.loc 1 721 1 view -0
+ 281              		.cfi_startproc
+ 282              		@ args = 0, pretend = 0, frame = 0
+ 283              		@ frame_needed = 0, uses_anonymous_args = 0
+ 284              		@ link register save eliminated.
+ 722:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #if (RFW_ENABLE ==1 )
+ 723:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c ****   RFWPacket.Init.Modem= Modem;
+ 724:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** #endif
+ 725:Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c **** }
+ 285              		.loc 1 725 1 view .LVU39
+ 286 0000 7047     		bx	lr
+ 287              		.cfi_endproc
+ 288              	.LFE1174:
+ 290              		.text
+ 291              	.Letext0:
+ 292              		.file 2 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/machine/_de
+ 293              		.file 3 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/sys/_stdint
+ 294              		.file 4 "Utilities/timer/stm32_timer.h"
+ 295              		.file 5 "Middlewares/Third_Party/SubGHz_Phy/radio.h"
+ 296              		.file 6 "Middlewares/Third_Party/SubGHz_Phy/radio_ex.h"
+ 297              		.file 7 "Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.h"
+ 298              		.file 8 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dma.h"
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 radio_fw.c
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:16     .text.RFW_TransmitLongPacket:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:24     .text.RFW_TransmitLongPacket:0000000000000000 RFW_TransmitLongPacket
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:45     .text.RFW_ReceiveLongPacket:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:52     .text.RFW_ReceiveLongPacket:0000000000000000 RFW_ReceiveLongPacket
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:72     .text.RFW_Init:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:79     .text.RFW_Init:0000000000000000 RFW_Init
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:97     .text.RFW_DeInit:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:104    .text.RFW_DeInit:0000000000000000 RFW_DeInit
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:117    .text.RFW_Is_Init:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:124    .text.RFW_Is_Init:0000000000000000 RFW_Is_Init
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:139    .text.RFW_Is_LongPacketModeEnabled:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:146    .text.RFW_Is_LongPacketModeEnabled:0000000000000000 RFW_Is_LongPacketModeEnabled
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:161    .text.RFW_SetAntSwitch:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:168    .text.RFW_SetAntSwitch:0000000000000000 RFW_SetAntSwitch
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:182    .text.RFW_TransmitInit:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:189    .text.RFW_TransmitInit:0000000000000000 RFW_TransmitInit
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:208    .text.RFW_ReceiveInit:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:215    .text.RFW_ReceiveInit:0000000000000000 RFW_ReceiveInit
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:230    .text.RFW_DeInit_TxLongPacket:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:237    .text.RFW_DeInit_TxLongPacket:0000000000000000 RFW_DeInit_TxLongPacket
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:250    .text.RFW_ReceivePayload:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:257    .text.RFW_ReceivePayload:0000000000000000 RFW_ReceivePayload
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:270    .text.RFW_SetRadioModem:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccE7sjz5.s:277    .text.RFW_SetRadioModem:0000000000000000 RFW_SetRadioModem
+
+NO UNDEFINED SYMBOLS

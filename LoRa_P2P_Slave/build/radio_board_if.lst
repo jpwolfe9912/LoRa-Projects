@@ -1,0 +1,483 @@
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"radio_board_if.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.RBI_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	RBI_Init
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	RBI_Init:
+  25              	.LFB1163:
+  26              		.file 1 "SubGHz_Phy/Target/radio_board_if.c"
+   1:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN Header */
+   2:SubGHz_Phy/Target/radio_board_if.c **** /**
+   3:SubGHz_Phy/Target/radio_board_if.c ****   ******************************************************************************
+   4:SubGHz_Phy/Target/radio_board_if.c ****   * @file    radio_board_if.c
+   5:SubGHz_Phy/Target/radio_board_if.c ****   * @author  MCD Application Team
+   6:SubGHz_Phy/Target/radio_board_if.c ****   * @brief   This file provides an interface layer between MW and Radio Board
+   7:SubGHz_Phy/Target/radio_board_if.c ****   ******************************************************************************
+   8:SubGHz_Phy/Target/radio_board_if.c ****   * @attention
+   9:SubGHz_Phy/Target/radio_board_if.c ****   *
+  10:SubGHz_Phy/Target/radio_board_if.c ****   * Copyright (c) 2022 STMicroelectronics.
+  11:SubGHz_Phy/Target/radio_board_if.c ****   * All rights reserved.
+  12:SubGHz_Phy/Target/radio_board_if.c ****   *
+  13:SubGHz_Phy/Target/radio_board_if.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:SubGHz_Phy/Target/radio_board_if.c ****   * in the root directory of this software component.
+  15:SubGHz_Phy/Target/radio_board_if.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:SubGHz_Phy/Target/radio_board_if.c ****   *
+  17:SubGHz_Phy/Target/radio_board_if.c ****   ******************************************************************************
+  18:SubGHz_Phy/Target/radio_board_if.c ****   */
+  19:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END Header */
+  20:SubGHz_Phy/Target/radio_board_if.c **** 
+  21:SubGHz_Phy/Target/radio_board_if.c **** /* Includes ------------------------------------------------------------------*/
+  22:SubGHz_Phy/Target/radio_board_if.c **** #include "radio_board_if.h"
+  23:SubGHz_Phy/Target/radio_board_if.c **** 
+  24:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN Includes */
+  25:SubGHz_Phy/Target/radio_board_if.c **** 
+  26:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END Includes */
+  27:SubGHz_Phy/Target/radio_board_if.c **** 
+  28:SubGHz_Phy/Target/radio_board_if.c **** /* External variables ---------------------------------------------------------*/
+  29:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN EV */
+  30:SubGHz_Phy/Target/radio_board_if.c **** 
+  31:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END EV */
+  32:SubGHz_Phy/Target/radio_board_if.c **** 
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 2
+
+
+  33:SubGHz_Phy/Target/radio_board_if.c **** /* Private typedef -----------------------------------------------------------*/
+  34:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN PTD */
+  35:SubGHz_Phy/Target/radio_board_if.c **** 
+  36:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END PTD */
+  37:SubGHz_Phy/Target/radio_board_if.c **** 
+  38:SubGHz_Phy/Target/radio_board_if.c **** /* Private define ------------------------------------------------------------*/
+  39:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN PD */
+  40:SubGHz_Phy/Target/radio_board_if.c **** 
+  41:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END PD */
+  42:SubGHz_Phy/Target/radio_board_if.c **** 
+  43:SubGHz_Phy/Target/radio_board_if.c **** /* Private macro -------------------------------------------------------------*/
+  44:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN PM */
+  45:SubGHz_Phy/Target/radio_board_if.c **** 
+  46:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END PM */
+  47:SubGHz_Phy/Target/radio_board_if.c **** 
+  48:SubGHz_Phy/Target/radio_board_if.c **** /* Private variables ---------------------------------------------------------*/
+  49:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN PV */
+  50:SubGHz_Phy/Target/radio_board_if.c **** 
+  51:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END PV */
+  52:SubGHz_Phy/Target/radio_board_if.c **** 
+  53:SubGHz_Phy/Target/radio_board_if.c **** /* Private function prototypes -----------------------------------------------*/
+  54:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE BEGIN PFP */
+  55:SubGHz_Phy/Target/radio_board_if.c **** 
+  56:SubGHz_Phy/Target/radio_board_if.c **** /* USER CODE END PFP */
+  57:SubGHz_Phy/Target/radio_board_if.c **** 
+  58:SubGHz_Phy/Target/radio_board_if.c **** /* Exported functions --------------------------------------------------------*/
+  59:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_Init(void)
+  60:SubGHz_Phy/Target/radio_board_if.c **** {
+  27              		.loc 1 60 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  61:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_Init_1 */
+  62:SubGHz_Phy/Target/radio_board_if.c **** 
+  63:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_Init_1 */
+  64:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+  65:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+  66:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+  67:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+  68:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+  69:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+  70:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+  71:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+  72:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+  73:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+  74:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_Init();
+  75:SubGHz_Phy/Target/radio_board_if.c **** #else
+  76:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_Init here */
+  77:SubGHz_Phy/Target/radio_board_if.c ****   int32_t retcode = 0;
+  32              		.loc 1 77 3 view .LVU1
+  33              	.LVL0:
+  78:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_Init_2 */
+  79:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+  80:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_Init_2 */
+  81:SubGHz_Phy/Target/radio_board_if.c ****   return retcode;
+  34              		.loc 1 81 3 view .LVU2
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 3
+
+
+  82:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER  */
+  83:SubGHz_Phy/Target/radio_board_if.c **** }
+  35              		.loc 1 83 1 is_stmt 0 view .LVU3
+  36 0000 0020     		movs	r0, #0
+  37 0002 7047     		bx	lr
+  38              		.cfi_endproc
+  39              	.LFE1163:
+  41              		.section	.text.RBI_DeInit,"ax",%progbits
+  42              		.align	1
+  43              		.global	RBI_DeInit
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  47              		.fpu softvfp
+  49              	RBI_DeInit:
+  50              	.LFB1164:
+  84:SubGHz_Phy/Target/radio_board_if.c **** 
+  85:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_DeInit(void)
+  86:SubGHz_Phy/Target/radio_board_if.c **** {
+  51              		.loc 1 86 1 is_stmt 1 view -0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              		@ link register save eliminated.
+  87:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_DeInit_1 */
+  88:SubGHz_Phy/Target/radio_board_if.c **** 
+  89:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_DeInit_1 */
+  90:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+  91:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+  92:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+  93:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+  94:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+  95:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+  96:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+  97:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+  98:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+  99:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+ 100:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_DeInit();
+ 101:SubGHz_Phy/Target/radio_board_if.c **** #else
+ 102:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_DeInit here */
+ 103:SubGHz_Phy/Target/radio_board_if.c ****   int32_t retcode = 0;
+  56              		.loc 1 103 3 view .LVU5
+  57              	.LVL1:
+ 104:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_DeInit_2 */
+ 105:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+ 106:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_DeInit_2 */
+ 107:SubGHz_Phy/Target/radio_board_if.c ****   return retcode;
+  58              		.loc 1 107 3 view .LVU6
+ 108:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER */
+ 109:SubGHz_Phy/Target/radio_board_if.c **** }
+  59              		.loc 1 109 1 is_stmt 0 view .LVU7
+  60 0000 0020     		movs	r0, #0
+  61 0002 7047     		bx	lr
+  62              		.cfi_endproc
+  63              	.LFE1164:
+  65              		.section	.text.RBI_ConfigRFSwitch,"ax",%progbits
+  66              		.align	1
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 4
+
+
+  67              		.global	RBI_ConfigRFSwitch
+  68              		.syntax unified
+  69              		.thumb
+  70              		.thumb_func
+  71              		.fpu softvfp
+  73              	RBI_ConfigRFSwitch:
+  74              	.LVL2:
+  75              	.LFB1165:
+ 110:SubGHz_Phy/Target/radio_board_if.c **** 
+ 111:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_ConfigRFSwitch(RBI_Switch_TypeDef Config)
+ 112:SubGHz_Phy/Target/radio_board_if.c **** {
+  76              		.loc 1 112 1 is_stmt 1 view -0
+  77              		.cfi_startproc
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  80              		@ link register save eliminated.
+ 113:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_ConfigRFSwitch_1 */
+ 114:SubGHz_Phy/Target/radio_board_if.c **** 
+ 115:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_ConfigRFSwitch_1 */
+ 116:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+ 117:SubGHz_Phy/Target/radio_board_if.c **** 
+ 118:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+ 119:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+ 120:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+ 121:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+ 122:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+ 123:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+ 124:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+ 125:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+ 126:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+ 127:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_ConfigRFSwitch((BSP_RADIO_Switch_TypeDef) Config);
+ 128:SubGHz_Phy/Target/radio_board_if.c **** #else
+ 129:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_ConfigRFSwitch here */
+ 130:SubGHz_Phy/Target/radio_board_if.c ****   int32_t retcode = 0;
+  81              		.loc 1 130 3 view .LVU9
+ 131:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_ConfigRFSwitch_2 */
+ 132:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+ 133:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_ConfigRFSwitch_2 */
+ 134:SubGHz_Phy/Target/radio_board_if.c ****   return retcode;
+  82              		.loc 1 134 3 view .LVU10
+ 135:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER */
+ 136:SubGHz_Phy/Target/radio_board_if.c **** }
+  83              		.loc 1 136 1 is_stmt 0 view .LVU11
+  84 0000 0020     		movs	r0, #0
+  85              	.LVL3:
+  86              		.loc 1 136 1 view .LVU12
+  87 0002 7047     		bx	lr
+  88              		.cfi_endproc
+  89              	.LFE1165:
+  91              		.section	.text.RBI_GetTxConfig,"ax",%progbits
+  92              		.align	1
+  93              		.global	RBI_GetTxConfig
+  94              		.syntax unified
+  95              		.thumb
+  96              		.thumb_func
+  97              		.fpu softvfp
+  99              	RBI_GetTxConfig:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 5
+
+
+ 100              	.LFB1166:
+ 137:SubGHz_Phy/Target/radio_board_if.c **** 
+ 138:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_GetTxConfig(void)
+ 139:SubGHz_Phy/Target/radio_board_if.c **** {
+ 101              		.loc 1 139 1 is_stmt 1 view -0
+ 102              		.cfi_startproc
+ 103              		@ args = 0, pretend = 0, frame = 0
+ 104              		@ frame_needed = 0, uses_anonymous_args = 0
+ 105              		@ link register save eliminated.
+ 140:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_GetTxConfig_1 */
+ 141:SubGHz_Phy/Target/radio_board_if.c **** 
+ 142:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_GetTxConfig_1 */
+ 143:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+ 144:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+ 145:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+ 146:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+ 147:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+ 148:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+ 149:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+ 150:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+ 151:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+ 152:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+ 153:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_GetTxConfig();
+ 154:SubGHz_Phy/Target/radio_board_if.c **** #else
+ 155:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_GetTxConfig here */
+ 156:SubGHz_Phy/Target/radio_board_if.c ****   int32_t retcode = RBI_CONF_RFO;
+ 106              		.loc 1 156 3 view .LVU14
+ 107              	.LVL4:
+ 157:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_GetTxConfig_2 */
+ 158:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+ 159:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_GetTxConfig_2 */
+ 160:SubGHz_Phy/Target/radio_board_if.c ****   return retcode;
+ 108              		.loc 1 160 3 view .LVU15
+ 161:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER */
+ 162:SubGHz_Phy/Target/radio_board_if.c **** }
+ 109              		.loc 1 162 1 is_stmt 0 view .LVU16
+ 110 0000 0020     		movs	r0, #0
+ 111 0002 7047     		bx	lr
+ 112              		.cfi_endproc
+ 113              	.LFE1166:
+ 115              		.section	.text.RBI_IsTCXO,"ax",%progbits
+ 116              		.align	1
+ 117              		.global	RBI_IsTCXO
+ 118              		.syntax unified
+ 119              		.thumb
+ 120              		.thumb_func
+ 121              		.fpu softvfp
+ 123              	RBI_IsTCXO:
+ 124              	.LFB1167:
+ 163:SubGHz_Phy/Target/radio_board_if.c **** 
+ 164:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_IsTCXO(void)
+ 165:SubGHz_Phy/Target/radio_board_if.c **** {
+ 125              		.loc 1 165 1 is_stmt 1 view -0
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 0
+ 128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129              		@ link register save eliminated.
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 6
+
+
+ 166:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_IsTCXO_1 */
+ 167:SubGHz_Phy/Target/radio_board_if.c **** 
+ 168:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_IsTCXO_1 */
+ 169:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+ 170:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+ 171:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+ 172:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+ 173:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+ 174:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+ 175:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+ 176:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+ 177:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+ 178:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+ 179:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_IsTCXO();
+ 180:SubGHz_Phy/Target/radio_board_if.c **** #else
+ 181:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_IsTCXO here */
+ 182:SubGHz_Phy/Target/radio_board_if.c ****   int32_t retcode = IS_TCXO_SUPPORTED;
+ 130              		.loc 1 182 3 view .LVU18
+ 131              	.LVL5:
+ 183:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_IsTCXO_2 */
+ 184:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+ 185:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_IsTCXO_2 */
+ 186:SubGHz_Phy/Target/radio_board_if.c ****   return retcode;
+ 132              		.loc 1 186 3 view .LVU19
+ 187:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER  */
+ 188:SubGHz_Phy/Target/radio_board_if.c **** }
+ 133              		.loc 1 188 1 is_stmt 0 view .LVU20
+ 134 0000 0120     		movs	r0, #1
+ 135 0002 7047     		bx	lr
+ 136              		.cfi_endproc
+ 137              	.LFE1167:
+ 139              		.section	.text.RBI_IsDCDC,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	RBI_IsDCDC
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 145              		.fpu softvfp
+ 147              	RBI_IsDCDC:
+ 148              	.LFB1168:
+ 189:SubGHz_Phy/Target/radio_board_if.c **** 
+ 190:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_IsDCDC(void)
+ 191:SubGHz_Phy/Target/radio_board_if.c **** {
+ 149              		.loc 1 191 1 is_stmt 1 view -0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 153              		@ link register save eliminated.
+ 192:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_IsDCDC_1 */
+ 193:SubGHz_Phy/Target/radio_board_if.c **** 
+ 194:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_IsDCDC_1 */
+ 195:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+ 196:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+ 197:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+ 198:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+ 199:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+ 200:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 7
+
+
+ 201:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+ 202:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+ 203:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+ 204:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+ 205:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_IsDCDC();
+ 206:SubGHz_Phy/Target/radio_board_if.c **** #else
+ 207:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_IsDCDC here */
+ 208:SubGHz_Phy/Target/radio_board_if.c ****   int32_t retcode = IS_DCDC_SUPPORTED;
+ 154              		.loc 1 208 3 view .LVU22
+ 155              	.LVL6:
+ 209:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_IsDCDC_2 */
+ 210:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+ 211:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_IsDCDC_2 */
+ 212:SubGHz_Phy/Target/radio_board_if.c ****   return retcode;
+ 156              		.loc 1 212 3 view .LVU23
+ 213:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER  */
+ 214:SubGHz_Phy/Target/radio_board_if.c **** }
+ 157              		.loc 1 214 1 is_stmt 0 view .LVU24
+ 158 0000 0120     		movs	r0, #1
+ 159 0002 7047     		bx	lr
+ 160              		.cfi_endproc
+ 161              	.LFE1168:
+ 163              		.section	.text.RBI_GetRFOMaxPowerConfig,"ax",%progbits
+ 164              		.align	1
+ 165              		.global	RBI_GetRFOMaxPowerConfig
+ 166              		.syntax unified
+ 167              		.thumb
+ 168              		.thumb_func
+ 169              		.fpu softvfp
+ 171              	RBI_GetRFOMaxPowerConfig:
+ 172              	.LVL7:
+ 173              	.LFB1169:
+ 215:SubGHz_Phy/Target/radio_board_if.c **** 
+ 216:SubGHz_Phy/Target/radio_board_if.c **** int32_t RBI_GetRFOMaxPowerConfig(RBI_RFOMaxPowerConfig_TypeDef Config)
+ 217:SubGHz_Phy/Target/radio_board_if.c **** {
+ 174              		.loc 1 217 1 is_stmt 1 view -0
+ 175              		.cfi_startproc
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178              		@ link register save eliminated.
+ 218:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_GetRFOMaxPowerConfig_1 */
+ 219:SubGHz_Phy/Target/radio_board_if.c **** 
+ 220:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_GetRFOMaxPowerConfig_1 */
+ 221:SubGHz_Phy/Target/radio_board_if.c **** #if defined(USE_BSP_DRIVER)
+ 222:SubGHz_Phy/Target/radio_board_if.c ****   /* Important note: BSP code is board dependent
+ 223:SubGHz_Phy/Target/radio_board_if.c ****    * STM32WL_Nucleo code can be found
+ 224:SubGHz_Phy/Target/radio_board_if.c ****    *       either in STM32CubeWL package under Drivers/BSP/STM32WLxx_Nucleo/
+ 225:SubGHz_Phy/Target/radio_board_if.c ****    *       or at https://github.com/STMicroelectronics/STM32CubeWL/tree/main/Drivers/BSP/STM32WLxx_
+ 226:SubGHz_Phy/Target/radio_board_if.c ****    * 1/ For User boards, the BSP/STM32WLxx_Nucleo/ directory can be copied and replaced in the proj
+ 227:SubGHz_Phy/Target/radio_board_if.c ****    *       on board RF switch configuration (pin control, number of port etc)
+ 228:SubGHz_Phy/Target/radio_board_if.c ****    *       on TCXO configuration
+ 229:SubGHz_Phy/Target/radio_board_if.c ****    *       on DC/DC configuration
+ 230:SubGHz_Phy/Target/radio_board_if.c ****    *       on maximum output power that the board can deliver*/
+ 231:SubGHz_Phy/Target/radio_board_if.c ****   return BSP_RADIO_GetRFOMaxPowerConfig((BSP_RADIO_RFOMaxPowerConfig_TypeDef) Config);
+ 232:SubGHz_Phy/Target/radio_board_if.c **** #else
+ 233:SubGHz_Phy/Target/radio_board_if.c ****   /* 2/ Or implement RBI_RBI_GetRFOMaxPowerConfig here */
+ 234:SubGHz_Phy/Target/radio_board_if.c ****   int32_t ret = 0;
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 8
+
+
+ 179              		.loc 1 234 3 view .LVU26
+ 235:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE BEGIN RBI_GetRFOMaxPowerConfig_2 */
+ 236:SubGHz_Phy/Target/radio_board_if.c **** #warning user to provide its board code or to call his board driver functions
+ 237:SubGHz_Phy/Target/radio_board_if.c ****   if (Config == RBI_RFO_LP_MAXPOWER)
+ 180              		.loc 1 237 3 view .LVU27
+ 181              		.loc 1 237 6 is_stmt 0 view .LVU28
+ 182 0000 08B9     		cbnz	r0, .L9
+ 238:SubGHz_Phy/Target/radio_board_if.c ****   {
+ 239:SubGHz_Phy/Target/radio_board_if.c ****     ret = 15; /*dBm*/
+ 183              		.loc 1 239 9 view .LVU29
+ 184 0002 0F20     		movs	r0, #15
+ 185              	.LVL8:
+ 186              		.loc 1 239 9 view .LVU30
+ 187 0004 7047     		bx	lr
+ 188              	.LVL9:
+ 189              	.L9:
+ 240:SubGHz_Phy/Target/radio_board_if.c ****   }
+ 241:SubGHz_Phy/Target/radio_board_if.c ****   else
+ 242:SubGHz_Phy/Target/radio_board_if.c ****   {
+ 243:SubGHz_Phy/Target/radio_board_if.c ****     ret = 22; /*dBm*/
+ 190              		.loc 1 243 9 view .LVU31
+ 191 0006 1620     		movs	r0, #22
+ 192              	.LVL10:
+ 244:SubGHz_Phy/Target/radio_board_if.c ****   }
+ 245:SubGHz_Phy/Target/radio_board_if.c ****   /* USER CODE END RBI_GetRFOMaxPowerConfig_2 */
+ 246:SubGHz_Phy/Target/radio_board_if.c ****   return ret;
+ 193              		.loc 1 246 3 is_stmt 1 view .LVU32
+ 247:SubGHz_Phy/Target/radio_board_if.c **** #endif  /* USE_BSP_DRIVER  */
+ 248:SubGHz_Phy/Target/radio_board_if.c **** }
+ 194              		.loc 1 248 1 is_stmt 0 view .LVU33
+ 195 0008 7047     		bx	lr
+ 196              		.cfi_endproc
+ 197              	.LFE1169:
+ 199              		.text
+ 200              	.Letext0:
+ 201              		.file 2 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/machine/_de
+ 202              		.file 3 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/sys/_stdint
+ 203              		.file 4 "SubGHz_Phy/Target/radio_board_if.h"
+ 204              		.file 5 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dma.h"
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 radio_board_if.c
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:16     .text.RBI_Init:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:24     .text.RBI_Init:0000000000000000 RBI_Init
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:42     .text.RBI_DeInit:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:49     .text.RBI_DeInit:0000000000000000 RBI_DeInit
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:66     .text.RBI_ConfigRFSwitch:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:73     .text.RBI_ConfigRFSwitch:0000000000000000 RBI_ConfigRFSwitch
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:92     .text.RBI_GetTxConfig:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:99     .text.RBI_GetTxConfig:0000000000000000 RBI_GetTxConfig
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:116    .text.RBI_IsTCXO:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:123    .text.RBI_IsTCXO:0000000000000000 RBI_IsTCXO
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:140    .text.RBI_IsDCDC:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:147    .text.RBI_IsDCDC:0000000000000000 RBI_IsDCDC
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:164    .text.RBI_GetRFOMaxPowerConfig:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccxZGnF7.s:171    .text.RBI_GetRFOMaxPowerConfig:0000000000000000 RBI_GetRFOMaxPowerConfig
+
+NO UNDEFINED SYMBOLS

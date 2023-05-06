@@ -1,0 +1,745 @@
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"stm32wlxx_it.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.NMI_Handler,"ax",%progbits
+  16              		.align	1
+  17              		.global	NMI_Handler
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	NMI_Handler:
+  25              	.LFB1163:
+  26              		.file 1 "Core/Src/stm32wlxx_it.c"
+   1:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN Header */
+   2:Core/Src/stm32wlxx_it.c **** /**
+   3:Core/Src/stm32wlxx_it.c ****  ******************************************************************************
+   4:Core/Src/stm32wlxx_it.c ****  * @file    stm32wlxx_it.c
+   5:Core/Src/stm32wlxx_it.c ****  * @brief   Interrupt Service Routines.
+   6:Core/Src/stm32wlxx_it.c ****  ******************************************************************************
+   7:Core/Src/stm32wlxx_it.c ****  * @attention
+   8:Core/Src/stm32wlxx_it.c ****  *
+   9:Core/Src/stm32wlxx_it.c ****  * Copyright (c) 2022 STMicroelectronics.
+  10:Core/Src/stm32wlxx_it.c ****  * All rights reserved.
+  11:Core/Src/stm32wlxx_it.c ****  *
+  12:Core/Src/stm32wlxx_it.c ****  * This software is licensed under terms that can be found in the LICENSE file
+  13:Core/Src/stm32wlxx_it.c ****  * in the root directory of this software component.
+  14:Core/Src/stm32wlxx_it.c ****  * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Core/Src/stm32wlxx_it.c ****  *
+  16:Core/Src/stm32wlxx_it.c ****  ******************************************************************************
+  17:Core/Src/stm32wlxx_it.c ****  */
+  18:Core/Src/stm32wlxx_it.c **** /* USER CODE END Header */
+  19:Core/Src/stm32wlxx_it.c **** 
+  20:Core/Src/stm32wlxx_it.c **** /* Includes ------------------------------------------------------------------*/
+  21:Core/Src/stm32wlxx_it.c **** #include "main.h"
+  22:Core/Src/stm32wlxx_it.c **** #include "stm32wlxx_it.h"
+  23:Core/Src/stm32wlxx_it.c **** /* Private includes ----------------------------------------------------------*/
+  24:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN Includes */
+  25:Core/Src/stm32wlxx_it.c **** /* USER CODE END Includes */
+  26:Core/Src/stm32wlxx_it.c **** 
+  27:Core/Src/stm32wlxx_it.c **** /* Private typedef -----------------------------------------------------------*/
+  28:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN TD */
+  29:Core/Src/stm32wlxx_it.c **** 
+  30:Core/Src/stm32wlxx_it.c **** /* USER CODE END TD */
+  31:Core/Src/stm32wlxx_it.c **** 
+  32:Core/Src/stm32wlxx_it.c **** /* Private define ------------------------------------------------------------*/
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 2
+
+
+  33:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN PD */
+  34:Core/Src/stm32wlxx_it.c **** 
+  35:Core/Src/stm32wlxx_it.c **** /* USER CODE END PD */
+  36:Core/Src/stm32wlxx_it.c **** 
+  37:Core/Src/stm32wlxx_it.c **** /* Private macro -------------------------------------------------------------*/
+  38:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN PM */
+  39:Core/Src/stm32wlxx_it.c **** 
+  40:Core/Src/stm32wlxx_it.c **** /* USER CODE END PM */
+  41:Core/Src/stm32wlxx_it.c **** 
+  42:Core/Src/stm32wlxx_it.c **** /* Private variables ---------------------------------------------------------*/
+  43:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN PV */
+  44:Core/Src/stm32wlxx_it.c **** extern volatile uint16_t systickCounter;
+  45:Core/Src/stm32wlxx_it.c **** /* USER CODE END PV */
+  46:Core/Src/stm32wlxx_it.c **** 
+  47:Core/Src/stm32wlxx_it.c **** /* Private function prototypes -----------------------------------------------*/
+  48:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN PFP */
+  49:Core/Src/stm32wlxx_it.c **** 
+  50:Core/Src/stm32wlxx_it.c **** /* USER CODE END PFP */
+  51:Core/Src/stm32wlxx_it.c **** 
+  52:Core/Src/stm32wlxx_it.c **** /* Private user code ---------------------------------------------------------*/
+  53:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN 0 */
+  54:Core/Src/stm32wlxx_it.c **** 
+  55:Core/Src/stm32wlxx_it.c **** /* USER CODE END 0 */
+  56:Core/Src/stm32wlxx_it.c **** 
+  57:Core/Src/stm32wlxx_it.c **** /* External variables --------------------------------------------------------*/
+  58:Core/Src/stm32wlxx_it.c **** extern RTC_HandleTypeDef hrtc;
+  59:Core/Src/stm32wlxx_it.c **** extern SUBGHZ_HandleTypeDef hsubghz;
+  60:Core/Src/stm32wlxx_it.c **** extern DMA_HandleTypeDef hdma_usart1_tx;
+  61:Core/Src/stm32wlxx_it.c **** extern UART_HandleTypeDef huart1;
+  62:Core/Src/stm32wlxx_it.c **** /* USER CODE BEGIN EV */
+  63:Core/Src/stm32wlxx_it.c **** 
+  64:Core/Src/stm32wlxx_it.c **** /* USER CODE END EV */
+  65:Core/Src/stm32wlxx_it.c **** 
+  66:Core/Src/stm32wlxx_it.c **** /******************************************************************************/
+  67:Core/Src/stm32wlxx_it.c **** /*           Cortex Processor Interruption and Exception Handlers          */
+  68:Core/Src/stm32wlxx_it.c **** /******************************************************************************/
+  69:Core/Src/stm32wlxx_it.c **** /**
+  70:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Non maskable interrupt.
+  71:Core/Src/stm32wlxx_it.c ****   */
+  72:Core/Src/stm32wlxx_it.c **** void NMI_Handler(void)
+  73:Core/Src/stm32wlxx_it.c **** {
+  27              		.loc 1 73 1 view -0
+  28              		.cfi_startproc
+  29              		@ Volatile: function does not return.
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.L2:
+  74:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+  75:Core/Src/stm32wlxx_it.c **** 
+  76:Core/Src/stm32wlxx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 0 */
+  77:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+  78:Core/Src/stm32wlxx_it.c **** 	while (1)
+  34              		.loc 1 78 2 discriminator 1 view .LVU1
+  79:Core/Src/stm32wlxx_it.c **** 	{
+  80:Core/Src/stm32wlxx_it.c **** 	}
+  35              		.loc 1 80 2 discriminator 1 view .LVU2
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 3
+
+
+  78:Core/Src/stm32wlxx_it.c **** 	{
+  36              		.loc 1 78 8 discriminator 1 view .LVU3
+  37 0000 FEE7     		b	.L2
+  38              		.cfi_endproc
+  39              	.LFE1163:
+  41              		.section	.text.HardFault_Handler,"ax",%progbits
+  42              		.align	1
+  43              		.global	HardFault_Handler
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  47              		.fpu softvfp
+  49              	HardFault_Handler:
+  50              	.LFB1164:
+  81:Core/Src/stm32wlxx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 1 */
+  82:Core/Src/stm32wlxx_it.c **** }
+  83:Core/Src/stm32wlxx_it.c **** 
+  84:Core/Src/stm32wlxx_it.c **** /**
+  85:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Hard fault interrupt.
+  86:Core/Src/stm32wlxx_it.c ****   */
+  87:Core/Src/stm32wlxx_it.c **** void HardFault_Handler(void)
+  88:Core/Src/stm32wlxx_it.c **** {
+  51              		.loc 1 88 1 view -0
+  52              		.cfi_startproc
+  53              		@ Volatile: function does not return.
+  54              		@ args = 0, pretend = 0, frame = 0
+  55              		@ frame_needed = 0, uses_anonymous_args = 0
+  56              		@ link register save eliminated.
+  57              	.L4:
+  89:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN HardFault_IRQn 0 */
+  90:Core/Src/stm32wlxx_it.c **** 
+  91:Core/Src/stm32wlxx_it.c ****   /* USER CODE END HardFault_IRQn 0 */
+  92:Core/Src/stm32wlxx_it.c ****   while (1)
+  58              		.loc 1 92 3 discriminator 1 view .LVU5
+  93:Core/Src/stm32wlxx_it.c ****   {
+  94:Core/Src/stm32wlxx_it.c ****     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+  95:Core/Src/stm32wlxx_it.c ****     /* USER CODE END W1_HardFault_IRQn 0 */
+  96:Core/Src/stm32wlxx_it.c ****   }
+  59              		.loc 1 96 3 discriminator 1 view .LVU6
+  92:Core/Src/stm32wlxx_it.c ****   {
+  60              		.loc 1 92 9 discriminator 1 view .LVU7
+  61 0000 FEE7     		b	.L4
+  62              		.cfi_endproc
+  63              	.LFE1164:
+  65              		.section	.text.MemManage_Handler,"ax",%progbits
+  66              		.align	1
+  67              		.global	MemManage_Handler
+  68              		.syntax unified
+  69              		.thumb
+  70              		.thumb_func
+  71              		.fpu softvfp
+  73              	MemManage_Handler:
+  74              	.LFB1165:
+  97:Core/Src/stm32wlxx_it.c **** }
+  98:Core/Src/stm32wlxx_it.c **** 
+  99:Core/Src/stm32wlxx_it.c **** /**
+ 100:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Memory management fault.
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 4
+
+
+ 101:Core/Src/stm32wlxx_it.c ****   */
+ 102:Core/Src/stm32wlxx_it.c **** void MemManage_Handler(void)
+ 103:Core/Src/stm32wlxx_it.c **** {
+  75              		.loc 1 103 1 view -0
+  76              		.cfi_startproc
+  77              		@ Volatile: function does not return.
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  80              		@ link register save eliminated.
+  81              	.L6:
+ 104:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+ 105:Core/Src/stm32wlxx_it.c **** 
+ 106:Core/Src/stm32wlxx_it.c ****   /* USER CODE END MemoryManagement_IRQn 0 */
+ 107:Core/Src/stm32wlxx_it.c ****   while (1)
+  82              		.loc 1 107 3 discriminator 1 view .LVU9
+ 108:Core/Src/stm32wlxx_it.c ****   {
+ 109:Core/Src/stm32wlxx_it.c ****     /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
+ 110:Core/Src/stm32wlxx_it.c ****     /* USER CODE END W1_MemoryManagement_IRQn 0 */
+ 111:Core/Src/stm32wlxx_it.c ****   }
+  83              		.loc 1 111 3 discriminator 1 view .LVU10
+ 107:Core/Src/stm32wlxx_it.c ****   {
+  84              		.loc 1 107 9 discriminator 1 view .LVU11
+  85 0000 FEE7     		b	.L6
+  86              		.cfi_endproc
+  87              	.LFE1165:
+  89              		.section	.text.BusFault_Handler,"ax",%progbits
+  90              		.align	1
+  91              		.global	BusFault_Handler
+  92              		.syntax unified
+  93              		.thumb
+  94              		.thumb_func
+  95              		.fpu softvfp
+  97              	BusFault_Handler:
+  98              	.LFB1166:
+ 112:Core/Src/stm32wlxx_it.c **** }
+ 113:Core/Src/stm32wlxx_it.c **** 
+ 114:Core/Src/stm32wlxx_it.c **** /**
+ 115:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Prefetch fault, memory access fault.
+ 116:Core/Src/stm32wlxx_it.c ****   */
+ 117:Core/Src/stm32wlxx_it.c **** void BusFault_Handler(void)
+ 118:Core/Src/stm32wlxx_it.c **** {
+  99              		.loc 1 118 1 view -0
+ 100              		.cfi_startproc
+ 101              		@ Volatile: function does not return.
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 104              		@ link register save eliminated.
+ 105              	.L8:
+ 119:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN BusFault_IRQn 0 */
+ 120:Core/Src/stm32wlxx_it.c **** 
+ 121:Core/Src/stm32wlxx_it.c ****   /* USER CODE END BusFault_IRQn 0 */
+ 122:Core/Src/stm32wlxx_it.c ****   while (1)
+ 106              		.loc 1 122 3 discriminator 1 view .LVU13
+ 123:Core/Src/stm32wlxx_it.c ****   {
+ 124:Core/Src/stm32wlxx_it.c ****     /* USER CODE BEGIN W1_BusFault_IRQn 0 */
+ 125:Core/Src/stm32wlxx_it.c ****     /* USER CODE END W1_BusFault_IRQn 0 */
+ 126:Core/Src/stm32wlxx_it.c ****   }
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 5
+
+
+ 107              		.loc 1 126 3 discriminator 1 view .LVU14
+ 122:Core/Src/stm32wlxx_it.c ****   {
+ 108              		.loc 1 122 9 discriminator 1 view .LVU15
+ 109 0000 FEE7     		b	.L8
+ 110              		.cfi_endproc
+ 111              	.LFE1166:
+ 113              		.section	.text.UsageFault_Handler,"ax",%progbits
+ 114              		.align	1
+ 115              		.global	UsageFault_Handler
+ 116              		.syntax unified
+ 117              		.thumb
+ 118              		.thumb_func
+ 119              		.fpu softvfp
+ 121              	UsageFault_Handler:
+ 122              	.LFB1167:
+ 127:Core/Src/stm32wlxx_it.c **** }
+ 128:Core/Src/stm32wlxx_it.c **** 
+ 129:Core/Src/stm32wlxx_it.c **** /**
+ 130:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Undefined instruction or illegal state.
+ 131:Core/Src/stm32wlxx_it.c ****   */
+ 132:Core/Src/stm32wlxx_it.c **** void UsageFault_Handler(void)
+ 133:Core/Src/stm32wlxx_it.c **** {
+ 123              		.loc 1 133 1 view -0
+ 124              		.cfi_startproc
+ 125              		@ Volatile: function does not return.
+ 126              		@ args = 0, pretend = 0, frame = 0
+ 127              		@ frame_needed = 0, uses_anonymous_args = 0
+ 128              		@ link register save eliminated.
+ 129              	.L10:
+ 134:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN UsageFault_IRQn 0 */
+ 135:Core/Src/stm32wlxx_it.c **** 
+ 136:Core/Src/stm32wlxx_it.c ****   /* USER CODE END UsageFault_IRQn 0 */
+ 137:Core/Src/stm32wlxx_it.c ****   while (1)
+ 130              		.loc 1 137 3 discriminator 1 view .LVU17
+ 138:Core/Src/stm32wlxx_it.c ****   {
+ 139:Core/Src/stm32wlxx_it.c ****     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+ 140:Core/Src/stm32wlxx_it.c ****     /* USER CODE END W1_UsageFault_IRQn 0 */
+ 141:Core/Src/stm32wlxx_it.c ****   }
+ 131              		.loc 1 141 3 discriminator 1 view .LVU18
+ 137:Core/Src/stm32wlxx_it.c ****   {
+ 132              		.loc 1 137 9 discriminator 1 view .LVU19
+ 133 0000 FEE7     		b	.L10
+ 134              		.cfi_endproc
+ 135              	.LFE1167:
+ 137              		.section	.text.SVC_Handler,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	SVC_Handler
+ 140              		.syntax unified
+ 141              		.thumb
+ 142              		.thumb_func
+ 143              		.fpu softvfp
+ 145              	SVC_Handler:
+ 146              	.LFB1168:
+ 142:Core/Src/stm32wlxx_it.c **** }
+ 143:Core/Src/stm32wlxx_it.c **** 
+ 144:Core/Src/stm32wlxx_it.c **** /**
+ 145:Core/Src/stm32wlxx_it.c ****   * @brief This function handles System service call via SWI instruction.
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 6
+
+
+ 146:Core/Src/stm32wlxx_it.c ****   */
+ 147:Core/Src/stm32wlxx_it.c **** void SVC_Handler(void)
+ 148:Core/Src/stm32wlxx_it.c **** {
+ 147              		.loc 1 148 1 view -0
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 0
+ 150              		@ frame_needed = 0, uses_anonymous_args = 0
+ 151              		@ link register save eliminated.
+ 149:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN SVCall_IRQn 0 */
+ 150:Core/Src/stm32wlxx_it.c **** 
+ 151:Core/Src/stm32wlxx_it.c ****   /* USER CODE END SVCall_IRQn 0 */
+ 152:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN SVCall_IRQn 1 */
+ 153:Core/Src/stm32wlxx_it.c **** 
+ 154:Core/Src/stm32wlxx_it.c ****   /* USER CODE END SVCall_IRQn 1 */
+ 155:Core/Src/stm32wlxx_it.c **** }
+ 152              		.loc 1 155 1 view .LVU21
+ 153 0000 7047     		bx	lr
+ 154              		.cfi_endproc
+ 155              	.LFE1168:
+ 157              		.section	.text.DebugMon_Handler,"ax",%progbits
+ 158              		.align	1
+ 159              		.global	DebugMon_Handler
+ 160              		.syntax unified
+ 161              		.thumb
+ 162              		.thumb_func
+ 163              		.fpu softvfp
+ 165              	DebugMon_Handler:
+ 166              	.LFB1169:
+ 156:Core/Src/stm32wlxx_it.c **** 
+ 157:Core/Src/stm32wlxx_it.c **** /**
+ 158:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Debug monitor.
+ 159:Core/Src/stm32wlxx_it.c ****   */
+ 160:Core/Src/stm32wlxx_it.c **** void DebugMon_Handler(void)
+ 161:Core/Src/stm32wlxx_it.c **** {
+ 167              		.loc 1 161 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171              		@ link register save eliminated.
+ 162:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
+ 163:Core/Src/stm32wlxx_it.c **** 
+ 164:Core/Src/stm32wlxx_it.c ****   /* USER CODE END DebugMonitor_IRQn 0 */
+ 165:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+ 166:Core/Src/stm32wlxx_it.c **** 
+ 167:Core/Src/stm32wlxx_it.c ****   /* USER CODE END DebugMonitor_IRQn 1 */
+ 168:Core/Src/stm32wlxx_it.c **** }
+ 172              		.loc 1 168 1 view .LVU23
+ 173 0000 7047     		bx	lr
+ 174              		.cfi_endproc
+ 175              	.LFE1169:
+ 177              		.section	.text.PendSV_Handler,"ax",%progbits
+ 178              		.align	1
+ 179              		.global	PendSV_Handler
+ 180              		.syntax unified
+ 181              		.thumb
+ 182              		.thumb_func
+ 183              		.fpu softvfp
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 7
+
+
+ 185              	PendSV_Handler:
+ 186              	.LFB1170:
+ 169:Core/Src/stm32wlxx_it.c **** 
+ 170:Core/Src/stm32wlxx_it.c **** /**
+ 171:Core/Src/stm32wlxx_it.c ****   * @brief This function handles Pendable request for system service.
+ 172:Core/Src/stm32wlxx_it.c ****   */
+ 173:Core/Src/stm32wlxx_it.c **** void PendSV_Handler(void)
+ 174:Core/Src/stm32wlxx_it.c **** {
+ 187              		.loc 1 174 1 view -0
+ 188              		.cfi_startproc
+ 189              		@ args = 0, pretend = 0, frame = 0
+ 190              		@ frame_needed = 0, uses_anonymous_args = 0
+ 191              		@ link register save eliminated.
+ 175:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN PendSV_IRQn 0 */
+ 176:Core/Src/stm32wlxx_it.c **** 
+ 177:Core/Src/stm32wlxx_it.c ****   /* USER CODE END PendSV_IRQn 0 */
+ 178:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN PendSV_IRQn 1 */
+ 179:Core/Src/stm32wlxx_it.c **** 
+ 180:Core/Src/stm32wlxx_it.c ****   /* USER CODE END PendSV_IRQn 1 */
+ 181:Core/Src/stm32wlxx_it.c **** }
+ 192              		.loc 1 181 1 view .LVU25
+ 193 0000 7047     		bx	lr
+ 194              		.cfi_endproc
+ 195              	.LFE1170:
+ 197              		.section	.text.SysTick_Handler,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	SysTick_Handler
+ 200              		.syntax unified
+ 201              		.thumb
+ 202              		.thumb_func
+ 203              		.fpu softvfp
+ 205              	SysTick_Handler:
+ 206              	.LFB1171:
+ 182:Core/Src/stm32wlxx_it.c **** 
+ 183:Core/Src/stm32wlxx_it.c **** /**
+ 184:Core/Src/stm32wlxx_it.c ****   * @brief This function handles System tick timer.
+ 185:Core/Src/stm32wlxx_it.c ****   */
+ 186:Core/Src/stm32wlxx_it.c **** void SysTick_Handler(void)
+ 187:Core/Src/stm32wlxx_it.c **** {
+ 207              		.loc 1 187 1 view -0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 0
+ 210              		@ frame_needed = 0, uses_anonymous_args = 0
+ 211              		@ link register save eliminated.
+ 188:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN SysTick_IRQn 0 */
+ 189:Core/Src/stm32wlxx_it.c **** 	systickCounter++;
+ 212              		.loc 1 189 2 view .LVU27
+ 213              		.loc 1 189 16 is_stmt 0 view .LVU28
+ 214 0000 034A     		ldr	r2, .L15
+ 215 0002 1388     		ldrh	r3, [r2]
+ 216 0004 9BB2     		uxth	r3, r3
+ 217 0006 0133     		adds	r3, r3, #1
+ 218 0008 9BB2     		uxth	r3, r3
+ 219 000a 1380     		strh	r3, [r2]	@ movhi
+ 190:Core/Src/stm32wlxx_it.c ****   /* USER CODE END SysTick_IRQn 0 */
+ 191:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN SysTick_IRQn 1 */
+ 192:Core/Src/stm32wlxx_it.c **** 
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 8
+
+
+ 193:Core/Src/stm32wlxx_it.c ****   /* USER CODE END SysTick_IRQn 1 */
+ 194:Core/Src/stm32wlxx_it.c **** }
+ 220              		.loc 1 194 1 view .LVU29
+ 221 000c 7047     		bx	lr
+ 222              	.L16:
+ 223 000e 00BF     		.align	2
+ 224              	.L15:
+ 225 0010 00000000 		.word	systickCounter
+ 226              		.cfi_endproc
+ 227              	.LFE1171:
+ 229              		.section	.text.RTC_WKUP_IRQHandler,"ax",%progbits
+ 230              		.align	1
+ 231              		.global	RTC_WKUP_IRQHandler
+ 232              		.syntax unified
+ 233              		.thumb
+ 234              		.thumb_func
+ 235              		.fpu softvfp
+ 237              	RTC_WKUP_IRQHandler:
+ 238              	.LFB1172:
+ 195:Core/Src/stm32wlxx_it.c **** 
+ 196:Core/Src/stm32wlxx_it.c **** /******************************************************************************/
+ 197:Core/Src/stm32wlxx_it.c **** /* STM32WLxx Peripheral Interrupt Handlers                                    */
+ 198:Core/Src/stm32wlxx_it.c **** /* Add here the Interrupt Handlers for the used peripherals.                  */
+ 199:Core/Src/stm32wlxx_it.c **** /* For the available peripheral interrupt handler names,                      */
+ 200:Core/Src/stm32wlxx_it.c **** /* please refer to the startup file (startup_stm32wlxx.s).                    */
+ 201:Core/Src/stm32wlxx_it.c **** /******************************************************************************/
+ 202:Core/Src/stm32wlxx_it.c **** 
+ 203:Core/Src/stm32wlxx_it.c **** /**
+ 204:Core/Src/stm32wlxx_it.c ****   * @brief This function handles RTC Wakeup Interrupt.
+ 205:Core/Src/stm32wlxx_it.c ****   */
+ 206:Core/Src/stm32wlxx_it.c **** void RTC_WKUP_IRQHandler(void)
+ 207:Core/Src/stm32wlxx_it.c **** {
+ 239              		.loc 1 207 1 is_stmt 1 view -0
+ 240              		.cfi_startproc
+ 241              		@ args = 0, pretend = 0, frame = 0
+ 242              		@ frame_needed = 0, uses_anonymous_args = 0
+ 243 0000 08B5     		push	{r3, lr}
+ 244              		.cfi_def_cfa_offset 8
+ 245              		.cfi_offset 3, -8
+ 246              		.cfi_offset 14, -4
+ 208:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN RTC_WKUP_IRQn 0 */
+ 209:Core/Src/stm32wlxx_it.c **** 
+ 210:Core/Src/stm32wlxx_it.c ****   /* USER CODE END RTC_WKUP_IRQn 0 */
+ 211:Core/Src/stm32wlxx_it.c ****   HAL_RTCEx_WakeUpTimerIRQHandler(&hrtc);
+ 247              		.loc 1 211 3 view .LVU31
+ 248 0002 0248     		ldr	r0, .L19
+ 249 0004 FFF7FEFF 		bl	HAL_RTCEx_WakeUpTimerIRQHandler
+ 250              	.LVL0:
+ 212:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN RTC_WKUP_IRQn 1 */
+ 213:Core/Src/stm32wlxx_it.c **** 
+ 214:Core/Src/stm32wlxx_it.c ****   /* USER CODE END RTC_WKUP_IRQn 1 */
+ 215:Core/Src/stm32wlxx_it.c **** }
+ 251              		.loc 1 215 1 is_stmt 0 view .LVU32
+ 252 0008 08BD     		pop	{r3, pc}
+ 253              	.L20:
+ 254 000a 00BF     		.align	2
+ 255              	.L19:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 9
+
+
+ 256 000c 00000000 		.word	hrtc
+ 257              		.cfi_endproc
+ 258              	.LFE1172:
+ 260              		.section	.text.DMA1_Channel1_IRQHandler,"ax",%progbits
+ 261              		.align	1
+ 262              		.global	DMA1_Channel1_IRQHandler
+ 263              		.syntax unified
+ 264              		.thumb
+ 265              		.thumb_func
+ 266              		.fpu softvfp
+ 268              	DMA1_Channel1_IRQHandler:
+ 269              	.LFB1173:
+ 216:Core/Src/stm32wlxx_it.c **** 
+ 217:Core/Src/stm32wlxx_it.c **** /**
+ 218:Core/Src/stm32wlxx_it.c ****   * @brief This function handles DMA1 Channel 1 Interrupt.
+ 219:Core/Src/stm32wlxx_it.c ****   */
+ 220:Core/Src/stm32wlxx_it.c **** void DMA1_Channel1_IRQHandler(void)
+ 221:Core/Src/stm32wlxx_it.c **** {
+ 270              		.loc 1 221 1 is_stmt 1 view -0
+ 271              		.cfi_startproc
+ 272              		@ args = 0, pretend = 0, frame = 0
+ 273              		@ frame_needed = 0, uses_anonymous_args = 0
+ 274 0000 08B5     		push	{r3, lr}
+ 275              		.cfi_def_cfa_offset 8
+ 276              		.cfi_offset 3, -8
+ 277              		.cfi_offset 14, -4
+ 222:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+ 223:Core/Src/stm32wlxx_it.c **** 
+ 224:Core/Src/stm32wlxx_it.c ****   /* USER CODE END DMA1_Channel1_IRQn 0 */
+ 225:Core/Src/stm32wlxx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart1_tx);
+ 278              		.loc 1 225 3 view .LVU34
+ 279 0002 0248     		ldr	r0, .L23
+ 280 0004 FFF7FEFF 		bl	HAL_DMA_IRQHandler
+ 281              	.LVL1:
+ 226:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+ 227:Core/Src/stm32wlxx_it.c **** 
+ 228:Core/Src/stm32wlxx_it.c ****   /* USER CODE END DMA1_Channel1_IRQn 1 */
+ 229:Core/Src/stm32wlxx_it.c **** }
+ 282              		.loc 1 229 1 is_stmt 0 view .LVU35
+ 283 0008 08BD     		pop	{r3, pc}
+ 284              	.L24:
+ 285 000a 00BF     		.align	2
+ 286              	.L23:
+ 287 000c 00000000 		.word	hdma_usart1_tx
+ 288              		.cfi_endproc
+ 289              	.LFE1173:
+ 291              		.section	.text.DMA1_Channel4_IRQHandler,"ax",%progbits
+ 292              		.align	1
+ 293              		.global	DMA1_Channel4_IRQHandler
+ 294              		.syntax unified
+ 295              		.thumb
+ 296              		.thumb_func
+ 297              		.fpu softvfp
+ 299              	DMA1_Channel4_IRQHandler:
+ 300              	.LFB1174:
+ 230:Core/Src/stm32wlxx_it.c **** 
+ 231:Core/Src/stm32wlxx_it.c **** // /**
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 10
+
+
+ 232:Core/Src/stm32wlxx_it.c **** //   * @brief This function handles DMA1 Channel 2 Interrupt.
+ 233:Core/Src/stm32wlxx_it.c **** //   */
+ 234:Core/Src/stm32wlxx_it.c **** // void DMA1_Channel2_IRQHandler(void)
+ 235:Core/Src/stm32wlxx_it.c **** // {
+ 236:Core/Src/stm32wlxx_it.c **** //   /* USER CODE BEGIN DMA1_Channel2_IRQn 0 */
+ 237:Core/Src/stm32wlxx_it.c **** 
+ 238:Core/Src/stm32wlxx_it.c **** //   /* USER CODE END DMA1_Channel2_IRQn 0 */
+ 239:Core/Src/stm32wlxx_it.c **** 
+ 240:Core/Src/stm32wlxx_it.c **** //   /* USER CODE BEGIN DMA1_Channel2_IRQn 1 */
+ 241:Core/Src/stm32wlxx_it.c **** 
+ 242:Core/Src/stm32wlxx_it.c **** //   /* USER CODE END DMA1_Channel2_IRQn 1 */
+ 243:Core/Src/stm32wlxx_it.c **** // }
+ 244:Core/Src/stm32wlxx_it.c **** 
+ 245:Core/Src/stm32wlxx_it.c **** // /**
+ 246:Core/Src/stm32wlxx_it.c **** //   * @brief This function handles DMA1 Channel 3 Interrupt.
+ 247:Core/Src/stm32wlxx_it.c **** //   */
+ 248:Core/Src/stm32wlxx_it.c **** // void DMA1_Channel3_IRQHandler(void)
+ 249:Core/Src/stm32wlxx_it.c **** // {
+ 250:Core/Src/stm32wlxx_it.c **** //   /* USER CODE BEGIN DMA1_Channel3_IRQn 0 */
+ 251:Core/Src/stm32wlxx_it.c **** 
+ 252:Core/Src/stm32wlxx_it.c **** //   /* USER CODE END DMA1_Channel3_IRQn 0 */
+ 253:Core/Src/stm32wlxx_it.c **** 
+ 254:Core/Src/stm32wlxx_it.c **** //   /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
+ 255:Core/Src/stm32wlxx_it.c **** 
+ 256:Core/Src/stm32wlxx_it.c **** //   /* USER CODE END DMA1_Channel3_IRQn 1 */
+ 257:Core/Src/stm32wlxx_it.c **** // }
+ 258:Core/Src/stm32wlxx_it.c **** 
+ 259:Core/Src/stm32wlxx_it.c **** /**
+ 260:Core/Src/stm32wlxx_it.c ****   * @brief This function handles DMA1 Channel 4 Interrupt.
+ 261:Core/Src/stm32wlxx_it.c ****   */
+ 262:Core/Src/stm32wlxx_it.c **** void DMA1_Channel4_IRQHandler(void)
+ 263:Core/Src/stm32wlxx_it.c **** {
+ 301              		.loc 1 263 1 is_stmt 1 view -0
+ 302              		.cfi_startproc
+ 303              		@ args = 0, pretend = 0, frame = 0
+ 304              		@ frame_needed = 0, uses_anonymous_args = 0
+ 305              		@ link register save eliminated.
+ 264:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+ 265:Core/Src/stm32wlxx_it.c **** 
+ 266:Core/Src/stm32wlxx_it.c ****   /* USER CODE END DMA1_Channel4_IRQn 0 */
+ 267:Core/Src/stm32wlxx_it.c **** 
+ 268:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+ 269:Core/Src/stm32wlxx_it.c **** 
+ 270:Core/Src/stm32wlxx_it.c ****   /* USER CODE END DMA1_Channel4_IRQn 1 */
+ 271:Core/Src/stm32wlxx_it.c **** }
+ 306              		.loc 1 271 1 view .LVU37
+ 307 0000 7047     		bx	lr
+ 308              		.cfi_endproc
+ 309              	.LFE1174:
+ 311              		.section	.text.USART1_IRQHandler,"ax",%progbits
+ 312              		.align	1
+ 313              		.global	USART1_IRQHandler
+ 314              		.syntax unified
+ 315              		.thumb
+ 316              		.thumb_func
+ 317              		.fpu softvfp
+ 319              	USART1_IRQHandler:
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 11
+
+
+ 320              	.LFB1175:
+ 272:Core/Src/stm32wlxx_it.c **** 
+ 273:Core/Src/stm32wlxx_it.c **** /**
+ 274:Core/Src/stm32wlxx_it.c ****   * @brief This function handles USART1 Interrupt.
+ 275:Core/Src/stm32wlxx_it.c ****   */
+ 276:Core/Src/stm32wlxx_it.c **** void USART1_IRQHandler(void)
+ 277:Core/Src/stm32wlxx_it.c **** {
+ 321              		.loc 1 277 1 view -0
+ 322              		.cfi_startproc
+ 323              		@ args = 0, pretend = 0, frame = 0
+ 324              		@ frame_needed = 0, uses_anonymous_args = 0
+ 325 0000 08B5     		push	{r3, lr}
+ 326              		.cfi_def_cfa_offset 8
+ 327              		.cfi_offset 3, -8
+ 328              		.cfi_offset 14, -4
+ 278:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN USART1_IRQn 0 */
+ 279:Core/Src/stm32wlxx_it.c **** 
+ 280:Core/Src/stm32wlxx_it.c ****   /* USER CODE END USART1_IRQn 0 */
+ 281:Core/Src/stm32wlxx_it.c ****   HAL_UART_IRQHandler(&huart1);
+ 329              		.loc 1 281 3 view .LVU39
+ 330 0002 0248     		ldr	r0, .L28
+ 331 0004 FFF7FEFF 		bl	HAL_UART_IRQHandler
+ 332              	.LVL2:
+ 282:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN USART1_IRQn 1 */
+ 283:Core/Src/stm32wlxx_it.c **** 
+ 284:Core/Src/stm32wlxx_it.c ****   /* USER CODE END USART1_IRQn 1 */
+ 285:Core/Src/stm32wlxx_it.c **** }
+ 333              		.loc 1 285 1 is_stmt 0 view .LVU40
+ 334 0008 08BD     		pop	{r3, pc}
+ 335              	.L29:
+ 336 000a 00BF     		.align	2
+ 337              	.L28:
+ 338 000c 00000000 		.word	huart1
+ 339              		.cfi_endproc
+ 340              	.LFE1175:
+ 342              		.section	.text.SUBGHZ_Radio_IRQHandler,"ax",%progbits
+ 343              		.align	1
+ 344              		.global	SUBGHZ_Radio_IRQHandler
+ 345              		.syntax unified
+ 346              		.thumb
+ 347              		.thumb_func
+ 348              		.fpu softvfp
+ 350              	SUBGHZ_Radio_IRQHandler:
+ 351              	.LFB1176:
+ 286:Core/Src/stm32wlxx_it.c **** 
+ 287:Core/Src/stm32wlxx_it.c **** /**
+ 288:Core/Src/stm32wlxx_it.c ****   * @brief This function handles SUBGHZ Radio Interrupt.
+ 289:Core/Src/stm32wlxx_it.c ****   */
+ 290:Core/Src/stm32wlxx_it.c **** void SUBGHZ_Radio_IRQHandler(void)
+ 291:Core/Src/stm32wlxx_it.c **** {
+ 352              		.loc 1 291 1 is_stmt 1 view -0
+ 353              		.cfi_startproc
+ 354              		@ args = 0, pretend = 0, frame = 0
+ 355              		@ frame_needed = 0, uses_anonymous_args = 0
+ 356 0000 08B5     		push	{r3, lr}
+ 357              		.cfi_def_cfa_offset 8
+ 358              		.cfi_offset 3, -8
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 12
+
+
+ 359              		.cfi_offset 14, -4
+ 292:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN SUBGHZ_Radio_IRQn 0 */
+ 293:Core/Src/stm32wlxx_it.c **** 
+ 294:Core/Src/stm32wlxx_it.c ****   /* USER CODE END SUBGHZ_Radio_IRQn 0 */
+ 295:Core/Src/stm32wlxx_it.c ****   HAL_SUBGHZ_IRQHandler(&hsubghz);
+ 360              		.loc 1 295 3 view .LVU42
+ 361 0002 0248     		ldr	r0, .L32
+ 362 0004 FFF7FEFF 		bl	HAL_SUBGHZ_IRQHandler
+ 363              	.LVL3:
+ 296:Core/Src/stm32wlxx_it.c ****   /* USER CODE BEGIN SUBGHZ_Radio_IRQn 1 */
+ 297:Core/Src/stm32wlxx_it.c **** 
+ 298:Core/Src/stm32wlxx_it.c ****   /* USER CODE END SUBGHZ_Radio_IRQn 1 */
+ 299:Core/Src/stm32wlxx_it.c **** }
+ 364              		.loc 1 299 1 is_stmt 0 view .LVU43
+ 365 0008 08BD     		pop	{r3, pc}
+ 366              	.L33:
+ 367 000a 00BF     		.align	2
+ 368              	.L32:
+ 369 000c 00000000 		.word	hsubghz
+ 370              		.cfi_endproc
+ 371              	.LFE1176:
+ 373              		.text
+ 374              	.Letext0:
+ 375              		.file 2 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/machine/_de
+ 376              		.file 3 "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/sys/_stdint
+ 377              		.file 4 "Drivers/CMSIS/Device/ST/STM32WLxx/Include/stm32wle5xx.h"
+ 378              		.file 5 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_def.h"
+ 379              		.file 6 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_dma.h"
+ 380              		.file 7 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_rtc.h"
+ 381              		.file 8 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_subghz.h"
+ 382              		.file 9 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_uart.h"
+ 383              		.file 10 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_hal_rtc_ex.h"
+ 384              		.file 11 "Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_dma.h"
+ARM GAS  /var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32wlxx_it.c
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:16     .text.NMI_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:24     .text.NMI_Handler:0000000000000000 NMI_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:42     .text.HardFault_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:49     .text.HardFault_Handler:0000000000000000 HardFault_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:66     .text.MemManage_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:73     .text.MemManage_Handler:0000000000000000 MemManage_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:90     .text.BusFault_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:97     .text.BusFault_Handler:0000000000000000 BusFault_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:114    .text.UsageFault_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:121    .text.UsageFault_Handler:0000000000000000 UsageFault_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:138    .text.SVC_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:145    .text.SVC_Handler:0000000000000000 SVC_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:158    .text.DebugMon_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:165    .text.DebugMon_Handler:0000000000000000 DebugMon_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:178    .text.PendSV_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:185    .text.PendSV_Handler:0000000000000000 PendSV_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:198    .text.SysTick_Handler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:205    .text.SysTick_Handler:0000000000000000 SysTick_Handler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:225    .text.SysTick_Handler:0000000000000010 $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:230    .text.RTC_WKUP_IRQHandler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:237    .text.RTC_WKUP_IRQHandler:0000000000000000 RTC_WKUP_IRQHandler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:256    .text.RTC_WKUP_IRQHandler:000000000000000c $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:261    .text.DMA1_Channel1_IRQHandler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:268    .text.DMA1_Channel1_IRQHandler:0000000000000000 DMA1_Channel1_IRQHandler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:287    .text.DMA1_Channel1_IRQHandler:000000000000000c $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:292    .text.DMA1_Channel4_IRQHandler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:299    .text.DMA1_Channel4_IRQHandler:0000000000000000 DMA1_Channel4_IRQHandler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:312    .text.USART1_IRQHandler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:319    .text.USART1_IRQHandler:0000000000000000 USART1_IRQHandler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:338    .text.USART1_IRQHandler:000000000000000c $d
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:343    .text.SUBGHZ_Radio_IRQHandler:0000000000000000 $t
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:350    .text.SUBGHZ_Radio_IRQHandler:0000000000000000 SUBGHZ_Radio_IRQHandler
+/var/folders/9y/n02fl3g16gnf7ppy14xghdy80000gn/T//ccS8uufL.s:369    .text.SUBGHZ_Radio_IRQHandler:000000000000000c $d
+
+UNDEFINED SYMBOLS
+systickCounter
+HAL_RTCEx_WakeUpTimerIRQHandler
+hrtc
+HAL_DMA_IRQHandler
+hdma_usart1_tx
+HAL_UART_IRQHandler
+huart1
+HAL_SUBGHZ_IRQHandler
+hsubghz
